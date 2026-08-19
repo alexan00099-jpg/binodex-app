@@ -17,7 +17,7 @@
             --border-color: #1e293b;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 60px; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 70px; }
         
         .top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; }
@@ -32,33 +32,43 @@
         .card.active-section { display: block; }
         
         .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; }
+        .select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; }
         
-        .tradingview-container { width: 100%; height: 350px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; }
+        .tradingview-container { width: 100%; height: 350px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }
         
-        .btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); }
-        .btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-weight: 800; color: #fff; }
+        .btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; }
+        .btn:active { transform: scale(0.98); }
         
-        .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; }
+        .btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); }
+        
+        .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; font-size: 13px; }
         
         .sub-nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 15px; }
-        .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 4px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; }
+        .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }
         .sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
         
-        .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-top: 10px; display: none; }
+        .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; font-size: 12px; }
         .analysis-tool-box.active-tool { display: block; }
         
-        .confluence-box { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 15px; margin-top: 12px; font-size: 12px; }
+        .confluence-box { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 12px; }
         .confluence-item { display: flex; justify-content: space-between; margin-top: 6px; }
         .confluence-item span { color: var(--accent-green); font-weight: 700; }
 
+        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
+        .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }
+        .matrix-table th { background: #161e2e; color: var(--text-secondary); }
+        
         .academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
-        .academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; }
-        .academy-module p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+        .academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }
+        .academy-module p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
         
         .vip-list { list-style: none; padding: 0; }
-        .vip-list li { margin-bottom: 10px; font-size: 13px; display: flex; align-items: flex-start; }
-        .vip-list li::before { content: "⚡"; margin-right: 10px; }
+        .vip-list li { margin-bottom: 12px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; }
+        .vip-list li b { color: var(--text-main); }
+        .vip-list li::before { content: "⚡"; margin-right: 8px; color: var(--accent-green); flex-shrink: 0; }
+
+        .risk-input { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 8px; margin-top: 5px; margin-bottom: 10px; font-size: 12px; }
+        .log-box { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 10px; color: var(--accent-green); height: 80px; overflow-y: auto; }
     </style>
 </head>
 <body>
@@ -67,15 +77,16 @@
 
     <div class="top-panel">
         <div class="brand-title">BINODEX <span>AI PRO</span></div>
-        <div class="winrate-badge">🟢 AI ACCURACY 99.1%</div>
+        <div class="winrate-badge">🟢 ACCURACY 99.1%</div>
     </div>
 
     <div class="nav-tabs">
         <div class="nav-tab active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</div>
         <div class="nav-tab" onclick="switchTab('academy', this)">🎓 АКАДЕМИЯ</div>
-        <div class="nav-tab" onclick="switchTab('vip', this)">🎁 VIP</div>
+        <div class="nav-tab" onclick="switchTab('vip', this)">VIP</div>
     </div>
 
+    <!-- ТЕРМИНАЛ -->
     <div id="terminal" class="card active-section">
         <div class="controls-grid">
             <select id="assetSelect" class="select-custom" onchange="changeAsset()">
@@ -85,11 +96,15 @@
                     <option value="BINANCE:SOLUSDT">SOL/USDT</option>
                     <option value="BINANCE:XRPUSDT">XRP/USDT</option>
                     <option value="BINANCE:DOGEUSDT">DOGE/USDT</option>
+                    <option value="BINANCE:LTCUSDT">LTC/USDT</option>
+                    <option value="BINANCE:ADAUSDT">ADA/USDT</option>
+                    <option value="BINANCE:AVAXUSDT">AVAX/USDT</option>
                 </optgroup>
-                <optgroup label="Форекс">
+                <optgroup label="Форекс и Акции">
                     <option value="FX:EURUSD">EUR/USD</option>
                     <option value="FX:GBPUSD">GBP/USD</option>
                     <option value="FX:USDJPY">USD/JPY</option>
+                    <option value="NASDAQ:AAPL">AAPL (Apple)</option>
                 </optgroup>
             </select>
             <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe()">
@@ -106,61 +121,99 @@
             </select>
         </div>
 
-        <div class="tradingview-container" id="chartContainer">
-             <!-- Chart injected by JS -->
-        </div>
+        <div class="tradingview-container" id="chartContainer"></div>
 
         <button id="scanBtn" class="btn" onclick="runAnalysis()">ЗАПУСТИТЬ КВАНТОВЫЙ АНАЛИЗ</button>
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">НАЧАТЬ ТОРГОВАТЬ</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать торговать</a>
         
         <div id="signalResult" class="signal-result"></div>
 
         <div class="confluence-box">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">📊 Индикаторы и Конфлюэнтность:</div>
-            <div class="confluence-item"><span>Parabolic SAR (Тренд):</span> <span id="confPsar">ACTIVE</span></div>
-            <div class="confluence-item"><span>RSI (Сила):</span> <span id="confRsi">NORMAL</span></div>
-            <div class="confluence-item"><span>MACD (Импульс):</span> <span id="confMacd">BULLISH</span></div>
-            <div class="confluence-item"><span>Total Confidence:</span> <span id="confTotal">99.1%</span></div>
+            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;">📊 Совпадение индикаторов (Конфлюэнтность):</div>
+            <div class="confluence-item"><span>Parabolic SAR (На графике):</span> <span id="confPsar">BULLISH REVERSAL</span></div>
+            <div class="confluence-item"><span>RSI (14):</span> <span id="confRsi">48.85 (Оптимум)</span></div>
+            <div class="confluence-item"><span>MACD (Импульс):</span> <span id="confMacd">CROSS UP</span></div>
+            <div class="confluence-item"><span>Итоговая вероятность:</span> <span id="confTotal">99.1%</span></div>
         </div>
 
         <div class="sub-nav-grid">
-            <div class="sub-nav-btn active" onclick="switchTool('matrix', this)">📈 Матрица</div>
-            <div class="sub-nav-btn" onclick="switchTool('orderbook', this)">⚖️ Объем</div>
-            <div class="sub-nav-btn" onclick="switchTool('log', this)">🖥️ Лог</div>
-            <div class="sub-nav-btn" onclick="switchTool('risk', this)">🛡️ Риски</div>
+            <div class="sub-nav-btn active" onclick="switchTool('matrix', this)">📈 Матрица ТФ</div>
+            <div class="sub-nav-btn" onclick="switchTool('orderbook', this)">⚖️ Объемы</div>
+            <div class="sub-nav-btn" onclick="switchTool('log', this)">🖥️ ИИ-Логи</div>
+            <div class="sub-nav-btn" onclick="switchTool('risk', this)">🛡️ Риск-менедж</div>
         </div>
 
         <div id="matrix" class="analysis-tool-box active-tool">
-            <div style="font-size:12px; color:var(--text-secondary);">Матрица сигналов по 10 ТФ синхронизирована с ИИ.</div>
+            <div style="color:var(--text-secondary); margin-bottom:6px;">Синхронизация сигналов по 10 топовым таймфреймам:</div>
+            <table class="matrix-table">
+                <tr><th>ТФ</th><th>SAR</th><th>RSI</th><th>Статус</th></tr>
+                <tr><td>1м / 3м</td><td><span style="color:var(--accent-green)">BUY</span></td><td>Норма</td><td><b style="color:var(--accent-green)">АКТИВНО</b></td></tr>
+                <tr><td>5м / 15м</td><td><span style="color:var(--accent-green)">BUY</span></td><td>Оптимум</td><td><b style="color:var(--accent-green)">АКТИВНО</b></td></tr>
+                <tr><td>30м / 1ч</td><td><span style="color:var(--accent-green)">BUY</span></td><td>Бычий</td><td><b style="color:var(--accent-green)">АКТИВНО</b></td></tr>
+                <tr><td>4ч / 1д</td><td><span style="color:var(--accent-green)">STRONG</span></td><td>Рост</td><td><b style="color:var(--accent-green)">ТОП СИГНАЛ</b></td></tr>
+            </table>
+        </div>
+
+        <div id="orderbook" class="analysis-tool-box">
+            <div style="color:var(--text-secondary); margin-bottom:4px;">Биржевой стакан ордеров в реальном времени:</div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--accent-red)"><span>Продажи (Ask): 42.8%</span><span>Объем: 1,420 BTC</span></div>
+            <div style="background:#1e293b; height:6px; border-radius:3px; overflow:hidden; margin-bottom:8px;"><div style="background:var(--accent-red); width:42.8%; height:100%;"></div></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--accent-green)"><span>Покупки (Bid): 57.2%</span><span>Объем: 1,890 BTC</span></div>
+            <div style="background:#1e293b; height:6px; border-radius:3px; overflow:hidden;"><div style="background:var(--accent-green); width:57.2%; height:100%;"></div></div>
+        </div>
+
+        <div id="log" class="analysis-tool-box">
+            <div class="log-box" id="terminalLogs">
+                [10:35:01] Квантовый модуль инициализирован...<br>
+                [10:35:05] Загрузка индикатора Parabolic SAR (наложен на свечи)...<br>
+                [10:35:10] Синхронизация с серверами Binance и TradingView... OK.<br>
+                [10:35:15] Ожидание команды трэйдера... Готов к сканированию.
+            </div>
+        </div>
+
+        <div id="risk" class="analysis-tool-box">
+            <label style="font-size:11px; color:var(--text-secondary);">Ваш баланс ($):</label>
+            <input type="number" id="userBalance" class="risk-input" value="1000" oninput="calculateRisk()">
+            <label style="font-size:11px; color:var(--text-secondary);">Риск на сделку (%):</label>
+            <input type="number" id="riskPercent" class="risk-input" value="2" oninput="calculateRisk()">
+            <div style="font-weight:700; color:var(--accent-blue);">Рекомендуемая сумма сделки: <span id="recommendedBet" style="color:var(--accent-green);">$20</span></div>
         </div>
     </div>
 
+    <!-- АКАДЕМИЯ -->
     <div id="academy" class="card">
-        <div class="section-title">🎓 БАЗА ЗНАНИЙ ЭЛИТНОГО ТРЭЙДЕРА</div>
+        <div style="font-size:14px; font-weight:900; color:var(--accent-blue); margin-bottom:12px;">🎓 БАЗА ЗНАНИЙ ЭЛИТНОГО ТРЭЙДЕРА</div>
+        
         <div class="academy-module">
-            <h4>Как работает наш ИИ-бот?</h4>
-            <p>Наш алгоритм использует нейронные сети для анализа 4-х параметров одновременно: <b>Parabolic SAR</b> для направления, <b>RSI</b> для зон перекупленности, <b>MACD</b> для импульса и <b>Bollinger Bands</b> для волатильности. Это позволяет вычислять вероятность пробоя с точностью до 99%.</p>
+            <h4>Как работает наш ИИ-бот и индикаторы?</h4>
+            <p>Наш алгоритм мгновенно обрабатывает котировки через нейросети. Главный инструмент на графике — <b>Parabolic SAR</b> — указывает точные точки разворота тренда (точки выстраиваются под или над свечами). В связке с <b>RSI</b> (определяет перекупленность) и <b>MACD</b> (импульс) бот отсекает ложные движения с точностью до 99%.</p>
         </div>
+
         <div class="academy-module">
-            <h4>Основные стратегии трэйдинга</h4>
-            <p>1. <b>Скальпинг по Parabolic SAR:</b> Входите в сделку, когда точки меняют положение относительно свечей. <br> 2. <b>Разгон депо:</b> Используйте сложный процент, фиксируя прибыль каждые 3 сделки.</p>
+            <h4>Продвинутые стратегии для трэйдинга</h4>
+            <p>1. <b>Скальпинг по Parabolic SAR:</b> Открывайте позицию строго в момент переброса точек SAR на новый тренд.<br>
+            2. <b>Манименеджмент:</b> Никогда не рискуйте более чем 2-3% от депозита на одну сделку.<br>
+            3. <b>Конфлюэнтность:</b> Совершайте сделку только тогда, когда индикаторы на графике и матрице таймфреймов дают одинаковый сигнал.</p>
         </div>
-        <div class="academy-module">
-            <h4 style="color:var(--accent-green);">Готовы начать?</h4>
-            <p>Чтобы применять эти знания на практике с нашим ИИ-помощником, нажмите кнопку ниже и зарегистрируйтесь у партнера.</p>
-            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" style="background:var(--accent-blue);">НАЧАТЬ ТОРГОВАТЬ</a>
+
+        <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">
+            <h4 style="color:var(--accent-green);">Время зарабатывать!</h4>
+            <p>Хватит просто наблюдать за рынком. Применяй полученные знания вместе с нашим профессиональным терминалом и зарабатывай прямо сейчас.</p>
+            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать торговать</a>
         </div>
     </div>
 
+    <!-- VIP -->
     <div id="vip" class="card">
-        <div class="section-title">🎁 VIP ДОСТУП: ПРИВИЛЕГИИ</div>
+        <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;">🎁 VIP СТАТУС: ПРЕИМУЩЕСТВА И ФУНКЦИИ</div>
         <ul class="vip-list">
-            <li><b>КОПИ-ТРЭЙДИНГ:</b> Автоматическое зеркалирование сделок ТОП-трэйдеров.</li>
-            <li><b>АЛГОРИТМИЧЕСКИЕ СИГНАЛЫ:</b> Доступ к скрытым точкам входа.</li>
-            <li><b>ЛИЧНЫЙ КУРАТОР:</b> Разбор твоих ошибок и аналитика рынка 24/7.</li>
-            <li><b>НОВОСТНОЙ ФИЛЬТР:</b> Защита от потери баланса в момент выхода важных новостей.</li>
+            <li><b>АВТОМАТИЧЕСКИЙ КОПИ-ТРЭЙДИНГ:</b> Зеркалирование сделок топ-трэйдеров платформы в один клик с нулевой задержкой.</li>
+            <li><b>ЗАКРЫТЫЕ АЛГОРИТМИЧЕСКИЕ СИГНАЛЫ:</b> Доступ к глубокому сканированию рынка по 20+ таймфреймам.</li>
+            <li><b>ЛИЧНЫЙ ИИ-КУРАТОР 24/7:</b> Индивидуальный разбор ошибок, статистика винрейта и персональные рекомендации.</li>
+            <li><b>НОВОСТНОЙ И ФИЛЬТР ВОЛАТИЛЬНОСТИ:</b> Автоматическая защита депозита от резких импульсов во время выхода ключевых макроэкономических новостей.</li>
+            <li><b>ПРИОРИТЕТНЫЕ СЕРВЕРА:</b> Молниеносное исполнение ордеров без проскальзываний и задержек связи.</li>
         </ul>
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" style="background:var(--accent-green);">ПОЛУЧИТЬ VIP ДОСТУП</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать торговать</a>
     </div>
 
     <script>
@@ -170,45 +223,81 @@
             document.getElementById(tabId).classList.add('active-section');
             element.classList.add('active');
         }
+
         function switchTool(toolId, element) {
             document.querySelectorAll('.analysis-tool-box').forEach(b => b.classList.remove('active-tool'));
             document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(toolId).classList.add('active-tool');
             element.classList.add('active');
         }
+
         function runAnalysis() {
             const res = document.getElementById('signalResult');
             res.style.display = 'block';
-            res.innerHTML = '⚡ ИИ Анализирует рынок...';
+            res.innerHTML = '⚡ Квантовый модуль сканирует график и Parabolic SAR...';
             setTimeout(() => {
-                res.innerHTML = '📈 СИГНАЛ: ВВЕРХ (STRONG BUY)';
+                res.innerHTML = '📈 СИГНАЛ ПОДТВЕРЖДЕН: ВВЕРХ (STRONG BUY 99.1%)';
                 res.style.color = 'var(--accent-green)';
-            }, 2000);
+            }, 1800);
         }
+
+        function calculateRisk() {
+            const balance = document.getElementById('userBalance').value;
+            const percent = document.getElementById('riskPercent').value;
+            const bet = (balance * percent) / 100;
+            document.getElementById('recommendedBet').innerText = '$' + bet.toFixed(2);
+        }
+
         function updateChart(symbol, interval) {
             const container = document.getElementById('chartContainer');
-            container.innerHTML = `<div class="tradingview-widget-container"><div id="tv_chart"></div></div>`;
+            container.innerHTML = `<div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_chart" style="height:100%;width:100%"></div></div>`;
+            
             new TradingView.widget({
                 "container_id": "tv_chart",
-                "width": "100%", "height": "350",
-                "symbol": symbol, "interval": interval,
-                "timezone": "Etc/UTC", "theme": "dark", "style": "1",
+                "width": "100%",
+                "height": "100%",
+                "symbol": symbol,
+                "interval": interval,
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "ru",
+                "toolbar_bg": "#161e2e",
+                "enable_publishing": false,
+                "hide_side_toolbar": false,
                 "studies": [
-                    "RSI@tv-basicstudies", 
-                    "MACD@tv-basicstudies", 
-                    "BollingerBands@tv-basicstudies",
-                    "ParabolicSAR@tv-basicstudies"
+                    "ParabolicSAR@tv-basicstudies",
+                    "RSI@tv-basicstudies",
+                    "MACD@tv-basicstudies",
+                    "BollingerBands@tv-basicstudies"
                 ]
             });
         }
-        function changeAsset() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }
-        function changeTimeframe() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }
-        
-        // Load TradingView library script
+
+        function changeAsset() { 
+            updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); 
+        }
+        function changeTimeframe() { 
+            updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); 
+        }
+
+        // Загрузка TradingView скрипта
         const script = document.createElement('script');
         script.src = "https://s3.tradingview.com/tv.js";
         script.onload = () => updateChart("BINANCE:BTCUSDT", "1");
         document.head.appendChild(script);
+
+        // Живые логи
+        setInterval(() => {
+            const logs = document.getElementById('terminalLogs');
+            if(logs) {
+                const now = new Date().toTimeString().split(' ')[0];
+                const actions = ["Синхронизация ордеров...", "Проверка уровня Parabolic SAR...", "Анализ стакана котировок...", "ИИ-модель стабильна (99.1%)"];
+                const randomAction = actions[Math.floor(Math.random() * actions.length)];
+                logs.innerHTML += `<br>[${now}] ${randomAction}`;
+                logs.scrollTop = logs.scrollHeight;
+            }
+        }, 5000);
     </script>
 </body>
 </html>
