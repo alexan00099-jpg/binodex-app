@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BINODEX AI TRADING</title>
+    <title>BINODEX AI TRADING TERMINAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         body { background-color: #0b0e14; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; }
         .glass-card { background: rgba(22, 27, 38, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
@@ -29,14 +30,14 @@
 
     <!-- NAVIGATION TABS -->
     <nav class="flex border-b border-slate-800 bg-slate-900/50 text-slate-400 text-sm font-medium text-center">
-        <button onclick="switchTab('signals')" id="tab-signals" class="tab-btn active flex-1 py-3">📊 СИГНАЛЫ</button>
+        <button onclick="switchTab('signals')" id="tab-signals" class="tab-btn active flex-1 py-3">📊 СИГНАЛЫ И ГРАФИК</button>
         <button onclick="switchTab('academy')" id="tab-academy" class="tab-btn flex-1 py-3">🎓 АКАДЕМИЯ</button>
         <button onclick="switchTab('ref')" id="tab-ref" class="tab-btn flex-1 py-3">🎁 VIP И РЕФЕРАЛКА</button>
     </nav>
 
     <main class="p-4 max-w-lg mx-auto">
 
-        <!-- TAB 1: SIGNALS & ANALYTICS -->
+        <!-- TAB 1: SIGNALS, GRAPHIC & ANALYTICS -->
         <section id="section-signals" class="space-y-4">
             
             <!-- NEWS PROTECTION BANNER -->
@@ -67,11 +68,11 @@
             <div class="glass-card p-5 rounded-2xl space-y-4 accent-glow border border-cyan-500/20">
                 <div class="flex justify-between items-center">
                     <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Валютная пара</label>
-                    <select id="asset" class="bg-slate-800 text-slate-200 text-sm rounded-lg px-3 py-1.5 border border-slate-700 outline-none">
-                        <option>EUR / USD (OTC)</option>
-                        <option>GBP / USD (OTC)</option>
-                        <option>USD / JPY (OTC)</option>
-                        <option>BTC / USDT</option>
+                    <select id="asset" onchange="updateTradingViewChart()" class="bg-slate-800 text-slate-200 text-sm rounded-lg px-3 py-1.5 border border-slate-700 outline-none">
+                        <option value="FX:EURUSD">EUR / USD (OTC)</option>
+                        <option value="FX:GBPUSD">GBP / USD (OTC)</option>
+                        <option value="FX:USDJPY">USD / JPY (OTC)</option>
+                        <option value="BINANCE:BTCUSDT">BTC / USDT</option>
                     </select>
                 </div>
 
@@ -90,7 +91,7 @@
             </div>
 
             <!-- SIGNAL RESULT BOX -->
-            <div id="signal-result" class="hidden glass-card p-5 rounded-2xl border border-cyan-500/30 space-y-4 animate-fade-in">
+            <div id="signal-result" class="hidden glass-card p-5 rounded-2xl border border-cyan-500/30 space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                     <div>
                         <div class="text-xs text-slate-400">УВЕРЕННОСТЬ ИИ</div>
@@ -120,7 +121,7 @@
                     </div>
                 </div>
 
-                <!-- DIRECT TRADE BUTTON WITH YOUR REF LINK -->
+                <!-- DIRECT TRADE BUTTON WITH REF LINK -->
                 <a href="Https://bdclick.app/smart/naJly9" target="_blank" class="block text-center w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider transition">
                     📈 ОТКРЫТЬ СДЕЛКУ НА ПЛАТФОРМЕ
                 </a>
@@ -129,6 +130,15 @@
                     <i class="fa-solid fa-share-nodes"></i>
                     <span>ПОДЕЛИШЬСЯ РЕЗУЛЬТАТОМ</span>
                 </button>
+            </div>
+
+            <!-- TRADINGVIEW LIVE CHART WIDGET -->
+            <div class="glass-card p-3 rounded-2xl border border-slate-800 space-y-2">
+                <div class="text-xs font-bold text-slate-400 flex items-center space-x-2">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i>
+                    <span>ОНЛАЙН ГРАФИК РЫНКА (TRADINGVIEW)</span>
+                </div>
+                <div class="w-full h-80 rounded-xl overflow-hidden border border-slate-800" id="tv_chart_container"></div>
             </div>
 
         </section>
@@ -208,7 +218,7 @@
             <div class="glass-card p-4 rounded-xl space-y-3">
                 <div class="text-sm font-bold text-slate-200">🚀 ПРИВЕДИ 3 ДРУЗЕЙ = VIP ИИ БЕСПЛАТНО</div>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    Делись своей личной ссылкой. Как только 3 друга зайдeт в бота, твоя точность сигналов автоматически повысится до 98%.
+                    Делись своей личной ссылкой. Как только 3 друга зайдёт в бота, твоя точность сигналов автоматически повысится до 98%.
                 </p>
                 <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center text-xs">
                     <span class="font-mono text-slate-400 truncate pr-2">https://t.me/Binodex_Signal_Bot?start=ref123</span>
@@ -221,7 +231,7 @@
         <!-- PERMANENT CALL TO ACTION FOOTER -->
         <div class="mt-8 glass-card p-4 rounded-2xl border border-cyan-500/40 text-center space-y-3">
             <p class="text-xs font-medium text-slate-200 leading-relaxed">
-                А в моём канале я бесплатно обучаю трэйдингу и захожу в сделки со своей командой в прямом эфире. Вступить в нашу команду можно по ссылке в профиле!
+                А в моём канале я бесплатно обучаю трейдингу и захожу в сделки со своей командой в прямом эфире. Вступить в нашу команду можно по ссылке в профиле!
             </p>
             <a href="Https://bdclick.app/smart/naJly9" target="_blank" class="inline-block w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
                 👉 ПРИСОЕДИНИТЬСЯ К КОМАНДЕ
@@ -231,6 +241,31 @@
     </main>
 
     <script>
+        // TRADINGVIEW CHART INITIALIZATION
+        let tvWidget;
+        function loadTradingViewWidget(symbol) {
+            document.getElementById('tv_chart_container').innerHTML = '';
+            tvWidget = new TradingView.widget({
+                "autosize": true,
+                "symbol": symbol || "FX:EURUSD",
+                "interval": "1",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "ru",
+                "enable_publishing": false,
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
+                "container_id": "tv_chart_container"
+            });
+        }
+
+        function updateTradingViewChart() {
+            const selectedSymbol = document.getElementById('asset').value;
+            loadTradingViewWidget(selectedSymbol);
+        }
+
+        // TAB SWITCHING
         function switchTab(tabName) {
             document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -239,6 +274,7 @@
             document.getElementById('tab-' + tabName).classList.add('active');
         }
 
+        // SIGNAL GENERATION LOGIC
         function generateSignal() {
             const resultBox = document.getElementById('signal-result');
             const dirBox = document.getElementById('signal-direction');
@@ -263,12 +299,14 @@
             }
         }
 
+        // RISK CALCULATOR LOGIC
         function calcRisk() {
             const dep = parseFloat(document.getElementById('deposit-input').value) || 0;
             document.getElementById('risk-1').innerText = '$' + (dep * 0.01).toFixed(1);
             document.getElementById('risk-2').innerText = '$' + (dep * 0.02).toFixed(1);
         }
 
+        // QUIZ LOGIC
         function answerQuiz(isCorrect) {
             if (isCorrect) {
                 alert("ПРАВИЛЬНО! ВЫ ПОЛУЧИЛИ VIP-СТАТУС НА 3 ДНЯ!");
@@ -284,6 +322,11 @@
         function copyRef() {
             alert("Ваша реферальная ссылка скопирована!");
         }
+
+        // INITIAL LOAD
+        window.onload = function() {
+            loadTradingViewWidget("FX:EURUSD");
+        };
     </script>
 </body>
 </html>
