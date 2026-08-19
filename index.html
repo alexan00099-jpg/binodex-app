@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex AI Mobile Terminal</title>
+    <title>Binodex AI Ultimate Mobile</title>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -31,28 +31,11 @@
             -webkit-overflow-scrolling: touch;
         }
         body {
-            padding: 12px;
-            padding-bottom: 50px;
+            padding: 10px;
+            padding-bottom: 40px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-        }
-        
-        /* СТРИМ БАННЕР */
-        .stream-banner {
-            background: linear-gradient(135deg, #ff3d00, #d50000);
-            color: white;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 900;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(255, 61, 0, 0.4);
-            cursor: pointer;
-            text-transform: uppercase;
-            text-align: center;
+            gap: 10px;
         }
 
         /* ШАПКА */
@@ -83,7 +66,7 @@
             font-weight: 700;
         }
 
-        /* КАРТОЧКИ БЛОКОВ */
+        /* КАРТОЧКИ */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -227,6 +210,26 @@
             width: 100%;
         }
 
+        /* Кнопка рефералки под сигналы */
+        .referral-trade-btn {
+            display: block;
+            background: linear-gradient(135deg, #2979ff, #1565c0);
+            color: white;
+            text-align: center;
+            padding: 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 13px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(41, 121, 255, 0.4);
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
         .news-badge {
             display: flex;
             align-items: center;
@@ -301,19 +304,13 @@
 </head>
 <body>
 
-    <!-- 1. СТРИМ-БАННЕР НА YOUTUBE -->
-    <div class="stream-banner" onclick="alert('Переход на прямой эфир на YouTube!')">
-        <span>🔴 ПРЯМОЙ ЭФИР НА YouTube (ТОРГОВЛЯ)</span>
-        <span>СМОТРЕТЬ ▶</span>
-    </div>
-
-    <!-- 2. ШАПКА БОТА -->
+    <!-- 1. ШАПКА БОТА -->
     <div class="header">
         <div class="logo">BINODEX <span>AI MOBILE v30</span></div>
         <div class="badge-live">🟢 AI 99.7%</div>
     </div>
 
-    <!-- 3. НОВОСТНОЙ ФИЛЬТР SAFE ZONE -->
+    <!-- 2. НОВОСТНОЙ ФИЛЬТР SAFE ZONE -->
     <div class="card" style="padding: 10px 14px;">
         <div class="news-badge">
             <span>🛡 НОВОСТНОЙ ФИЛЬТР: SAFE ZONE</span>
@@ -321,7 +318,7 @@
         </div>
     </div>
 
-    <!-- 4. ГРАФИК TRADINGVIEW -->
+    <!-- 3. ГРАФИК TRADINGVIEW -->
     <div class="card">
         <div class="section-title">📊 ЖИВОЙ ГРАФИК КОТИРОВОК</div>
         <div class="chart-box">
@@ -339,7 +336,7 @@
         </div>
     </div>
 
-    <!-- 5. ТЕРМИНАЛ И КВАНТОВЫЙ АНАЛИЗ -->
+    <!-- 4. ТЕРМИНАЛ И КВАНТОВЫЙ АНАЛИЗ С РЕФЕРАЛЬНОЙ КНОПКОЙ -->
     <div class="card">
         <div class="section-title">⚡ КВАНТОВЫЙ СКАНЕР СИГНАЛОВ</div>
         
@@ -366,7 +363,7 @@
             <option value="5 минут">⏳ 5 МИНУТ (КЛАССИК)</option>
         </select>
 
-        <button id="signalBtn" class="primary-btn" onclick="startAnalysis()">⚡ ЗАПУСТИТЬ АНАЛИЗ ИИ</button>
+        <button id="signalBtn" class="primary-btn" onclick="startAnalysis()">⚡ ПОЛУЧИТЬ СИГНАЛ ИИ</button>
 
         <div id="analysisLoader" class="analysis-loader">
             <div class="spinner"></div>
@@ -390,9 +387,14 @@
 
             <button class="action-link-btn" onclick="copySignalParams()" style="margin-top: 10px;">📋 СКОПИРОВАТЬ ПАРАМЕТРЫ СДЕЛКИ</button>
         </div>
+
+        <!-- Кнопка торговли на Binodex с реферальной ссылкой -->
+        <a href="ВАША_РЕФЕРАЛЬНАЯ_ССЫЛКА_СДЕСЬ" target="_blank" class="referral-trade-btn">
+            🚀 ТОРГОВАТЬ НА BINODEX (ПО МОЕЙ ССЫЛКЕ)
+        </a>
     </div>
 
-    <!-- 6. СИМУЛЯТОР СДЕЛОК -->
+    <!-- 5. СИМУЛЯТОР СДЕЛОК -->
     <div class="card">
         <div class="section-title">🎮 СИМУЛЯТОР СДЕЛОК (ТРЕНИРОВКА)</div>
         <div class="balance-box">
@@ -408,7 +410,7 @@
         <div id="simResultLog" style="font-size:11px; color:#cbd5e1; text-align:center; font-weight:700; min-height: 16px;"></div>
     </div>
 
-    <!-- 7. КАЛЬКУЛЯТОРЫ РИСКОВ -->
+    <!-- 6. КАЛЬКУЛЯТОРЫ РИСКОВ -->
     <div class="card">
         <div class="section-title">📉 КАЛЬКУЛЯТОР РИСКОВ ТРЭЙДЕРА</div>
         <input type="number" id="depositInput" class="input-field" value="500" oninput="calculateRisk()">
@@ -426,7 +428,7 @@
         </div>
     </div>
 
-    <!-- 8. АРХИВ СИГНАЛОВ -->
+    <!-- 7. АРХИВ СИГНАЛОВ -->
     <div class="card">
         <div class="section-title">📜 ПРОЗРАЧНЫЙ АРХИВ СИГНАЛОВ</div>
         <div class="list-item"><span>🇪🇺 EUR/USD • 3 мин (ВВЕРХ)</span><span class="win-tag">+96% ✔</span></div>
@@ -434,14 +436,14 @@
         <div class="list-item" style="margin-bottom:0;"><span>🥇 XAU/USD • 5 мин (ВНИЗ)</span><span class="win-tag">+97% ✔</span></div>
     </div>
 
-    <!-- 9. ПРОМОКОДЫ СО СТРИМА -->
+    <!-- 8. ПРОМОКОДЫ СО СТРИМА -->
     <div class="card">
         <div class="section-title">🎁 АКТИВАЦИЯ ПРОМОКОДА СО СТРИМА</div>
         <input type="text" id="promoInput" class="input-field" placeholder="Введите код с трансляции">
         <button class="action-link-btn" onclick="activatePromo()">АКТИВИРОВАТЬ БОНУС</button>
     </div>
 
-    <!-- 10. ТОП ТРЭЙДЕРОВ И VIP -->
+    <!-- 9. ТОП ТРЭЙДЕРОВ И VIP -->
     <div class="card">
         <div class="section-title">👑 ТОП ТРЭЙДЕРОВ НЕДЕЛИ</div>
         <div class="top-trader-item"><span>1. @alex_trader***</span><span style="color:var(--accent-green); font-weight:900;">+$8,450</span></div>
@@ -454,7 +456,7 @@
         <button class="primary-btn" style="background:var(--accent-blue);" onclick="alert('Реферальная ссылка скопирована!')">СКОПИРОВАТЬ VIP-ССЫЛКУ</button>
     </div>
 
-    <!-- 11. СЕРВЕР И FAQ -->
+    <!-- 10. СЕРВЕР И FAQ -->
     <div class="card">
         <div class="section-title">⚙️ СТАТУС СЕРВЕРА И ЛОГИ</div>
         <div class="risk-row"><span>Кластер нейросети:</span><span style="color:var(--accent-green); font-weight:800;">ONLINE</span></div>
