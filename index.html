@@ -36,7 +36,7 @@
         .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         .select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; }
         
-        .tradingview-container { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }
+        .tradingview-container { width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }
         
         .btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; }
         .btn:active { transform: scale(0.98); }
@@ -50,14 +50,14 @@
         .confluence-item span { color: var(--accent-green); font-weight: 700; }
 
         /* BIG NEURO LOGS SECTION */
-        .big-neuro-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-top: 15px; }
-        .log-box-large { background: #000; border-radius: 10px; padding: 12px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 180px; overflow-y: auto; border: 1px solid var(--border-color); line-height: 1.5; }
-        
-        .sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; }
-        .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 10px 4px; border-radius: 10px; font-size: 11px; font-weight: 700; text-align: center; cursor: pointer; }
+        .big-neuro-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }
+        .log-box-large { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 10px; color: var(--accent-green); height: 120px; overflow-y: auto; border: 1px solid var(--border-color); }
+
+        .sub-nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 15px; }
+        .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; }
         .sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
         
-        .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; }
+        .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; font-size: 12px; }
         .analysis-tool-box.active-tool { display: block; }
         
         .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
@@ -66,8 +66,7 @@
         
         .vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
         .vip-list { list-style: none; padding: 0; }
-        .vip-list li { margin-bottom: 10px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); }
-        .vip-list li::before { content: "⚡"; margin-right: 8px; color: var(--accent-green); }
+        .vip-list li { margin-bottom: 10px; font-size: 12px; color: var(--text-secondary); }
     </style>
 </head>
 <body>
@@ -110,15 +109,15 @@
         <!-- Конфлюэнтность -->
         <div class="confluence-box">
             <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;">📊 Мультииндикаторная конфлюэнтность:</div>
-            <div class="confluence-item"><span>Parabolic SAR (на свечах):</span> <span>ACTIVE</span></div>
-            <div class="confluence-item"><span>RSI Моментум (14):</span> <span>STABLE</span></div>
-            <div class="confluence-item"><span>MACD Импульс:</span> <span>UPTREND</span></div>
-            <div class="confluence-item"><span>Точность нейросети:</span> <span>99.4%</span></div>
+            <div class="confluence-item"><span>Parabolic SAR:</span> <span>BULLISH</span></div>
+            <div class="confluence-item"><span>RSI:</span> <span>STABLE</span></div>
+            <div class="confluence-item"><span>MACD:</span> <span>CROSS UP</span></div>
+            <div class="confluence-item"><span>Точность ИИ:</span> <span>99.4%</span></div>
         </div>
 
-        <!-- БОЛЬШОЙ РАЗДЕЛ НЕЙРО-ЛОГОВ (Размещен сразу после конфлюэнтности) -->
+        <!-- БОЛЬШОЙ РАЗДЕЛ НЕЙРО-ЛОГОВ (Статичный) -->
         <div class="big-neuro-box">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>
+            <div style="font-weight:700; color:var(--accent-blue); font-size: 11px; margin-bottom:6px;">🧠 НЕЙРО-ЛОГИ АЛГОРИТМА:</div>
             <div class="log-box-large" id="terminalLogs">
                 [SYSTEM] Инициализация квантового ядра v4.8...<br>
                 [SYSTEM] Синхронизация с серверами: 0.1ms...<br>
@@ -131,6 +130,7 @@
         <!-- Доп. инструменты -->
         <div class="sub-nav-grid">
             <div class="sub-nav-btn active" onclick="switchTool('matrix', this)">📈 Матрица</div>
+            <div class="sub-nav-btn" onclick="switchTool('orderbook', this)">⚖️ Стакан</div>
             <div class="sub-nav-btn" onclick="switchTool('risk', this)">🛡️ Риск</div>
             <div class="sub-nav-btn" onclick="switchTool('aiCore', this)">⚙️ Ядро</div>
         </div>
@@ -143,12 +143,16 @@
             </table>
         </div>
 
+        <div id="orderbook" class="analysis-tool-box">
+            <div style="font-size:11px; color:var(--text-secondary);">Покупатели: 58% | Продавцы: 42%</div>
+        </div>
+
         <div id="risk" class="analysis-tool-box">
-            <div style="color:var(--text-secondary); font-size:11px;">Риск-менеджмент: 2% от баланса.</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Рекомендуемый риск: 2% от депозита.</div>
         </div>
 
         <div id="aiCore" class="analysis-tool-box">
-            <div style="color:var(--text-secondary); font-size:11px;">Ядро: Работает в штатном режиме.</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Алгоритм фильтрации шумов: Уровень 3 (ВКЛ)</div>
         </div>
     </div>
 
@@ -163,9 +167,8 @@
     <div id="vip" class="card">
         <h3 style="color:var(--accent-green); margin-bottom:10px;">🎁 VIP СТАТУС</h3>
         <div class="vip-card-box">
-            <p>Выбери свой доступ:</p>
             <p>• <b>VIP на 7 дней:</b> Тест системы.</p>
-            <p>• <b>VIP на 30 дней:</b> Полный доступ.</p>
+            <p>• <b>VIP на 30 дней:</b> Полный безлимитный доступ.</p>
         </div>
         <ul class="vip-list">
             <li>Автоматический копи-трэйдинг.</li>
@@ -195,24 +198,20 @@
             const btn = document.getElementById('scanBtn');
             res.style.display = 'block';
             btn.disabled = true;
-            res.innerHTML = '⚡ Анализ...';
+            res.innerHTML = '⚡ ИИ-Анализ...';
             setTimeout(() => {
-                res.innerHTML = '📈 СИГНАЛ: STRONG BUY <br>Вероятность: 99.4%';
+                res.innerHTML = '📈 СИГНАЛ: STRONG BUY <br>Вероятность успеха: 99.4%';
                 btn.disabled = false;
             }, 2000);
         }
 
-        // Авто-обновление логов
         setInterval(() => {
             const logs = document.getElementById('terminalLogs');
             const now = new Date().toTimeString().split(' ')[0];
-            logs.innerHTML += `<br>[${now}] Сканирование рынка...`;
+            logs.innerHTML += `<br>[${now}] Проверка импульсов...`;
             logs.scrollTop = logs.scrollHeight;
         }, 5000);
 
-        function changeAsset() { /* Logic */ }
-        function changeTimeframe() { /* Logic */ }
-        
         // TradingView init
         const script = document.createElement('script');
         script.src = "https://s3.tradingview.com/tv.js";
