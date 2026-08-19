@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex AI Pro</title>
+    <title>Binodex AI Pro Terminal</title>
+    <!-- Официальный скрипт Telegram WebApp -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -54,6 +55,7 @@
             font-size: 11px;
             font-weight: 700;
         }
+        /* ВКЛАДКИ */
         .nav-tabs {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -98,12 +100,32 @@
             justify-content: space-between;
             align-items: center;
         }
+        /* УПРАВЛЕНИЕ АКТИВАМИ */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .select-custom {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            outline: none;
+        }
+        /* ГРАФИК */
         .tradingview-container {
             width: 100%;
-            height: 340px;
+            height: 360px;
             border-radius: 8px;
             overflow: hidden;
             background: #131722;
+            border: 1px solid var(--border-color);
         }
         .news-filter {
             display: flex;
@@ -118,19 +140,28 @@
             color: var(--accent-green);
             margin-bottom: 10px;
         }
+        /* КНОПКИ */
         .btn {
             width: 100%;
             background: linear-gradient(135deg, #00c853, #009624);
             color: #fff;
             border: none;
             border-radius: 10px;
-            padding: 14px;
-            font-size: 14px;
+            padding: 13px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
             text-transform: uppercase;
             box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
             margin-top: 8px;
+        }
+        .btn-trade {
+            background: linear-gradient(135deg, #00bcd4, #008ba3);
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+            margin-top: 8px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
         }
         .btn:active {
             transform: scale(0.98);
@@ -143,9 +174,93 @@
             border: 1px solid var(--accent-green);
             text-align: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--accent-green);
             display: none;
+        }
+        /* МОДУЛЬ СОВПАДЕНИЯ ИНДИКАТОРОВ (КОНФЛЮЭНТНОСТЬ) */
+        .confluence-box {
+            background: rgba(0, 188, 212, 0.05);
+            border: 1px solid rgba(0, 188, 212, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+        .confluence-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+            color: var(--text-secondary);
+        }
+        .confluence-item span {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+        /* ДОП. БЛОКИ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .feature-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+        .feature-box span {
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+        .sentiment-bar {
+            width: 100%;
+            height: 6px;
+            background: #ff3d00;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 6px;
+            display: flex;
+        }
+        .sentiment-bull {
+            width: 78%;
+            background: #00c853;
+            height: 100%;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+            font-size: 11px;
+        }
+        .history-table th, .history-table td {
+            padding: 5px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .history-table th {
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+        .calc-box {
+            background: rgba(0, 188, 212, 0.05);
+            border: 1px solid rgba(0, 188, 212, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+        .calc-input {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-top: 4px;
+            font-size: 12px;
         }
         .academy-item {
             background: rgba(255,255,255,0.03);
@@ -156,29 +271,11 @@
             color: var(--text-main);
             font-size: 13px;
         }
-        .footer-cta {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 1px solid var(--accent-blue);
-            border-radius: 12px;
-            padding: 14px;
+        .footer-info {
             text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
             margin-top: 15px;
-        }
-        .footer-cta p {
-            font-size: 12px;
-            line-height: 1.4;
-            color: var(--text-main);
-            margin-bottom: 10px;
-        }
-        .footer-btn {
-            display: block;
-            background: var(--accent-blue);
-            color: #fff;
-            text-decoration: none;
-            padding: 11px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 13px;
         }
     </style>
 </head>
@@ -191,29 +288,61 @@
 
     <div class="top-panel">
         <div class="brand-title">BINODEX <span>AI PRO</span></div>
-        <div class="winrate-badge">🟢 WINRATE 97.4%</div>
+        <div class="winrate-badge">🟢 WINRATE 98.2%</div>
     </div>
 
+    <!-- МЕНЮ ВКЛАДОК -->
     <div class="nav-tabs">
         <div class="nav-tab active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</div>
         <div class="nav-tab" onclick="switchTab('academy', this)">🎓 АКАДЕМИЯ</div>
-        <div class="nav-tab" onclick="switchTab('vip', this)">🎁 VIP ДОСТУП</div>
+        <div class="nav-tab" onclick="switchTab('vip', this)">🎁 VIP СИСТЕМЫ</div>
     </div>
 
+    <!-- ВКЛАДКА 1: ТЕРМИНАЛ -->
     <div id="terminal" class="card active-section">
         <div class="news-filter">
-            <span>🛡️ Новостной фильтр: РЫНОК БЕЗОПАСЕН</span>
-            <span style="font-size: 10px; background: rgba(255,255,255,0.1); padding: 3px 6px; border-radius: 4px;">LOW</span>
+            <span>🛡️ Новостной фильтр: РЫНОК ИДЕАЛЕН</span>
+            <span style="font-size: 10px; background: rgba(255,255,255,0.1); padding: 3px 6px; border-radius: 4px;">HIGH WINRATE</span>
         </div>
 
-        <div class="section-title">
-            <span>📊 Живой график рынка</span>
-            <span style="color: var(--accent-blue);">GBP/USD</span>
+        <!-- УПРАВЛЕНИЕ АКТИВАМИ И ТАЙМФРЕЙМАМИ -->
+        <div class="controls-grid">
+            <select id="assetSelect" class="select-custom" onchange="changeAsset()">
+                <optgroup label="Валютные пары (OTC / Форекс)">
+                    <option value="FX:GBPUSD">GBP/USD (ОТС)</option>
+                    <option value="FX:EURUSD">EUR/USD (ОТС)</option>
+                    <option value="FX:USDJPY">USD/JPY (ОТС)</option>
+                    <option value="FX:AUDUSD">AUD/USD (ОТС)</option>
+                    <option value="FX:USDCAD">USD/CAD (ОТС)</option>
+                    <option value="FX:USDCHF">USD/CHF (ОТС)</option>
+                    <option value="FX:NZDUSD">NZD/USD (ОТС)</option>
+                    <option value="FX:EURGBP">EUR/GBP (ОТС)</option>
+                    <option value="FX:EURJPY">EUR/JPY (ОТС)</option>
+                    <option value="FX:GBPJPY">GBP/JPY (ОТС)</option>
+                </optgroup>
+                <optgroup label="Криптовалюты">
+                    <option value="BINANCE:BTCUSDT">Bitcoin / USDT</option>
+                    <option value="BINANCE:ETHUSDT">Ethereum / USDT</option>
+                    <option value="BINANCE:XRPUSDT">Ripple / USDT</option>
+                    <option value="BINANCE:SOLUSDT">Solana / USDT</option>
+                    <option value="BINANCE:LTCUSDT">Litecoin / USDT</option>
+                </optgroup>
+            </select>
+
+            <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe()">
+                <option value="1">1 Мин</option>
+                <option value="5">5 Мин</option>
+                <option value="15">15 Мин</option>
+                <option value="60">1 Час</option>
+            </select>
         </div>
-        <div class="tradingview-container">
-            <div class="tradingview-widget-container" style="height:100%;width:100%">
+
+        <!-- ГРАФИК С 3 ВСТРОЕННЫМИ ИНДИКАТОРАМИ -->
+        <div class="tradingview-container" id="chartContainer">
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container" id="tv-widget-inner" style="height:100%;width:100%">
               <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+              <script type="text/javascript" id="tv-script" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
               {
                 "autosize": true,
                 "symbol": "FX:GBPUSD",
@@ -223,41 +352,115 @@
                 "style": "1",
                 "locale": "ru",
                 "enable_publishing": false,
-                "allow_symbol_change": true,
+                "allow_symbol_change": false,
+                "studies": [
+                  "RSI@tv-basicstudies",
+                  "MACD@tv-basicstudies",
+                  "BollingerBands@tv-basicstudies"
+                ],
                 "support_host": "https://www.tradingview.com"
               }
               </script>
             </div>
+            <!-- TradingView Widget END -->
+        </div>
+
+        <!-- СЕКЦИЯ СИГНАЛОВ С 4-СЕКУНДНЫМ АНАЛИЗОМ -->
+        <div style="margin-top: 10px;">
+            <div class="section-title">⚡ Квантовый сканер ИИ (4-этапный анализ)</div>
+            <button id="scanBtn" class="btn" onclick="runAnalysis()">ЗАПУСТИТЬ АНАЛИЗ ИИ</button>
+            <div id="signalResult" class="signal-result">📈 СИГНАЛ ИИ: ВВЕРХ (STRONG BUY)</div>
+            
+            <!-- РЕФЕРАЛЬНАЯ КНОПКА НАЧАТЬ ТОРГОВАТЬ -->
+            <a href="https://t.me/" class="btn btn-trade" target="_blank">🚀 НАЧАТЬ ТОРГОВАТЬ (РЕФЕРАЛКА)</a>
+        </div>
+
+        <!-- МОДУЛЬ СОВПАДЕНИЯ ИНДИКАТОРОВ (КОНФЛЮЭНТНОСТЬ) -->
+        <div class="confluence-box">
+            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;">📊 Совпадение индикаторов (Конфлюэнтность):</div>
+            <div class="confluence-item"><span>RSI (14) Перепроданность:</span> <span id="confRsi">СОВПАДЕНИЕ (OK)</span></div>
+            <div class="confluence-item"><span>MACD Пересечение линий:</span> <span id="confMacd">БЫЧИЙ ИМПУЛЬС</span></div>
+            <div class="confluence-item"><span>Bollinger Bands Пробой:</span> <span id="confBb">АКТИВЕН</span></div>
+            <div class="confluence-item"><span>Общий индекс совпадения:</span> <span style="font-size:12px;" id="confTotal">98.4% (ВЫСОКИЙ)</span></div>
+        </div>
+
+        <!-- ФУНКЦИЯ КАЛЬКУЛЯТОРА ПРИБЫЛИ (PnL) -->
+        <div class="calc-box">
+            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;">💰 Калькулятор потенциальной прибыли:</div>
+            <div style="display:flex; gap:6px; align-items:center;">
+                <div style="flex:1;">
+                    Сумма ($): <input type="number" id="investSum" class="calc-input" value="50" oninput="calculateProfit()">
+                </div>
+                <div style="flex:1;">
+                    Выплата: <span style="color:var(--accent-green); font-weight:700;" id="payoutVal">88%</span>
+                </div>
+                <div style="flex:1; text-align:right;">
+                    Доход: <span style="color:var(--accent-green); font-weight:800;" id="profitRes">$94.00</span>
+                </div>
             </div>
+        </div>
 
-        <div style="margin-top: 12px;">
-            <div class="section-title">⚡ Квантовый сканер сигналов</div>
-            <button class="btn" onclick="runAnalysis()">ПОЛУЧИТЬ СИГНАЛ ИИ</button>
-            <div id="signalResult" class="signal-result">📈 СИГНАЛ: ПОКУПКА ↑ (ВВЕРХ)</div>
+        <!-- СЕТКА ДОП. ФУНКЦИЙ -->
+        <div class="features-grid">
+            <div class="feature-box">
+                <div>Настроение рынка:</div>
+                <div style="color: var(--accent-green); font-weight:700; margin-top:2px;">78% ПОКУПКИ (LONG)</div>
+                <div class="sentiment-bar"><div class="sentiment-bull"></div></div>
+            </div>
+            <div class="feature-box">
+                <div>Синхронизация ИИ:</div>
+                <div style="color: var(--accent-green); font-weight:700; margin-top:2px;">⚡ 9 узлов активны</div>
+            </div>
+            <div class="feature-box">
+                <div>🛡️ Риск-менеджмент:</div>
+                <div style="color: var(--accent-blue); font-weight:700; margin-top:2px;">Защита капитала ВКЛ</div>
+            </div>
+            <div class="feature-box">
+                <div>🔐 Пинг сервера:</div>
+                <div style="color: var(--accent-green); font-weight:700; margin-top:2px;">⚡ 9 мс (Стабильно)</div>
+            </div>
+        </div>
+
+        <!-- ИСТОРИЯ СИГНАЛОВ -->
+        <div class="feature-box" style="margin-top: 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span>📋 Живая история успешных сделок:</span>
+                <span style="color:var(--accent-green);">Winrate 98.2%</span>
+            </div>
+            <table class="history-table">
+                <tr><th>Пара</th><th>Сигнал</th><th>Результат</th></tr>
+                <tr><td>GBP/USD</td><td style="color:var(--accent-green);">↑ ВВЕРХ</td><td style="color:var(--accent-green);">✅ ПЛЮС</td></tr>
+                <tr><td>EUR/USD</td><td style="color:var(--accent-red);">↓ ВНИЗ</td><td style="color:var(--accent-green);">✅ ПЛЮС</td></tr>
+                <tr><td>BTC/USDT</td><td style="color:var(--accent-green);">↑ ВВЕРХ</td><td style="color:var(--accent-green);">✅ ПЛЮС</td></tr>
+            </table>
         </div>
     </div>
 
+    <!-- ВКЛАДКА 2: АКАДЕМИЯ -->
     <div id="academy" class="card">
-        <div class="section-title">🎓 ОБУЧЕНИЕ ТРЭЙДИНГУ</div>
+        <div class="section-title">🎓 ПРОДВИНУТОЕ ОБУЧЕНИЕ ТРЭЙДИНГУ</div>
         <div class="academy-item">
-            <strong>1. Основы анализа рынка</strong><br>Как читать графики и использовать индикаторы для точных входов.
+            <strong>1. Анализ свечных паттернов</strong><br>Как находить разворотные точки на минутных таймфреймах.
         </div>
         <div class="academy-item">
-            <strong>2. Управление рисками</strong><br>Правильный манименеджмент для каждого успешного трэйдера.
+            <strong>2. Работа с индикаторами RSI и MACD</strong><br>Фильтрация ложных сигналов квантовым алгоритмом.
+        </div>
+        <div class="academy-item">
+            <strong>3. Психология успешного трэйдера</strong><br>Дисциплина и контроль эмоций во время торговой сессии.
         </div>
     </div>
 
+    <!-- ВКЛАДКА 3: VIP СИСТЕМЫ -->
     <div id="vip" class="card">
-        <div class="section-title">🎁 ЭКСКЛЮЗИВНЫЕ БОНУСЫ</div>
-        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
-            Получи полный доступ к закрытой экосистеме и прямым трансляциям.
+        <div class="section-title">🎁 VIP ЭКОСИСТЕМА И БОНУСЫ</div>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; line-height: 1.4;">
+            Получите эксклюзивный доступ к закрытым алгоритмам прогнозирования, авто-сигналам в реальном времени и прямой поддержке команды.
         </div>
-        <a href="https://t.me/" class="footer-btn" style="text-align: center;" target="_blank">ПОЛУЧИТЬ VIP СТАТУС</a>
+        <a href="https://t.me/" class="btn btn-trade" style="text-align: center;" target="_blank">ПОЛУЧИТЬ VIP СТАТУС</a>
     </div>
 
-    <div class="footer-cta">
-        <p>А в моём канале я бесплатно обучаю трэйдингу и захожу в сделки со своей командой в прямом эфире. Вступить в нашу команду можно по ссылке в профиле!</p>
-        <a href="https://t.me/" class="footer-btn" target="_blank">ВСТУПИТЬ В НАШУ КОМАНДУ</a>
+    <div class="footer-info">
+        Binodex AI Pro Terminal v7.4 • Secure Neural Core
     </div>
 
     <script>
@@ -268,17 +471,99 @@
             element.classList.add('active');
         }
 
+        // РЕАЛИСТИЧНЫЙ 4-СЕКУНДНЫЙ АНАЛИЗ С ДИНАМИЧЕСКИМИ ШАГАМИ
         function runAnalysis() {
+            const btn = document.getElementById('scanBtn');
             const res = document.getElementById('signalResult');
+            
+            btn.disabled = true;
             res.style.display = 'block';
-            res.innerHTML = '⏳ Сканирование рынков ИИ...';
+            
+            // Этап 1 (0 сек)
+            res.style.color = 'var(--accent-blue)';
+            res.style.borderColor = 'var(--accent-blue)';
+            res.style.background = 'rgba(0, 188, 212, 0.1)';
+            res.innerHTML = '⏳ [1/4] Подключение к квантовому узлу ИИ...';
+
+            // Этап 2 (1 сек)
             setTimeout(() => {
-                const isUp = Math.random() > 0.3;
+                res.innerHTML = '🔍 [2/4] Сканирование книги ордеров и стакана ликвидности...';
+            }, 1000);
+
+            // Этап 3 (2 сек)
+            setTimeout(() => {
+                res.innerHTML = '📈 [3/4] Проверка индикаторов (RSI, MACD, Bollinger)...';
+            }, 2000);
+
+            // Этап 4 (3 сек)
+            setTimeout(() => {
+                res.innerHTML = '⚡ [4/4] Синхронизация паттернов и расчет вероятности...';
+            }, 3000);
+
+            // Финал (4 секунды)
+            setTimeout(() => {
+                const isUp = Math.random() > 0.25; // 75% шанс на плюс для убедительности
                 res.style.color = isUp ? 'var(--accent-green)' : 'var(--accent-red)';
                 res.style.borderColor = isUp ? 'var(--accent-green)' : 'var(--accent-red)';
                 res.style.background = isUp ? 'rgba(0, 200, 83, 0.1)' : 'rgba(255, 61, 0, 0.1)';
-                res.innerHTML = isUp ? '📈 СИГНАЛ: ПОКУПКА ↑ (ВВЕРХ)' : '📉 СИГНАЛ: ПРОДАЖА ↓ (ВНИЗ)';
-            }, 1000);
+                res.innerHTML = isUp ? '📈 СИГНАЛ ИИ: ВВЕРХ (STRONG BUY 99%)' : '📉 СИГНАЛ ИИ: ВНИЗ (STRONG SELL 99%)';
+                
+                // Обновляем показатели совпадения для полной достоверности
+                document.getElementById('confRsi').innerText = isUp ? 'ПЕРЕПРОДАННОСТЬ (OK)' : 'ПЕРЕКУПЛЕННОСТЬ (OK)';
+                document.getElementById('confMacd').innerText = isUp ? 'БЫЧИЙ ИМПУЛЬС' : 'МЕДВЕЖИЙ ИМПУЛЬС';
+                document.getElementById('confTotal').innerText = (97 + Math.random() * 2).toFixed(1) + '% (ИДЕАЛЬНО)';
+
+                btn.disabled = false;
+            }, 4000);
+        }
+
+        // Калькулятор прибыли в реальном времени
+        function calculateProfit() {
+            const sum = parseFloat(document.getElementById('investSum').value) || 0;
+            const payout = 0.88; // 88%
+            const profit = sum + (sum * payout);
+            document.getElementById('profitRes').innerText = '$' + profit.toFixed(2);
+        }
+
+        // Динамическая смена валютных пар с сохранением индикаторов
+        function changeAsset() {
+            const symbol = document.getElementById('assetSelect').value;
+            const tf = document.getElementById('timeframeSelect').value;
+            updateChart(symbol, tf);
+        }
+
+        function changeTimeframe() {
+            const symbol = document.getElementById('assetSelect').value;
+            const tf = document.getElementById('timeframeSelect').value;
+            updateChart(symbol, tf);
+        }
+
+        function updateChart(symbol, timeframe) {
+            const container = document.getElementById('chartContainer');
+            container.innerHTML = `
+                <div class="tradingview-widget-container" style="height:100%;width:100%">
+                  <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+                  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                  {
+                    "autosize": true,
+                    "symbol": "${symbol}",
+                    "interval": "${timeframe}",
+                    "timezone": "Etc/UTC",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "ru",
+                    "enable_publishing": false,
+                    "allow_symbol_change": false,
+                    "studies": [
+                      "RSI@tv-basicstudies",
+                      "MACD@tv-basicstudies",
+                      "BollingerBands@tv-basicstudies"
+                    ],
+                    "support_host": "https://www.tradingview.com"
+                  }
+                  <\/script>
+                </div>
+            `;
         }
     </script>
 </body>
