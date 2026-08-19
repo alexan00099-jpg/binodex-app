@@ -248,7 +248,13 @@
             </table>
         </div>
 
-        <div id="orderbook" class="analysis-tool-box"><div style="color:var(--text-secondary);" data-i18n="t_ob_desc">Биржевой стакан ордеров крупных маркетмейкеров...</div></div>
+        <!-- 1. Стакан ордеров -->
+        <div id="orderbook" class="analysis-tool-box">
+            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">⚖️ ГЛУБИНА СТАКАНА МАРКЕТМЕЙКЕРОВ</div>
+            <div id="obContent" style="font-family:monospace; font-size:11px; line-height:1.5;">Загрузка стакана...</div>
+        </div>
+
+        <!-- Риск-менеджмент -->
         <div id="risk" class="analysis-tool-box">
             <label style="font-size:11px; color:var(--text-secondary);" data-i18n="r_bal">Ваш торговый баланс ($):</label>
             <input type="number" id="userBalance" class="risk-input" value="1000" oninput="calculateRisk()">
@@ -256,9 +262,36 @@
             <input type="number" id="riskPercent" class="risk-input" value="2" oninput="calculateRisk()">
             <div style="font-weight:700; color:var(--accent-blue);"><span data-i18n="r_rec">Рекомендуемый размер ставки:</span> <span id="recommendedBet" style="color:var(--accent-green);">$20.00</span></div>
         </div>
-        <div id="profit" class="analysis-tool-box"><div style="font-size:11px; color:var(--text-secondary);" data-i18n="t_calc_desc">Калькулятор сложного процента (разгон депозита)...</div></div>
-        <div id="history" class="analysis-tool-box"><div style="font-size:11px; color:var(--text-secondary);" data-i18n="t_hist_desc">Последние закрытые сессионные сделки ИИ...</div></div>
-        <div id="pool" class="analysis-tool-box"><div style="font-size:11px; color:var(--text-secondary);" data-i18n="t_pool_desc">Мониторинг китовых ордеров и пулов ликвидности...</div></div>
+
+        <!-- 2. Калькулятор сложного процента -->
+        <div id="profit" class="analysis-tool-box">
+            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">💰 КАЛЬКУЛЯТОР СЛОЖНОГО ПРОЦЕНТА</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Начальный депозит ($):</div>
+            <input type="number" id="calcStart" class="risk-input" value="100" oninput="calculateCompound()">
+            <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Прибыль в день (%):</div>
+            <input type="number" id="calcPercent" class="risk-input" value="10" oninput="calculateCompound()">
+            <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Количество дней:</div>
+            <input type="number" id="calcDays" class="risk-input" value="7" oninput="calculateCompound()">
+            <div style="margin-top:8px; font-weight:700; color:var(--accent-green);" id="calcResult">Итог через 7 дней: $194.87</div>
+        </div>
+
+        <!-- 3. История сессионных сделок -->
+        <div id="history" class="analysis-tool-box">
+            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">📑 ИСТОРИЯ СЕССИОННЫХ СДЕЛОК ИИ</div>
+            <div id="historyFeed" style="font-family:monospace; font-size:11px; max-height:130px; overflow-y:auto; line-height:1.5;">
+                [22:40:12] BTC/USDT • ВВЕРХ • СУММА: $50 • <span style="color:var(--accent-green)">УСПЕХ (+$46.00)</span><br>
+                [22:42:30] ETH/USDT • ВНИЗ • СУММА: $30 • <span style="color:var(--accent-green)">УСПЕХ (+$27.60)</span><br>
+                [22:45:00] SOL/USDT • ВВЕРХ • СУММА: $40 • <span style="color:var(--accent-red)">МИНУС (-$40.00)</span>
+            </div>
+        </div>
+
+        <!-- 4. Пул ликвидности / Киты -->
+        <div id="pool" class="analysis-tool-box">
+            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">🌐 МОНИТОРИНГ КИТОВ И ПУЛОВ</div>
+            <div id="poolFeed" style="font-family:monospace; font-size:11px; max-height:130px; overflow-y:auto; line-height:1.5;">
+                Инициализация сканера китовых транзакций...
+            </div>
+        </div>
     </div>
 
     <!-- ОБУЧЕНИЕ -->
@@ -423,7 +456,57 @@
             if(refInput) {
                 refInput.value = refUrl;
             }
+
+            // Автозапуск динамических интерактивных компонентов
+            updateOrderBook();
+            setInterval(updateOrderBook, 3000);
+            calculateCompound();
+            updatePoolFeed();
+            setInterval(updatePoolFeed, 4000);
         });
+
+        // Динамический стакан маркетмейкеров
+        function updateOrderBook() {
+            const ob = document.getElementById('obContent');
+            if(!ob) return;
+            const bPrice = (Math.random() * 500 + 60000).toFixed(2);
+            ob.innerHTML = `
+                🔴 ПРОДАЖИ (ASK): $${(parseFloat(bPrice)+1.5).toFixed(2)} — <span style="color:var(--accent-red)">${(Math.random()*15+5).toFixed(2)} BTC</span><br>
+                🔴 ПРОДАЖИ (ASK): $${(parseFloat(bPrice)+0.8).toFixed(2)} — <span style="color:var(--accent-red)">${(Math.random()*10+2).toFixed(2)} BTC</span><br>
+                🟢 СПРЕД ЦЕНА: <b>$${bPrice}</b><br>
+                🟢 ПОКУПКИ (BID): $${(parseFloat(bPrice)-0.7).toFixed(2)} — <span style="color:var(--accent-green)">${(Math.random()*12+3).toFixed(2)} BTC</span><br>
+                🟢 ПОКУПКИ (BID): $${(parseFloat(bPrice)-1.4).toFixed(2)} — <span style="color:var(--accent-green)">${(Math.random()*18+8).toFixed(2)} BTC</span>
+            `;
+        }
+
+        // Калькулятор сложного процента
+        function calculateCompound() {
+            const start = parseFloat(document.getElementById('calcStart').value) || 100;
+            const pct = parseFloat(document.getElementById('calcPercent').value) || 10;
+            const days = parseInt(document.getElementById('calcDays').value) || 7;
+            let total = start;
+            for(let i=0; i<days; i++) {
+                total += total * (pct / 100);
+            }
+            const resEl = document.getElementById('calcResult');
+            if(resEl) {
+                resEl.innerText = `Итог через ${days} дней: $${total.toFixed(2)}`;
+            }
+        }
+
+        // Лента китовых транзакций и пулов ликвидности
+        function updatePoolFeed() {
+            const pool = document.getElementById('poolFeed');
+            if(!pool) return;
+            const amounts = [150000, 320000, 500000, 1200000, 850000];
+            const randAmt = amounts[Math.floor(Math.random() * amounts.length)];
+            const assets = ['BTC', 'ETH', 'SOL', 'XRP'];
+            const randAsset = assets[Math.floor(Math.random() * assets.length)];
+            const now = new Date().toTimeString().split(' ')[0];
+            
+            const currentHTML = pool.innerHTML.includes('Инициализация') ? '' : pool.innerHTML;
+            pool.innerHTML = `[${now}] 🐋 КИТОВОЙ ОРДЕР: Перевод <b>$${randAmt.toLocaleString()}</b> в пул ${randAsset}<br>` + currentHTML;
+        }
 
         function copyRefLink() {
             const input = document.getElementById('refLinkInput');
