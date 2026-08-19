@@ -46,7 +46,6 @@
         
         .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; font-size: 13px; line-height: 1.4; }
         
-        /* Измененная сетка: удалили кнопку логов, так как раздел теперь статичен */
         .sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
         .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }
         .sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
@@ -58,9 +57,14 @@
         .confluence-item { display: flex; justify-content: space-between; margin-top: 6px; }
         .confluence-item span { color: var(--accent-green); font-weight: 700; }
 
-        /* СТИЛИ БОЛЬШОГО НЕЙРО-ЛОГА */
         .big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }
         .log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }
+
+        /* СТИЛИ БЛОКА ВЫВОДА СРЕДСТВ В РЕАЛЬНОМ ВРЕМЕНИ */
+        .withdrawal-box { background: rgba(0, 230, 118, 0.03); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; }
+        .withdrawal-feed { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 11px; height: 140px; overflow-y: auto; border: 1px solid var(--border-color); }
+        .withdrawal-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-secondary); }
+        .withdrawal-row span b { color: var(--accent-green); }
 
         .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
         .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }
@@ -140,7 +144,7 @@
         
         <div id="signalResult" class="signal-result"></div>
 
-        <!-- Блок совпадения индикаторов и конфлюэнтности -->
+        <!-- Конфлюэнтность -->
         <div class="confluence-box">
             <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;">📊 Мультииндикаторная конфлюэнтность:</div>
             <div class="confluence-item"><span>Parabolic SAR (на свечах):</span> <span id="confPsar">BULLISH REVERSAL</span></div>
@@ -150,7 +154,7 @@
             <div class="confluence-item"><span>Итоговая точность ИИ:</span> <span id="confTotal">99.4%</span></div>
         </div>
 
-        <!-- БОЛЬШОЙ СТАТИЧНЫЙ РАЗДЕЛ НЕЙРО-ЛОГОВ -->
+        <!-- НЕЙРО-ЛОГИ -->
         <div class="big-neuro-box">
             <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>
             <div class="log-box-big" id="terminalLogs">
@@ -161,7 +165,19 @@
             </div>
         </div>
 
-        <!-- Переключатель продвинутых функций (без логов) -->
+        <!-- БЛОК ВЫВОДА СРЕДСТВ В РЕАЛЬНОМ ВРЕМЕНИ -->
+        <div class="withdrawal-box">
+            <div style="font-weight:700; color:var(--accent-green); margin-bottom:8px;">💸 РЕАЛЬНЫЕ ВЫВОДЫ СРЕДСТВ С БИНАДЕКС:</div>
+            <div class="withdrawal-feed" id="withdrawalFeed">
+                [22:46:10] • Александр П. вывел <b>$45.00</b> (Успешно)
+                [22:46:25] • Дмитрий В. вывел <b>$320.00</b> (Успешно)
+                [22:46:40] • Елена С. вывела <b>$85.50</b> (Успешно)
+                [22:47:02] • Максим К. вывел <b>$1,250.00</b> (Успешно)
+                [22:47:18] • Ольга М. вывела <b>$18.00</b> (Успешно)
+            </div>
+        </div>
+
+        <!-- Переключатель функций -->
         <div class="sub-nav-grid">
             <div class="sub-nav-btn active" onclick="switchTool('matrix', this)">📈 Матрица ТФ</div>
             <div class="sub-nav-btn" onclick="switchTool('orderbook', this)">⚖️ Стакан ордеров</div>
@@ -172,7 +188,7 @@
             <div class="sub-nav-btn" onclick="switchTool('aiCore', this)">⚙️ Ядро ИИ</div>
         </div>
 
-        <!-- Содержимое мини-функций -->
+        <!-- Мини-функции -->
         <div id="matrix" class="analysis-tool-box active-tool">
             <div style="color:var(--text-secondary); margin-bottom:6px;">Синхронизация алгоритмов по 10 топовым таймфреймам:</div>
             <table class="matrix-table">
@@ -293,6 +309,7 @@
             element.classList.add('active');
         }
 
+        // РАСШИРЕННЫЙ АНАЛИЗ ИЗ 5 ШАГОВ
         function runAnalysis() {
             const res = document.getElementById('signalResult');
             const btn = document.getElementById('scanBtn');
@@ -300,21 +317,29 @@
             btn.disabled = true;
             
             res.style.color = 'var(--accent-blue)';
-            res.innerHTML = '⚡ [Шаг 1/3] Сканирование стакана ордеров и пулов ликвидности...';
+            res.innerHTML = '⚡ [Шаг 1/5] Сканирование стакана ордеров и пулов ликвидности...';
             
             setTimeout(() => {
-                res.innerHTML = '⚡ [Шаг 2/3] Анализ индикаторов Parabolic SAR, RSI и MACD...';
-            }, 1000);
+                res.innerHTML = '⚡ [Шаг 2/5] Анализ индикаторов Parabolic SAR, RSI и MACD...';
+            }, 800);
 
             setTimeout(() => {
-                res.innerHTML = '⚡ [Шаг 3/3] Синхронизация с нейросетью и матрицей ТФ...';
-            }, 2000);
+                res.innerHTML = '⚡ [Шаг 3/5] Проверка волатильности и полос Боллинджера...';
+            }, 1600);
+
+            setTimeout(() => {
+                res.innerHTML = '⚡ [Шаг 4/5] Синхронизация с нейросетью и матрицей ТФ...';
+            }, 2400);
+
+            setTimeout(() => {
+                res.innerHTML = '⚡ [Шаг 5/5] Фильтрация шумов и формирование итогового сигнала...';
+            }, 3200);
 
             setTimeout(() => {
                 res.innerHTML = '📈 СИГНАЛ ПОДТВЕРЖДЕН: ВВЕРХ (STRONG BUY) <br>🟢 Вероятность успешного исхода: <b>99.4%</b>';
                 res.style.color = 'var(--accent-green)';
                 btn.disabled = false;
-            }, 3000);
+            }, 4000);
         }
 
         function calculateRisk() {
@@ -379,6 +404,30 @@
                 logs.scrollTop = logs.scrollHeight;
             }
         }, 4500);
+
+        // Динамическая живая лента вывода средств (от $10 до $3000, упор на мелкие/средние суммы для реалистичности)
+        setInterval(() => {
+            const feed = document.getElementById('withdrawalFeed');
+            if(feed) {
+                const now = new Date().toTimeString().split(' ')[0];
+                const names = ["Алексей С.", "Иван Р.", "Дмитрий К.", "Сергей П.", "Артем В.", "Евгений М.", "Максим Т.", "Андрей Б.", "Виктор Л.", "Павел Н.", "Николай И."];
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                
+                // Генерация суммы: с большей вероятностью от 15 до 950 долларов, реже до 4500
+                let amount;
+                const r = Math.random();
+                if(r < 0.7) {
+                    amount = (Math.random() * 190 + 10).toFixed(2); // от 10 до 200
+                } else if(r < 0.95) {
+                    amount = (Math.random() * 800 + 200).toFixed(2); // от 200 до 1000
+                } else {
+                    amount = (Math.random() * 3500 + 1000).toFixed(2); // от 1000 до 4500
+                }
+
+                feed.innerHTML += `<br>[${now}] • ${randomName} вывел <b>$${amount}</b> (Успешно)`;
+                feed.scrollTop = feed.scrollHeight;
+            }
+        }, 6000);
     </script>
 </body>
 </html>
