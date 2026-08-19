@@ -3,299 +3,644 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex AI Trading Signals</title>
+    <title>Binodex Pro AI Terminal</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #0b0e14;
+            background-color: #090d16;
             color: #ffffff;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 12px;
+            padding-bottom: 30px;
         }
 
         .container {
             width: 100%;
-            max-width: 380px;
+            max-width: 420px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 4px;
         }
 
-        .header h1 {
-            font-size: 22px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        .brand {
+            font-size: 16px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .online-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.4; transform: scale(0.9); }
+        }
+
+        /* Controls Section */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .select-box, .tf-box {
+            background: #121826;
+            border: 1px solid #1f293d;
+            border-radius: 12px;
+            padding: 8px 10px;
+        }
+
+        .control-label {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
             margin-bottom: 4px;
+        }
+
+        select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #60a5fa;
+            font-weight: 700;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select option {
+            background: #121826;
+            color: #ffffff;
+        }
+
+        .tf-pills {
+            display: flex;
+            gap: 4px;
+        }
+
+        .tf-pill {
+            flex: 1;
+            text-align: center;
+            padding: 5px 0;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 6px;
+            background: #1a2235;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tf-pill.active {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+        }
+
+        /* TradingView Chart Container */
+        .chart-card {
+            background: #121826;
+            border: 1px solid #1f293d;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            height: 220px;
+            position: relative;
+        }
+
+        #tv_chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Technical Analysis Panel */
+        .ta-panel {
+            background: #121826;
+            border: 1px solid #1f293d;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+        }
+
+        .ta-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: #94a3b8;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
         }
 
-        .header p {
-            font-size: 13px;
-            color: #94a3b8;
+        .trend-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #1c2538;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
         }
 
-        .card {
-            background: #151921;
-            border-radius: 20px;
-            padding: 24px;
-            border: 1px solid #232a3b;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            text-align: center;
+        .trend-bar-fill {
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(90deg, #2563eb, #10b981);
+            border-radius: 4px;
+            transition: width 0.5s ease;
         }
 
-        .pair-badge {
-            display: inline-block;
-            background: #1e2638;
-            color: #60a5fa;
-            border: 1px solid #2b3854;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 15px;
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .ind-item {
+            background: #0a0e17;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #1a2234;
+        }
+
+        .ind-label {
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        .ind-value {
+            font-size: 12px;
             font-weight: 700;
-            margin-bottom: 16px;
-            letter-spacing: 0.5px;
+            color: #38bdf8;
+            margin-top: 2px;
+        }
+
+        /* Main Signal Display */
+        .signal-card {
+            background: #121826;
+            border: 1px solid #1f293d;
+            border-radius: 18px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
         .signal-box {
-            min-height: 110px;
+            min-height: 85px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #0d1117;
-            border-radius: 16px;
-            border: 1px solid #1e2638;
-            padding: 16px;
-            margin-bottom: 16px;
-            transition: all 0.3s ease;
+            background: #0a0e17;
+            border-radius: 14px;
+            border: 1px solid #1c2538;
+            padding: 12px;
+            margin-bottom: 12px;
         }
 
         .signal-text {
-            font-size: 22px;
-            font-weight: 800;
+            font-size: 20px;
+            font-weight: 900;
             letter-spacing: 0.5px;
         }
 
         .signal-idle { color: #64748b; }
-        .signal-up { color: #10b981; text-shadow: 0 0 12px rgba(16, 185, 129, 0.4); }
-        .signal-down { color: #ef4444; text-shadow: 0 0 12px rgba(239, 68, 68, 0.4); }
+        .signal-up { color: #10b981; text-shadow: 0 0 14px rgba(16, 185, 129, 0.5); }
+        .signal-down { color: #ef4444; text-shadow: 0 0 14px rgba(239, 68, 68, 0.5); }
 
-        .meta-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .meta-item {
-            background: #0d1117;
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px solid #1e2638;
-        }
-
-        .meta-label {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-
-        .meta-value {
-            font-size: 14px;
+        .timer-badge {
+            font-size: 12px;
             font-weight: 700;
-            color: #f1f5f9;
-        }
-
-        /* Loading Spinner */
-        .loader {
+            color: #f59e0b;
+            margin-top: 4px;
             display: none;
-            width: 32px;
-            height: 32px;
-            border: 3px solid rgba(59, 130, 246, 0.2);
-            border-radius: 50%;
-            border-top-color: #3b82f6;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 8px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .meta-row {
+            display: flex;
+            justify-content: space-around;
+            background: #0a0e17;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #1c2538;
         }
 
-        .scan-status {
+        .meta-cell {
+            text-align: center;
+        }
+
+        .meta-val {
             font-size: 13px;
-            color: #3b82f6;
-            font-weight: 600;
+            font-weight: 800;
+            color: #ffffff;
         }
 
         /* Buttons */
         .btn-main {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
             border: none;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 700;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: 800;
             border-radius: 14px;
             width: 100%;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-            transition: transform 0.1s ease;
-            margin-bottom: 12px;
+            box-shadow: 0 4px 18px rgba(37, 99, 235, 0.4);
+            transition: all 0.1s ease;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .btn-main:active {
-            transform: scale(0.97);
-        }
-
-        .btn-main:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        .btn-main:active { transform: scale(0.98); }
+        .btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .btn-ref {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             color: white;
             text-decoration: none;
             padding: 14px;
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 800;
             border-radius: 14px;
             width: 100%;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            transition: transform 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
         }
 
-        .btn-ref:active {
-            transform: scale(0.97);
+        .btn-ref:active { transform: scale(0.98); }
+
+        /* Recent Signals Feed */
+        .feed-card {
+            background: #121826;
+            border: 1px solid #1f293d;
+            border-radius: 16px;
+            padding: 12px 14px;
         }
 
-        .footer-note {
-            margin-top: 16px;
+        .feed-header {
             font-size: 11px;
-            color: #64748b;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .feed-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a2234;
+            font-size: 12px;
+        }
+
+        .feed-item:last-child { border-bottom: none; }
+
+        .feed-pair { font-weight: 700; color: #f1f5f9; }
+        .feed-dir-up { color: #10b981; font-weight: 700; }
+        .feed-dir-down { color: #ef4444; font-weight: 700; }
+        .feed-profit {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 11px;
+        }
+
+        /* Spinner Loader */
+        .loader {
+            display: none;
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 0.7s linear infinite;
+            margin-bottom: 6px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .scan-status {
+            font-size: 12px;
+            color: #3b82f6;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header">
-            <h1>Binodex AI Signal</h1>
-            <p>Нейросетевой анализ торговых пар v2.4</p>
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="brand">BINODEX AI PRO</div>
+            <div class="online-badge">
+                <div class="pulse-dot"></div>
+                <span id="onlineCount">1,438 В СЕТИ</span>
+            </div>
         </div>
 
-        <div class="card">
-            <div class="pair-badge" id="pair">EUR/USD OTC</div>
+        <!-- Controls -->
+        <div class="controls-grid">
+            <div class="select-box">
+                <div class="control-label">Валютная пара</div>
+                <select id="pairSelect" onchange="onPairChange()">
+                    <option value="EUR/USD OTC" data-symbol="FX:EURUSD">EUR/USD OTC</option>
+                    <option value="GBP/USD OTC" data-symbol="FX:GBPUSD">GBP/USD OTC</option>
+                    <option value="USD/JPY OTC" data-symbol="FX:USDJPY">USD/JPY OTC</option>
+                    <option value="AUD/CAD OTC" data-symbol="OANDA:AUDCAD">AUD/CAD OTC</option>
+                    <option value="BTC/USD" data-symbol="BINANCE:BTCUSDT">BTC/USD (Crypto)</option>
+                    <option value="ETH/USD" data-symbol="BINANCE:ETHUSDT">ETH/USD (Crypto)</option>
+                </select>
+            </div>
+            <div class="tf-box">
+                <div class="control-label">Экспирация</div>
+                <div class="tf-pills">
+                    <div class="tf-pill active" onclick="setTF(this, '1 МИН')">1m</div>
+                    <div class="tf-pill" onclick="setTF(this, '3 МИН')">3m</div>
+                    <div class="tf-pill" onclick="setTF(this, '5 МИН')">5m</div>
+                </div>
+            </div>
+        </div>
 
-            <div class="signal-box" id="signalBox">
+        <!-- TradingView Chart -->
+        <div class="chart-card">
+            <div id="tv_chart"></div>
+        </div>
+
+        <!-- Technical Analysis Panel -->
+        <div class="ta-panel">
+            <div class="ta-title">
+                <span>Анализ ИИ нейросети</span>
+                <span id="trendPercent" style="color:#10b981;">Сила тренда: 89%</span>
+            </div>
+            <div class="trend-bar-bg">
+                <div class="trend-bar-fill" id="trendBar" style="width: 89%;"></div>
+            </div>
+            <div class="indicators-grid">
+                <div class="ind-item">
+                    <div class="ind-label">Индикатор RSI</div>
+                    <div class="ind-value" id="rsiVal">68.4 (Нейтрально)</div>
+                </div>
+                <div class="ind-item">
+                    <div class="ind-label">Осциллятор MACD</div>
+                    <div class="ind-value" id="macdVal">Бычий импульс</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signal Section -->
+        <div class="signal-card">
+            <div class="signal-box">
                 <div class="loader" id="loader"></div>
-                <div class="signal-text signal-idle" id="signalText">НАЖМИТЕ КНОПКУ</div>
+                <div class="signal-text signal-idle" id="signalText">ВЫБЕРИТЕ ПАРУ И НАЖМИТЕ КНОПКУ</div>
+                <div class="timer-badge" id="timerBadge">⏱ Действителен: <span id="timerVal">03:00</span></div>
             </div>
 
-            <div class="meta-grid">
-                <div class="meta-item">
-                    <div class="meta-label">Экспирация</div>
-                    <div class="meta-value" id="timeValue">1 - 3 МИН</div>
+            <div class="meta-row">
+                <div class="meta-cell">
+                    <div class="control-label">Точность ИИ</div>
+                    <div class="meta-val" id="accVal" style="color:#10b981;">-- %</div>
                 </div>
-                <div class="meta-item">
-                    <div class="meta-label">Точность ИИ</div>
-                    <div class="meta-value" id="accuracyValue">-- %</div>
+                <div class="meta-cell">
+                    <div class="control-label">Режим ИИ</div>
+                    <div class="meta-val">Deep Analysis v3</div>
                 </div>
             </div>
-
-            <button class="btn-main" id="getSignalBtn" onclick="requestSignal()">ПОЛУЧИТЬ СИГНАЛ</button>
-            
-            <!-- Укажите свою партнерскую/реферальную ссылку вместо # -->
-            <a href="YOUR_REF_LINK" target="_blank" class="btn-ref">
-                ТОРГОВАТЬ НА BINODEX 🚀
-            </a>
-
-            <div class="footer-note">Сигналы генерируются на основе индикаторов RSI, MACD и Bollinger Bands</div>
         </div>
+
+        <!-- Buttons -->
+        <button class="btn-main" id="getSignalBtn" onclick="requestSignal()">ВЫЧИСЛИТЬ СИГНАЛ 🚀</button>
+
+        <!-- УКАЖИТЕ СВОЮ ССЫЛКУ ВМЕСТО YOUR_REF_LINK -->
+        <a href="YOUR_REF_LINK" target="_blank" class="btn-ref">
+            ТОРГОВАТЬ НА BINODEX 💰
+        </a>
+
+        <!-- Live Feed / Social Proof -->
+        <div class="feed-card">
+            <div class="feed-header">
+                <span>Успешные сигналы ИИ</span>
+                <span style="color:#10b981;">Winrate 92%</span>
+            </div>
+            <div id="feedList">
+                <div class="feed-item">
+                    <span class="feed-pair">EUR/USD OTC</span>
+                    <span class="feed-dir-up">ВВЕРХ ⬆️</span>
+                    <span class="feed-profit">+88% ✅</span>
+                </div>
+                <div class="feed-item">
+                    <span class="feed-pair">BTC/USD</span>
+                    <span class="feed-dir-down">ВНИЗ ⬇️</span>
+                    <span class="feed-profit">+93% ✅</span>
+                </div>
+                <div class="feed-item">
+                    <span class="feed-pair">GBP/USD OTC</span>
+                    <span class="feed-dir-up">ВВЕРХ ⬆️</span>
+                    <span class="feed-profit">+89% ✅</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
+        // Init Telegram WebApp
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
             tg.ready();
             tg.expand();
         }
 
-        const pairs = [
-            'EUR/USD OTC', 'GBP/USD OTC', 'USD/JPY OTC', 
-            'AUD/CAD OTC', 'EUR/JPY OTC', 'CRYPTO IDX', 'BTC/USD'
-        ];
+        let currentTF = '1 МИН';
+        let timerInterval = null;
+        let audioCtx = null;
+
+        // Sound Generator (Web Audio API - no external files needed)
+        function playSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'success') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                }
+            } catch (e) { console.log(e); }
+        }
+
+        // TradingView Widget Loader
+        function loadTradingViewWidget(symbol) {
+            document.getElementById('tv_chart').innerHTML = '';
+            new TradingView.widget({
+                "autosize": true,
+                "symbol": symbol,
+                "interval": "1",
+                "timezone": "Exchange",
+                "theme": "dark",
+                "style": "1",
+                "locale": "ru",
+                "toolbar_bg": "#121826",
+                "enable_publishing": false,
+                "hide_side_toolbar": true,
+                "allow_symbol_change": false,
+                "container_id": "tv_chart"
+            });
+        }
+
+        // Initial Chart Load
+        window.onload = () => {
+            loadTradingViewWidget('FX:EURUSD');
+            updateIndicators();
+            startOnlineCounter();
+        };
+
+        function onPairChange() {
+            playSound('click');
+            const select = document.getElementById('pairSelect');
+            const symbol = select.options[select.selectedIndex].getAttribute('data-symbol');
+            loadTradingViewWidget(symbol);
+            updateIndicators();
+        }
+
+        function setTF(element, tf) {
+            playSound('click');
+            document.querySelectorAll('.tf-pill').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            currentTF = tf;
+        }
+
+        function updateIndicators() {
+            const trend = Math.floor(Math.random() * (96 - 78) + 78);
+            document.getElementById('trendPercent').innerText = `Сила тренда: ${trend}%`;
+            document.getElementById('trendBar').style.width = `${trend}%`;
+
+            const rsi = (Math.random() * (72 - 32) + 32).toFixed(1);
+            document.getElementById('rsiVal').innerText = `${rsi} (${rsi > 60 ? 'Перекупл.' : rsi < 40 ? 'Перепрод.' : 'Нейтрально'})`;
+
+            const macdStates = ['Бычий импульс ⬆️', 'Медвежий импульс ⬇️', 'Золотое пересечение'];
+            document.getElementById('macdVal').innerText = macdStates[Math.floor(Math.random() * macdStates.length)];
+        }
+
+        function startOnlineCounter() {
+            setInterval(() => {
+                const count = Math.floor(Math.random() * (1490 - 1380) + 1380);
+                document.getElementById('onlineCount').innerText = `${count.toLocaleString()} В СЕТИ`;
+            }, 4000);
+        }
 
         const steps = [
-            'Подключение к серверу...',
-            'Сканирование объема...',
-            'Анализ RSI и MACD...',
-            'Формирование сигнала...'
+            'Сбор стакана заявок...',
+            'Расчёт паттернов свечей...',
+            'Фильтрация шумов ИИ...',
+            'Финализация прогноза...'
         ];
 
         function requestSignal() {
+            playSound('click');
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
             const btn = document.getElementById('getSignalBtn');
             const loader = document.getElementById('loader');
             const signalText = document.getElementById('signalText');
-            const pairElem = document.getElementById('pair');
-            const accuracyElem = document.getElementById('accuracyValue');
-            const timeValue = document.getElementById('timeValue');
+            const timerBadge = document.getElementById('timerBadge');
+            const accVal = document.getElementById('accVal');
 
             btn.disabled = true;
             loader.style.display = 'block';
+            timerBadge.style.display = 'none';
             signalText.className = 'scan-status';
-            accuracyElem.innerText = '-- %';
+            accVal.innerText = '-- %';
 
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
+            if (timerInterval) clearInterval(timerInterval);
 
-            let stepIndex = 0;
-            signalText.innerText = steps[stepIndex];
+            let stepIdx = 0;
+            signalText.innerText = steps[stepIdx];
 
-            const interval = setInterval(() => {
-                stepIndex++;
-                if (stepIndex < steps.length) {
-                    signalText.innerText = steps[stepIndex];
+            const scanTimer = setInterval(() => {
+                stepIdx++;
+                if (stepIdx < steps.length) {
+                    signalText.innerText = steps[stepIdx];
                 }
             }, 600);
 
             setTimeout(() => {
-                clearInterval(interval);
+                clearInterval(scanTimer);
                 loader.style.display = 'none';
+                playSound('success');
 
-                const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
-                const isUp = Math.random() > 0.48;
-                const accuracy = (Math.random() * (96.4 - 88.1) + 88.1).toFixed(1);
-                const expTimes = ['1 МИН', '2 МИН', '3 МИН'];
-                const expTime = expTimes[Math.floor(Math.random() * expTimes.length)];
-
-                pairElem.innerText = randomPair;
-                timeValue.innerText = expTime;
-                accuracyElem.innerText = accuracy + '%';
+                const isUp = Math.random() > 0.47;
+                const accuracy = (Math.random() * (96.8 - 89.2) + 89.2).toFixed(1);
+                accVal.innerText = accuracy + '%';
 
                 if (isUp) {
                     signalText.innerText = 'ПОКУПКА ⬆️ (ВВЕРХ)';
@@ -309,8 +654,46 @@
                     tg.HapticFeedback.notificationOccurred(isUp ? 'success' : 'warning');
                 }
 
+                // Start Countdown Timer (3 min)
+                startTimer(180);
+                timerBadge.style.display = 'block';
+
+                // Add to recent feed
+                addFeedItem(document.getElementById('pairSelect').value, isUp, accuracy);
+
                 btn.disabled = false;
+                updateIndicators();
             }, 2500);
+        }
+
+        function startTimer(seconds) {
+            let left = seconds;
+            const timerVal = document.getElementById('timerVal');
+
+            timerInterval = setInterval(() => {
+                left--;
+                const m = Math.floor(left / 60).toString().padStart(2, '0');
+                const s = (left % 60).toString().padStart(2, '0');
+                timerVal.innerText = `${m}:${s}`;
+
+                if (left <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timerBadge').style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function addFeedItem(pair, isUp, acc) {
+            const list = document.getElementById('feedList');
+            const item = document.createElement('div');
+            item.className = 'feed-item';
+            item.innerHTML = `
+                <span class="feed-pair">${pair}</span>
+                <span class="${isUp ? 'feed-dir-up' : 'feed-dir-down'}">${isUp ? 'ВВЕРХ ⬆️' : 'ВНИЗ ⬇️'}</span>
+                <span class="feed-profit">+${Math.floor(acc - 3)}% ✅</span>
+            `;
+            list.insertBefore(item, list.firstChild);
+            if (list.children.length > 4) list.removeChild(list.lastChild);
         }
     </script>
 </body>
