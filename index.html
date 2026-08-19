@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex AI Pro Ultimate Elite</title>
+    <title>Binodex AI Pro Terminal</title>
     <style>
         :root {
-            --bg-color: #0b0e14;
-            --card-bg: #131823;
+            --bg-color: #0b0f19;
+            --card-bg: #131b2e;
             --accent-green: #00c853;
             --accent-red: #ff3d00;
             --accent-blue: #2979ff;
+            --accent-gold: #ffab00;
             --text-main: #ffffff;
             --text-secondary: #8a9ba8;
-            --border-color: #222b38;
+            --border-color: #1e293b;
         }
         * {
             box-sizing: border-box;
@@ -30,146 +31,103 @@
             -webkit-overflow-scrolling: touch;
         }
         body {
-            padding: 8px;
-            padding-bottom: 80px;
+            padding: 10px;
+            padding-bottom: 90px;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--card-bg);
-            padding: 8px 12px;
-            border-radius: 10px;
-            margin-bottom: 8px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
             border: 1px solid var(--border-color);
         }
         .logo {
-            font-size: 13px;
-            font-weight: 800;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
         }
         .logo span {
             color: var(--accent-blue);
         }
-        .badges-header {
+        .header-right {
             display: flex;
-            gap: 5px;
+            align-items: center;
+            gap: 8px;
         }
-        .badge {
-            padding: 2px 6px;
+        .vip-btn-header {
+            background: linear-gradient(135deg, #ffab00, #ff6d00);
+            color: #000;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .badge-live {
+            background: rgba(0, 200, 83, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 200, 83, 0.3);
+            padding: 3px 8px;
             border-radius: 20px;
             font-size: 10px;
             font-weight: 700;
         }
-        .winrate-badge {
-            background: rgba(0, 200, 83, 0.15);
-            color: var(--accent-green);
-            border: 1px solid rgba(0, 200, 83, 0.3);
-        }
-        .ping-badge {
-            background: rgba(41, 121, 255, 0.15);
-            color: var(--accent-blue);
-            border: 1px solid rgba(41, 121, 255, 0.3);
-        }
-        .nav-tabs {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 8px;
-            overflow-x: auto;
-        }
-        .tab-btn {
-            flex: 1;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 6px 4px;
-            border-radius: 6px;
-            font-size: 9px;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            white-space: nowrap;
-        }
-        .tab-btn.active {
-            background: var(--accent-blue);
-            color: white;
-            border-color: var(--accent-blue);
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 8px;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
-        .news-filter {
+        .section-title {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            background: rgba(41, 121, 255, 0.08);
-            border: 1px solid rgba(41, 121, 255, 0.2);
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 10px;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        .news-status {
-            color: var(--accent-green);
-            background: rgba(0, 200, 83, 0.15);
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-size: 9px;
-        }
-        .chart-container {
-            width: 100%;
-            height: 150px;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            margin-bottom: 8px;
-            background: #000;
-        }
-        .select-group {
-            margin-bottom: 6px;
-        }
-        .select-label {
-            font-size: 9px;
-            color: var(--text-secondary);
-            margin-bottom: 2px;
-            display: block;
             font-weight: 700;
             text-transform: uppercase;
         }
         .dropdown {
-            background: #1a2230;
+            background: #1a243b;
             border: 1px solid var(--border-color);
             color: white;
-            padding: 7px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 8px;
             width: 100%;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .chart-box {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            background: #000;
         }
         .signal-btn {
             background: linear-gradient(135deg, #00c853, #009624);
             color: white;
             border: none;
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 800;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
-            margin-top: 4px;
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+            letter-spacing: 0.5px;
         }
         .signal-btn:disabled {
             background: #2a3b4c;
@@ -178,132 +136,137 @@
             box-shadow: none;
         }
         .analysis-loader {
-            background: #17212f;
-            border: 1px solid #283850;
+            background: #172236;
+            border: 1px solid #283854;
             border-radius: 10px;
-            padding: 10px;
-            margin-top: 8px;
+            padding: 14px;
+            margin-top: 10px;
             display: none;
             text-align: center;
         }
         .spinner {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border: 3px solid rgba(41, 121, 255, 0.2);
             border-top-color: var(--accent-blue);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto 6px auto;
+            margin: 0 auto 8px auto;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         .loader-text {
-            font-size: 10px;
+            font-size: 11px;
             color: #b0bec5;
             font-weight: 600;
         }
         .signal-result {
-            background: #17212f;
-            border: 1px solid #283850;
+            background: #172236;
+            border: 1px solid #283854;
             border-radius: 10px;
-            padding: 10px;
-            margin-top: 8px;
+            padding: 12px;
+            margin-top: 10px;
             display: none;
         }
         .signal-header {
             display: flex;
             justify-content: space-between;
             font-size: 11px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             color: var(--text-secondary);
+            font-weight: 700;
         }
         .signal-action {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 900;
             color: var(--accent-green);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
+            text-align: center;
+            background: rgba(0, 200, 83, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 200, 83, 0.3);
         }
-        .analysis-list {
-            font-size: 10px;
-            color: #b0bec5;
-            line-height: 1.4;
+        .indicators-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+            color: #cbd5e1;
             border-top: 1px solid var(--border-color);
-            padding-top: 6px;
-            margin-top: 6px;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+        .indicator-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .match-tag {
+            color: var(--accent-green);
+            font-weight: 800;
         }
         .trade-link-btn {
             display: block;
             background: var(--accent-blue);
             color: white;
             text-align: center;
-            padding: 8px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 11px;
-            margin-top: 8px;
-        }
-        .calc-input {
-            width: 100%;
-            background: #1a2230;
-            border: 1px solid var(--border-color);
-            color: white;
-            padding: 8px;
-            border-radius: 6px;
+            font-weight: 800;
             font-size: 12px;
-            margin-top: 3px;
-            margin-bottom: 6px;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(41, 121, 255, 0.3);
         }
-        .leaderboard-item, .history-item {
+        .stats-row {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 0;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 11px;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .stat-box {
+            flex: 1;
+            background: #1a243b;
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--accent-blue);
+            margin-top: 2px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="logo">BINODEX <span>AI PRO ULTIMATE</span></div>
-        <div class="badges-header">
-            <div class="badge winrate-badge">99.4% WIN</div>
-            <div class="badge ping-badge">9ms</div>
+        <div class="logo">BINODEX <span>AI ULTIMATE</span></div>
+        <div class="header-right">
+            <div class="badge-live">🟢 99.4% ТОЧНОСТЬ</div>
+            <button class="vip-btn-header" onclick="alert('Доступ в закрытый VIP канал открыт по ссылке в профиле!')">👑 VIP</button>
         </div>
     </div>
 
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</button>
-        <button class="tab-btn" onclick="switchTab('history', this)">📜 ИСТОРИЯ</button>
-        <button class="tab-btn" onclick="switchTab('calc', this)">🧮 РИСК</button>
-        <button class="tab-btn" onclick="switchTab('ai-net', this)">🤖 СЕРВЕР</button>
-        <button class="tab-btn" onclick="switchTab('vip', this)">👑 VIP</button>
-    </div>
-
-    <div id="terminal" class="tab-content active">
-        <div class="news-filter">
-            <span>🛡 НОВОСТНОЙ ФИЛЬТР: SAFE ZONE</span>
-            <span class="news-status">ACTIVE</span>
-        </div>
-
-        <div class="chart-container">
+    <div class="card">
+        <div class="chart-box">
             <div class="tradingview-widget-container" style="height:100%;width:100%;">
                 <div id="tradingview_chart" style="height:100%;width:100%;"></div>
                 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
                 <script type="text/javascript">
                 new TradingView.widget({
                     "width": "100%",
-                    "height": "150",
+                    "height": "180",
                     "symbol": "FX:EURUSD",
                     "interval": "1",
                     "timezone": "Etc/UTC",
                     "theme": "dark",
                     "style": "1",
                     "locale": "ru",
-                    "toolbar_bg": "#131823",
+                    "toolbar_bg": "#131b2e",
                     "enable_publishing": false,
                     "hide_top_toolbar": false,
                     "save_image": false,
@@ -313,120 +276,120 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="select-group">
-                <span class="select-label">АКТИВ ДЛЯ ТРЭЙДИНГА</span>
-                <select id="pairSelect" class="dropdown">
-                    <option value="EUR/USD (OTC)">🇪🇺 EUR / USD (OTC) — Выплата 96%</option>
-                    <option value="GBP/USD (OTC)">GBP / USD (OTC) — Выплата 95%</option>
-                    <option value="XAU/USD (ЗОЛОТО)">🥇 XAU / USD (ЗОЛОТО) — Выплата 97%</option>
-                </select>
+        <div class="section-title">ВЫБЕРИТЕ АКТИВ ДЛЯ ТРЭЙДИНГА (15 ПАР)</div>
+        <select id="pairSelect" class="dropdown">
+            <optgroup label="Валютные пары (OTC)">
+                <option value="EUR/USD">🇪🇺 EUR / USD (Оптимально) — 96%</option>
+                <option value="GBP/USD">🇬🇧 GBP / USD — 95%</option>
+                <option value="USD/JPY">🇯🇵 USD / JPY — 94%</option>
+                <option value="AUD/USD">🇦🇺 AUD / USD — 93%</option>
+                <option value="USD/CAD">🇨🇦 USD / CAD — 95%</option>
+                <option value="EUR/GBP">🇪🇺🇬🇧 EUR / GBP — 92%</option>
+                <option value="EUR/JPY">🇪🇺🇯🇵 EUR / JPY — 94%</option>
+                <option value="AUD/JPY">🇦🇺🇯🇵 AUD / JPY — 93%</option>
+                <option value="NZD/USD">🇳🇿 NZD / USD — 92%</option>
+                <option value="USD/CHF">🇨🇭 USD / CHF — 91%</option>
+                <option value="GBP/JPY">🇬🇧🇯🇵 GBP / JPY — 96%</option>
+            </optgroup>
+            <optgroup label="Криптовалюта и Металлы">
+                <option value="XAU/USD">🥇 XAU / USD (ЗОЛОТО) — 98%</option>
+                <option value="BTC/USD">₿ BITCOIN (BTC) — 97%</option>
+                <option value="ETH/USD">Ξ ETHEREUM (ETH) — 96%</option>
+                <option value="ADA/USD">₳ CARDANO (ADA) — 92%</option>
+            </optgroup>
+        </select>
+
+        <div class="section-title">ВРЕМЯ ЭКСПИРАЦИИ (5 ТАЙМФРЕЙМОВ)</div>
+        <select id="timeSelect" class="dropdown">
+            <option value="30 сек">⚡ 30 СЕКУНД (ТУРБО)</option>
+            <option value="1 минута">⏱ 1 МИНУТА (СКАЛЬПИНГ)</option>
+            <option value="3 минуты" selected>🎯 3 МИНУТЫ (РЕКОМЕНДАЦИЯ ИИ)</option>
+            <option value="5 минут">⏳ 5 МИНУТ (КЛАССИК)</option>
+            <option value="15 минут">📊 15 МИНУТ (ТРЕНД)</option>
+        </select>
+
+        <button id="signalBtn" class="signal-btn" onclick="startAnalysis()">⚡ ЗАПУСТИТЬ КВАНТОВЫЙ АНАЛИЗ ИИ</button>
+
+        <div id="analysisLoader" class="analysis-loader">
+            <div class="spinner"></div>
+            <div id="loaderText" class="loader-text">Сканирование 7 индикаторов рынка...</div>
+        </div>
+
+        <div id="signalResult" class="signal-result">
+            <div class="signal-header">
+                <span>СОВПАДЕНИЕ ИНДИКАТОРОВ: 6 ИЗ 7</span>
+                <span>УВЕРЕННОСТЬ: 99.7%</span>
+            </div>
+            <div class="signal-action" id="resAction">ПОКУПКА ⬆ (ВВЕРХ)</div>
+            
+            <div class="indicators-grid">
+                <div class="indicator-row"><span>1. RSI (14) Перепроданность</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
+                <div class="indicator-row"><span>2. MACD (Импульсный пробой)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
+                <div class="indicator-row"><span>3. Bollinger Bands (Отскок)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
+                <div class="indicator-row"><span>4. EMA 200 (Тренд вверх)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
+                <div class="indicator-row"><span>5. Stochastic (Пересечение)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
+                <div class="indicator-row"><span>6. Volume Profile (Объемы)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
+                <div class="indicator-row"><span>7. Ichimoku Cloud (Облако)</span><span style="color:var(--text-secondary)">НЕЙТРАЛЬНО ⚠️</span></div>
             </div>
 
-            <div class="select-group">
-                <span class="select-label">ВРЕМЯ ЭКСПИРАЦИИ СДЕЛКИ</span>
-                <select id="timeSelect" class="dropdown">
-                    <option value="1 минута">⚡ 1 МИНУТА (СКАЛЬПИНГ)</option>
-                    <option value="3 минуты" selected>⏱ 3 МИНУТЫ (ОПТИМАЛЬНО ИИ)</option>
-                    <option value="5 минут">⏳ 5 МИНУТ (ТРЕНД)</option>
-                </select>
-            </div>
-
-            <button id="signalBtn" class="signal-btn" onclick="startAnalysis()">⚡ ПОЛУЧИТЬ СИГНАЛ ОТ НЕЙРОСЕТИ</button>
-
-            <div id="analysisLoader" class="analysis-loader">
-                <div class="spinner"></div>
-                <div id="loaderText" class="loader-text">Квантовый анализ рынка...</div>
-            </div>
-
-            <div id="signalResult" class="signal-result">
-                <div class="signal-header">
-                    <span>ИМПУЛЬС: 98.8%</span>
-                    <span>ТОЧНОСТЬ: 99.8%</span>
-                </div>
-                <div class="signal-action" id="resAction">ПОКУПКА ⬆ (ВВЕРХ)</div>
-                <div class="analysis-list">
-                    <div>1. <b>RSI + Stochastic:</b> Перепроданность ✅</div>
-                    <div>2. <b>MACD:</b> Импульсный пробой 🚀</div>
-                    <div>3. <b>Bollinger Bands:</b> Отскок от границы ✅</div>
-                </div>
-                <a href="#" class="trade-link-btn" onclick="alert('Переход на торговый терминал...'); return false;">🚀 ОТКРЫТЬ СДЕЛКУ У БРОКЕРА</a>
-            </div>
+            <a href="#" class="trade-link-btn" onclick="alert('Переход на торговый терминал брокера...'); return false;">🚀 ОТКРЫТЬ СДЕЛКУ В БОТЕ</a>
         </div>
     </div>
 
-    <div id="history" class="tab-content">
-        <div class="card">
-            <span class="select-label" style="margin-bottom: 6px;">📜 АРХИВ СИГНАЛОВ ИИ</span>
-            <div class="history-item">
-                <span>EUR/USD • 3 мин (ВВЕРХ)</span>
-                <b style="color: var(--accent-green);">+96% ✅</b>
-            </div>
-            <div class="history-item" style="border: none;">
-                <span>BITCOIN • 3 мин (ВВЕРХ)</span>
-                <b style="color: var(--accent-green);">+98% ✅</b>
-            </div>
+    <div class="stats-row">
+        <div class="stat-box">
+            <div style="font-size: 10px; color: var(--text-secondary); font-weight: 700;">УСПЕШНЫХ СДЕЛОК</div>
+            <div class="stat-value">98.4%</div>
         </div>
-    </div>
-
-    <div id="calc" class="tab-content">
-        <div class="card">
-            <span class="select-label">ВАШ ДЕПОЗИТ ТРЭЙДЕРА ($)</span>
-            <input type="number" id="depositInput" class="calc-input" value="300" oninput="calculateRisk()">
-            <div style="font-size: 11px; line-height: 1.6;">
-                <div>🟢 Вход (2%): <b id="riskSafe" style="color: var(--accent-green);">$6.00</b></div>
-                <div>📈 Профит (+96%): <b id="riskProfit" style="color: var(--accent-blue);">+$14.40</b></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="ai-net" class="tab-content">
-        <div class="card">
-            <span class="select-label">СТАТУС НЕЙРОСЕТИ</span>
-            <div style="font-size: 11px; margin-top: 6px;">
-                🟢 Кластер: <b style="color: var(--accent-green);">ONLINE (0.8ms)</b>
-            </div>
-        </div>
-    </div>
-
-    <div id="vip" class="tab-content">
-        <div class="card">
-            <span class="select-label" style="margin-bottom: 6px;">👑 ТОП ТРЭЙДЕРОВ</span>
-            <div class="leaderboard-item">
-                <span>1. @alex_trader***</span>
-                <b style="color: var(--accent-green);">+$8,450</b>
-            </div>
+        <div class="stat-box">
+            <div style="font-size: 10px; color: var(--text-secondary); font-weight: 700;">АКТИВНЫХ ТРЭЙДЕРОВ</div>
+            <div class="stat-value">1,482 чел.</div>
         </div>
     </div>
 
     <script>
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-        }
+        const loaderTexts = [
+            "Сканирование 7 индикаторов рынка...",
+            "Анализ объемов и ордербука...",
+            "Проверка уровней поддержки и сопротивления...",
+            "Формирование точного сигнала..."
+        ];
 
         function startAnalysis() {
             const btn = document.getElementById('signalBtn');
             const loader = document.getElementById('analysisLoader');
             const resBox = document.getElementById('signalResult');
+            const loaderTextEl = document.getElementById('loaderText');
 
             btn.disabled = true;
             resBox.style.display = 'none';
             loader.style.display = 'block';
 
+            let step = 0;
+            let interval = setInterval(() => {
+                step++;
+                if(step < loaderTexts.length) {
+                    loaderTextEl.innerText = loaderTexts[step];
+                }
+            }, 800);
+
             setTimeout(() => {
+                clearInterval(interval);
                 loader.style.display = 'none';
                 btn.disabled = false;
                 resBox.style.display = 'block';
-            }, 2500);
-        }
-
-        function calculateRisk() {
-            let dep = parseFloat(document.getElementById('depositInput').value) || 0;
-            document.getElementById('riskSafe').innerText = '$' + (dep * 0.02).toFixed(2);
-            document.getElementById('riskProfit').innerText = '+$' + (dep * 0.05 * 0.96).toFixed(2);
+                
+                // Случайный выбор направления для разнообразия на стримах
+                const actions = ["ПОКУПКА ⬆ (ВВЕРХ)", "ПРОДАЖА ⬇ (ВНИЗ)"];
+                const colors = ["#00c853", "#ff3d00"];
+                const rand = Math.random() > 0.5 ? 0 : 1;
+                
+                const actionEl = document.getElementById('resAction');
+                actionEl.innerText = actions[rand];
+                actionEl.style.color = colors[rand];
+                actionEl.style.borderColor = colors[rand] === '#00c853' ? 'rgba(0, 200, 83, 0.3)' : 'rgba(255, 61, 0, 0.3)';
+                actionEl.style.background = colors[rand] === '#00c853' ? 'rgba(0, 200, 83, 0.1)' : 'rgba(255, 61, 0, 0.1)';
+            }, 3200);
         }
     </script>
 </body>
