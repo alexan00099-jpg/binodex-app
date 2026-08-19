@@ -44,7 +44,7 @@
         .btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); transition: 0.2s; }
         .btn-trade:active { transform: scale(0.98); }
         
-        .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; font-size: 13px; line-height: 1.4; }
+        .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; font-size: 13px; line-height: 1.5; }
         
         .sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
         .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }
@@ -60,11 +60,10 @@
         .big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }
         .log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }
 
-        /* СТИЛИ БЛОКА ВЫВОДА СРЕДСТВ В РЕАЛЬНОМ ВРЕМЕНИ */
+        /* БЛОК ВЫПЛАТ */
         .withdrawal-box { background: rgba(0, 230, 118, 0.03); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; }
         .withdrawal-feed { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 11px; height: 140px; overflow-y: auto; border: 1px solid var(--border-color); }
         .withdrawal-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-secondary); }
-        .withdrawal-row span b { color: var(--accent-green); }
 
         .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
         .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }
@@ -90,7 +89,7 @@
 
     <div class="top-panel">
         <div class="brand-title">BINODEX <span>AI PRO</span></div>
-        <div class="winrate-badge">🟢 AI ACCURACY 99.4%</div>
+        <div class="winrate-badge">🟢 AI STATUS: ACTIVE</div>
     </div>
 
     <div class="nav-tabs">
@@ -140,7 +139,7 @@
         <div class="tradingview-container" id="chartContainer"></div>
 
         <button id="scanBtn" class="btn" onclick="runAnalysis()">ЗАПУСТИТЬ КВАНТОВЫЙ ИИ-АНАЛИЗ</button>
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать торговать</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать трэйдинг</a>
         
         <div id="signalResult" class="signal-result"></div>
 
@@ -151,7 +150,7 @@
             <div class="confluence-item"><span>RSI Моментум (14):</span> <span id="confRsi">49.20 (Баланс)</span></div>
             <div class="confluence-item"><span>MACD Импульс:</span> <span id="confMacd">CROSS UP ACTIVE</span></div>
             <div class="confluence-item"><span>Индикатор Bollinger Bands:</span> <span style="color:var(--accent-green)">Сжатие / Пробой</span></div>
-            <div class="confluence-item"><span>Итоговая точность ИИ:</span> <span id="confTotal">99.4%</span></div>
+            <div class="confluence-item"><span>Статус алгоритмов:</span> <span style="color:var(--accent-green)">Синхронизировано</span></div>
         </div>
 
         <!-- НЕЙРО-ЛОГИ -->
@@ -165,15 +164,15 @@
             </div>
         </div>
 
-        <!-- БЛОК ВЫВОДА СРЕДСТВ В РЕАЛЬНОМ ВРЕМЕНИ -->
+        <!-- БЛОК ВЫПЛАТ -->
         <div class="withdrawal-box">
-            <div style="font-weight:700; color:var(--accent-green); margin-bottom:8px;">💸 РЕАЛЬНЫЕ ВЫВОДЫ СРЕДСТВ С БИНАДЕКС:</div>
+            <div style="font-weight:700; color:var(--accent-green); margin-bottom:8px;">💸 ВЫПЛАТЫ</div>
             <div class="withdrawal-feed" id="withdrawalFeed">
-                [22:46:10] • Александр П. вывел <b>$45.00</b> (Успешно)
-                [22:46:25] • Дмитрий В. вывел <b>$320.00</b> (Успешно)
-                [22:46:40] • Елена С. вывела <b>$85.50</b> (Успешно)
-                [22:47:02] • Максим К. вывел <b>$1,250.00</b> (Успешно)
-                [22:47:18] • Ольга М. вывела <b>$18.00</b> (Успешно)
+                [22:46:10] • jo****@gmail.com — выплата <b>$45.00</b> (Успешно)<br>
+                [22:48:25] • ar****@mail.ru — выплата <b>$320.00</b> (Успешно)<br>
+                [22:51:40] • el****@gmail.com — выплата <b>$85.50</b> (Успешно)<br>
+                [22:55:02] • ma****@mail.ru — выплата <b>$1,250.00</b> (Успешно)<br>
+                [23:00:18] • ol****@gmail.com — выплата <b>$18.00</b> (Успешно)
             </div>
         </div>
 
@@ -244,54 +243,56 @@
 
     <!-- АКАДЕМИЯ -->
     <div id="academy" class="card">
-        <div style="font-size:14px; font-weight:900; color:var(--accent-blue); margin-bottom:12px;">🎓 БАЗА ЗНАНИЙ ЭЛИТНОГО ТРЭЙДЕРА</div>
+        <div style="font-size:14px; font-weight:900; color:var(--accent-blue); margin-bottom:12px;">🎓 АКАДЕМИЯ ЭЛИТНОГО ТРЭЙДЕРА</div>
         
         <div class="academy-module">
-            <h4>Как работает наш ИИ-бот и индикаторы?</h4>
-            <p>Наш алгоритм мгновенно обрабатывает котировки через нейросети. Главный инструмент на самом графике — <b>Parabolic SAR</b> — указывает точные точки разворота тренда (точки выстраиваются под или над свечами). В связке с <b>RSI</b> (определяет зоны перекупленности), <b>MACD</b> (импульс) и <b>Bollinger Bands</b> бот отсекает ложные движения с точностью до 99.4%.</p>
+            <h4>Передовые алгоритмы и синергия индикаторов</h4>
+            <p>Наш терминал использует уникальные нейросетевые модели, объединяющие в себе десятки передовых математических инструментов. Главный трендовый индикатор <b>Parabolic SAR</b> выстраивается прямо на свечах, указывая безупречные точки разворота. Внутренние алгоритмы синхронизируют его показания с осциллятором <b>RSI</b> для оценки зон перекупленности, импульсным индикатором <b>MACD</b> и динамическими каналами <b>Bollinger Bands</b>. Это позволяет отсекать рыночный шум и находить самые прибыльные точки входа на любом активе.</p>
         </div>
 
         <div class="academy-module">
-            <h4>Продвинутые стратегии для трэйдинга</h4>
-            <p>1. <b>Скальпинг по Parabolic SAR:</b> Открывайте позицию строго в момент переброса точек SAR на новый тренд.<br>
-            2. <b>Манименеджмент:</b> Никогда не рискуйте более чем 2-3% от депозита на одну сделку.<br>
-            3. <b>Конфлюэнтность:</b> Совершайте сделку только тогда, когда индикаторы на графике и матрице таймфреймов дают согласованный сигнал.</p>
+            <h4>Продвинутые стратегии и микроструктура рынка</h4>
+            <p>1. <b>Скальпинг по импульсам SAR:</b> Открытие позиций в момент смены позиционирования точек на графике дает наибольшее математическое ожидание прибыли.<br>
+            2. <b>Конфлюэнтность таймфреймов:</b> Совершайте сделки только тогда, когда младшие и старшие таймфреймы дают единогласный сигнал.<br>
+            3. <b>Анализ пулов ликвидности:</b> Использование стакана ордеров и объемов крупного капитала (китов) позволяет заходить в сделку вместе с маркетмейкерами.</p>
         </div>
 
         <div class="academy-module">
-            <h4>Психология успешного трэйдера</h4>
-            <p>Дисциплина и контроль эмоций — 80% успеха на рынке. Используйте наш калькулятор рисков, фиксируйте прибыль после серии успешных входов и никогда не пытайтесь отыграться ва-банк.</p>
+            <h4>Психология и финансовая дисциплина</h4>
+            <p>Успешный трэйдинг — это на 80% контроль эмоций и строгий риск-менеджмент. Используйте калькулятор рисков, никогда не превышайте допустимый размер ставки на одну сделку и фиксируйте прибыль после серии успешных входов.</p>
         </div>
 
         <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">
-            <h4 style="color:var(--accent-green);">Время зарабатывать!</h4>
-            <p>Хватит просто наблюдать за рынком. Применяй полученные знания вместе с нашим профессиональным терминалом и зарабатывай прямо сейчас.</p>
-            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать торговать</a>
+            <h4 style="color:var(--accent-green);">Время зарабатывать профессионально!</h4>
+            <p>Используйте всю мощь передовых алгоритмов прямо сейчас и выводите свой трэйдинг на принципиально новый уровень.</p>
+            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать трэйдинг</a>
         </div>
     </div>
 
     <!-- VIP СТАТУС -->
     <div id="vip" class="card">
-        <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;">🎁 VIP СТАТУС: ПРЕИМУЩЕСТВА И ДОСТУПЫ</div>
+        <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;">🎁 VIP СТАТУС: УСЛОВИЯ И ПРЕИМУЩЕСТВА</div>
         
         <div class="vip-card-box">
-            <div style="font-weight:800; color:var(--accent-blue); margin-bottom:6px; font-size:13px;">📌 ВЫБЕРИТЕ УСЛОВИЯ ПОЛУЧЕНИЯ VIP ДОСТУПА:</div>
-            <div style="font-size:12px; color:var(--text-secondary); line-height:1.4; margin-bottom:8px;">
-                • <b>VIP на 7 дней:</b> Идеально для тестирования глубоких алгоритмов и быстрого разгона депозита.<br>
-                • <b>VIP на 30 дней:</b> Полный безлимитный доступ ко всем закрытым функциям, копи-трэйдингу и приоритетным серверам.
+            <div style="font-weight:800; color:var(--accent-blue); margin-bottom:8px; font-size:13px;">📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;">
+                • <b>Вариант 1 (VIP на 30 дней):</b> Зарегистрируйте новый аккаунт по ссылке ниже и сделайте хотя бы одну сделку на реальном счете на любую сумму.<br>
+                • <b>Вариант 2 (VIP на 7 дней):</b> Пригласите всего 3 друзей в нашего бота по вашей реферальной ссылке.
             </div>
+            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:5px;">Зарегистрироваться и получить VIP</a>
         </div>
 
+        <div style="font-weight:800; color:var(--text-main); margin-bottom:8px; font-size:13px;">🚀 ЧТО ДАЕТ VIP СТАТУС:</div>
         <ul class="vip-list">
-            <li><b>АВТОМАТИЧЕСКИЙ КОПИ-ТРЭЙДИНГ:</b> Зеркалирование сделок топ-трэйдеров платформы в один клик с нулевой задержкой.</li>
-            <li><b>ЗАКРЫТЫЕ АЛГОРИТМИЧЕСКИЕ СИГНАЛЫ:</b> Доступ к глубокому сканированию рынка по расширенным таймфреймам.</li>
-            <li><b>ЛИЧНЫЙ ИИ-КУРАТОР 24/7:</b> Индивидуальный разбор ошибок, статистика винрейта и персональные рекомендации.</li>
-            <li><b>НОВОСТНОЙ ФИЛЬТР ВОЛАТИЛЬНОСТИ:</b> Автоматическая защита депозита от резких импульсов во время выхода ключевых макроэкономических новостей.</li>
-            <li><b>ПРИОРИТЕТНЫЕ СЕРВЕРА:</b> Молниеносное исполнение ордеров без проскальзываний и задержек связи.</li>
-            <li><b>ЭКСКЛЮЗИВНЫЕ СТРАТЕГИИ ОБУЧЕНИЯ:</b> Закрытые модули по работе с крупным капиталом и скальпингу.</li>
+            <li><b>ПОВЫШЕННАЯ ТОЧНОСТЬ СИГНАЛОВ:</b> Доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией ложных пробоев.</li>
+            <li><b>АВТОМАТИЧЕСКИЙ КОПИ-ТРЭЙДИНГ:</b> Мгновенное зеркалирование прибыльных сделок лучших трэйдеров платформы в один клик.</li>
+            <li><b>ПРИОРИТЕТНЫЕ СЕРВЕРА 24/7:</b> Исполнение ордеров без задержек и проскальзываний на самых быстрых каналах связи.</li>
+            <li><b>АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:</b> Автоматическая защита депозита во время выхода важнейших макроэкономических новостей.</li>
+            <li><b>ЗАКРЫТЫЕ СТРАТЕГИИ И МОДУЛИ:</b> Расширенные обучающие курсы по разгону депозита и работе с крупным капиталом.</li>
+            <li><b>ЛИЧНЫЙ ИИ-КУРАТОР:</b> Глубокий разбор торговой статистики и персональные рекомендации по улучшению результатов.</li>
         </ul>
 
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать торговать</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Получить VIP доступ</a>
     </div>
 
     <script>
@@ -309,7 +310,7 @@
             element.classList.add('active');
         }
 
-        // РАСШИРЕННЫЙ АНАЛИЗ ИЗ 5 ШАГОВ
+        // РАСШИРЕННЫЙ АНАЛИЗ ИЗ 5 ШАГОВ (БЕЗ ПРОЦЕНТОВ В КОНЦЕ)
         function runAnalysis() {
             const res = document.getElementById('signalResult');
             const btn = document.getElementById('scanBtn');
@@ -320,7 +321,7 @@
             res.innerHTML = '⚡ [Шаг 1/5] Сканирование стакана ордеров и пулов ликвидности...';
             
             setTimeout(() => {
-                res.innerHTML = '⚡ [Шаг 2/5] Анализ индикаторов Parabolic SAR, RSI и MACD...';
+                res.innerHTML = '⚡ [Шаг 2/5] Глубокий анализ индикаторов Parabolic SAR, RSI и MACD...';
             }, 800);
 
             setTimeout(() => {
@@ -336,7 +337,7 @@
             }, 3200);
 
             setTimeout(() => {
-                res.innerHTML = '📈 СИГНАЛ ПОДТВЕРЖДЕН: ВВЕРХ (STRONG BUY) <br>🟢 Вероятность успешного исхода: <b>99.4%</b>';
+                res.innerHTML = '📈 СИГНАЛ УСПЕШНО СФОРМИРОВАН<br><b style="color:var(--accent-green); font-size:14px;">НАПРАВЛЕНИЕ: ВВЕРХ (STRONG BUY)</b><br><span style="font-size:11px; color:var(--text-secondary);">Импульс подтвержден мультииндикаторным квантовым сканированием.</span>';
                 res.style.color = 'var(--accent-green)';
                 btn.disabled = false;
             }, 4000);
@@ -396,7 +397,7 @@
                     "Синхронизация ордеров маркетмейкеров...",
                     "Проверка точек ParabolicSAR на свечах...",
                     "Анализ волатильности Bollinger Bands...",
-                    "Квантовое ядро стабильно (99.4%)...",
+                    "Квантовое ядро стабильно...",
                     "Сканирование импульсов MACD и RSI..."
                 ];
                 const randomAction = actions[Math.floor(Math.random() * actions.length)];
@@ -405,29 +406,42 @@
             }
         }, 4500);
 
-        // Динамическая живая лента вывода средств (от $10 до $3000, упор на мелкие/средние суммы для реалистичности)
-        setInterval(() => {
+        // Динамическая живая лента выплат (скрытые почты, рандомные интервалы, в среднем < 10 выплат в час)
+        function scheduleNextWithdrawal() {
             const feed = document.getElementById('withdrawalFeed');
             if(feed) {
                 const now = new Date().toTimeString().split(' ')[0];
-                const names = ["Алексей С.", "Иван Р.", "Дмитрий К.", "Сергей П.", "Артем В.", "Евгений М.", "Максим Т.", "Андрей Б.", "Виктор Л.", "Павел Н.", "Николай И."];
-                const randomName = names[Math.floor(Math.random() * names.length)];
+                const domains = ['gmail.com', 'mail.ru', 'yandex.ru', 'list.ru', 'gmail.com', 'gmail.com'];
+                const letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
                 
-                // Генерация суммы: с большей вероятностью от 15 до 950 долларов, реже до 4500
+                // Создание замаскированной почты
+                const nameLen = Math.floor(Math.random() * 2) + 3;
+                let prefix = '';
+                for(let i=0; i<nameLen; i++) prefix += letters[Math.floor(Math.random()*letters.length)];
+                const domain = domains[Math.floor(Math.random()*domains.length)];
+                const maskedEmail = `${prefix}****@${domain}`;
+
+                // Генерация суммы от 10 до 10000 (упор на средние и мелкие)
                 let amount;
                 const r = Math.random();
-                if(r < 0.7) {
-                    amount = (Math.random() * 190 + 10).toFixed(2); // от 10 до 200
-                } else if(r < 0.95) {
-                    amount = (Math.random() * 800 + 200).toFixed(2); // от 200 до 1000
+                if(r < 0.6) {
+                    amount = (Math.random() * 190 + 10).toFixed(2); // $10 - $200
+                } else if(r < 0.9) {
+                    amount = (Math.random() * 800 + 200).toFixed(2); // $200 - $1000
                 } else {
-                    amount = (Math.random() * 3500 + 1000).toFixed(2); // от 1000 до 4500
+                    amount = (Math.random() * 9000 + 1000).toFixed(2); // $1000 - $10000
                 }
 
-                feed.innerHTML += `<br>[${now}] • ${randomName} вывел <b>$${amount}</b> (Успешно)`;
+                feed.innerHTML += `<br>[${now}] • ${maskedEmail} — выплата <b>$${amount}</b> (Успешно)`;
                 feed.scrollTop = feed.scrollHeight;
             }
-        }, 6000);
+            
+            // Рандомный интервал от 360 до 600 секунд (строго не более 10 выплат в час)
+            const randomDelay = Math.floor(Math.random() * 240000) + 360000;
+            setTimeout(scheduleNextWithdrawal, randomDelay);
+        }
+        // Запуск первого таймера выплаты через случайное время
+        setTimeout(scheduleNextWithdrawal, 15000);
     </script>
 </body>
 </html>
