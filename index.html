@@ -352,11 +352,29 @@
     <div id="vip" class="card">
         <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;" data-i18n="vip_main_title">🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА</div>
         
+        <!-- ИНТЕРАКТИВНЫЙ БЛОК РЕФЕРАЛЬНОЙ ССЫЛКИ -->
+        <div class="vip-card-box" style="border-color: rgba(0, 230, 118, 0.4); background: linear-gradient(135deg, rgba(0,230,118,0.08), rgba(41,121,255,0.08));">
+            <div style="font-weight:800; color:var(--accent-green); margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:6px;">
+                <span>🔗</span> <span data-i18n="ref_box_title">ВАША ПЕРСОНАЛЬНАЯ РЕФЕРАЛЬНАЯ ССЫЛКА:</span>
+            </div>
+            <div style="font-size:11px; color:var(--text-secondary); line-height:1.4; margin-bottom:8px;" data-i18n="ref_box_desc">
+                Пригласите 3 друзей по этой ссылке в нашу команду — получите <b>VIP на 1 неделю</b>! За регистрацию с депозитом — <b>VIP на 1 месяц</b>.
+            </div>
+            <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+                <input type="text" id="refLinkInput" class="risk-input" style="margin: 0; font-size: 11px; background: #000; color: var(--accent-green);" readonly value="https://t.me/bot_username?start=ref_12345">
+                <button class="lang-switcher" onclick="copyRefLink()" style="background: var(--accent-blue); color: #fff; border: none; padding: 0 12px; font-weight: 700; border-radius: 8px; cursor: pointer; flex-shrink: 0;" data-i18n="ref_copy_btn">Копировать</button>
+            </div>
+            <div style="font-size: 11px; display: flex; justify-content: space-between; color: var(--text-secondary);">
+                <span data-i18n="ref_invited_count">Приглашено друзей: <b style="color: #fff;" id="invitedCount">0</b> / 3</span>
+                <span style="color: var(--accent-green);" id="refStatus" data-i18n="ref_status_none">До VIP осталось: 3 друга</span>
+            </div>
+        </div>
+
         <div class="vip-card-box">
             <div style="font-weight:800; color:var(--accent-blue); margin-bottom:8px; font-size:13px;" data-i18n="vip_how_title">📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:</div>
             <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="vip_how_text">
                 • Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт и совершите сделку на реальном счёте.<br>
-                • Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.
+                • Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке выше в нашу команду.
             </div>
             <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:5px;" data-i18n="vip_btn_top">Зарегистрироваться и получить VIP</a>
         </div>
@@ -373,7 +391,18 @@
             <li><b data-i18n="v8_title">ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):</b> <span data-i18n="v8_desc">Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.</span></li>
         </ul>
 
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="vip_btn_bot">Получить VIP доступ прямо сейчас</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-bottom: 12px;" data-i18n="vip_btn_bot">Получить VIP доступ прямо сейчас</a>
+
+        <!-- ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР / ПОДДЕРЖКА -->
+        <div class="vip-card-box" style="margin-top: 10px; margin-bottom: 0; border-color: rgba(41, 121, 255, 0.4); background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08));">
+            <div style="font-weight:800; color:var(--accent-blue); margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:6px;">
+                <span>💬</span> <span data-i18n="manager_box_title">ВАШ ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР:</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="manager_box_desc">
+                Остались вопросы по VIP доступу, пополнению или стратегии? Напишите нашему официальному представителю в Telegram, и вам помогут моментально!
+            </div>
+            <a href="https://t.me/jenna_mo1" class="btn-trade" target="_blank" style="background: linear-gradient(135deg, #2979ff, #00e676); margin-top:5px; margin-bottom:0;" data-i18n="manager_btn">Написать менеджеру (@jenna_mo1)</a>
+        </div>
     </div>
 
     <!-- ЕЖЕДНЕВНЫЙ ТОРГОВЫЙ СИГНАЛ -->
@@ -399,11 +428,43 @@
     </div>
 
     <script>
+        // Инициализация реферальной ссылки по Telegram ID
+        window.addEventListener('DOMContentLoaded', () => {
+            const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+            const userId = (tgUser && tgUser.id) ? tgUser.id : 'demo_user_' + Math.floor(Math.random() * 10000);
+            
+            // Замени 'your_telegram_bot' на реальный юзернейм своего Telegram-бота без @
+            const botUsername = 'your_telegram_bot'; 
+            const refUrl = `https://t.me/${botUsername}?start=ref_${userId}`;
+            
+            const refInput = document.getElementById('refLinkInput');
+            if(refInput) {
+                refInput.value = refUrl;
+            }
+        });
+
+        // Функция копирования реферальной ссылки
+        function copyRefLink() {
+            const input = document.getElementById('refLinkInput');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value);
+            
+            const btn = event.target;
+            const oldText = btn.innerText;
+            btn.innerText = currentLang === 'ru' ? 'СКОПИРОВАНО!' : 'COPIED!';
+            btn.style.background = 'var(--accent-green)';
+            setTimeout(() => {
+                btn.innerText = oldText;
+                btn.style.background = 'var(--accent-blue)';
+            }, 2000);
+        }
+
         // Функция кнопки Поделиться
         function shareBotApp() {
+            const refInputVal = document.getElementById('refLinkInput').value;
             const shareText = encodeURIComponent("🚀 Залетай в наш крутой бот-терминал BinoDex! Здесь бесплатное обучение, квантовый ИИ и трЭйдинг со своей командой в прямом эфире!");
-            const shareUrl = encodeURIComponent("https://t.me/ваш_бот_username"); 
-            window.open(`https://t.me/share/url?url=${shareUrl}&text=${shareText}`, '_blank');
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(refInputVal)}&text=${shareText}`, '_blank');
         }
 
         const translations = {
@@ -488,8 +549,13 @@
                 acad_h5: "Время зарабатывать профессионально!",
                 acad_p5: "Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трЭйдинг на новый уровень прибыльности.",
                 vip_main_title: "🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА",
+                ref_box_title: "ВАША ПЕРСОНАЛЬНАЯ РЕФЕРАЛЬНАЯ ССЫЛКА:",
+                ref_box_desc: "Пригласите 3 друзей по этой ссылке в нашу команду — получите VIP на 1 неделю! За регистрацию с депозитом — VIP на 1 месяц.",
+                ref_copy_btn: "Копировать",
+                ref_invited_count: "Приглашено друзей:",
+                ref_status_none: "До VIP осталось: 3 друга",
                 vip_how_title: "📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:",
-                vip_how_text: "• Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт и совершите сделку на реальном счёте.<br>• Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.",
+                vip_how_text: "• Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт и совершите сделку на реальном счёте.<br>• Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке выше в нашу команду.",
                 vip_btn_top: "Зарегистрироваться и получить VIP",
                 vip_perks_title: "🚀 ЧТО ДАЕТ VIP (ВСЕ ПРИВИЛЕГИИ):",
                 v1_title: "ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:",
@@ -509,6 +575,9 @@
                 v8_title: "ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):",
                 v8_desc: "Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.",
                 vip_btn_bot: "Получить VIP доступ прямо сейчас",
+                manager_box_title: "ВАШ ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР:",
+                manager_box_desc: "Остались вопросы по VIP доступу, пополнению или стратегии? Напишите нашему официальному представителю в Telegram, и вам помогут моментально!",
+                manager_btn: "Написать менеджеру (@jenna_mo1)",
                 daily_sig_title: "ЕЖЕДНЕВНЫЙ ТОРГОВЫЙ СИГНАЛ ДНЯ",
                 daily_sig_desc: "Актив: <b style='color:#fff;'>EUR/USD</b><br>Время экспирации: <b style='color:#fff;'>5 Минут</b><br>Рекомендация алгоритма ИИ: <b style='color:var(--accent-green);'>ВВЕРХ (STRONG BUY)</b><br>Точность прогноза: <b style='color:var(--accent-green);'>94.8%</b>",
                 daily_sig_btn: "Открыть сделку по сигналу",
@@ -595,8 +664,13 @@
                 acad_h5: "Time to Earn Professionally!",
                 acad_p5: "Harness our terminal power, deposit from 5 dollars, and take your trading to new levels of profitability.",
                 vip_main_title: "🎁 VIP: CONDITIONS & EXCLUSIVE PERKS",
+                ref_box_title: "YOUR PERSONAL REFERRAL LINK:",
+                ref_box_desc: "Invite 3 friends via this link to our team — get VIP for 1 week! For registration with a deposit — VIP for 1 month.",
+                ref_copy_btn: "Copy",
+                ref_invited_count: "Invited friends:",
+                ref_status_none: "Left to VIP: 3 friends",
                 vip_how_title: "📌 HOW TO GET FREE VIP ACCESS:",
-                vip_how_text: "• Option 1 (VIP for 1 month): Register via the link below, fund your account, and execute a trade.<br>• Option 2 (VIP for 1 week): Invite just 3 friends via your referral link to our team.",
+                vip_how_text: "• Option 1 (VIP for 1 month): Register via the link below, fund your account, and execute a trade.<br>• Option 2 (VIP for 1 week): Invite just 3 friends via your referral link above to our team.",
                 vip_btn_top: "Register & Get VIP",
                 vip_perks_title: "🚀 WHAT VIP INCLUDES (ALL PRIVILEGES):",
                 v1_title: "CLOSED VIP SIGNAL CHANNEL 24/7:",
@@ -616,6 +690,9 @@
                 v8_title: "ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):",
                 v8_desc: "Get a portion of fees refunded directly to your real balance on every executed trade.",
                 vip_btn_bot: "Get VIP Access Right Now",
+                manager_box_title: "YOUR PERSONAL MANAGER:",
+                manager_box_desc: "Have questions about VIP access, deposits, or strategy? Contact our official representative on Telegram for instant support!",
+                manager_btn: "Contact Manager (@jenna_mo1)",
                 daily_sig_title: "DAILY TRADING SIGNAL OF THE DAY",
                 daily_sig_desc: "Asset: <b style='color:#fff;'>EUR/USD</b><br>Expiry Time: <b style='color:#fff;'>5 Minutes</b><br>AI Algorithm Recommendation: <b style='color:var(--accent-green);'>UP (STRONG BUY)</b><br>Forecast Accuracy: <b style='color:var(--accent-green);'>94.8%</b>",
                 daily_sig_btn: "Open Trade by Signal",
