@@ -60,7 +60,6 @@
         .big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }
         .log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }
 
-        /* БЛОК ВЫПЛАТ */
         .withdrawal-box { background: rgba(0, 230, 118, 0.03); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; }
         .withdrawal-feed { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 11px; height: 140px; overflow-y: auto; border: 1px solid var(--border-color); }
         .withdrawal-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-secondary); }
@@ -95,7 +94,7 @@
     <div class="nav-tabs">
         <div class="nav-tab active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</div>
         <div class="nav-tab" onclick="switchTab('academy', this)">🎓 АКАДЕМИЯ</div>
-        <div class="nav-tab" onclick="switchTab('vip', this)">VIP СТАТУС</div>
+        <div class="nav-tab" onclick="switchTab('vip', this)">🎁 VIP СТАТУС</div>
     </div>
 
     <!-- ТЕРМИНАЛ -->
@@ -139,7 +138,7 @@
         <div class="tradingview-container" id="chartContainer"></div>
 
         <button id="scanBtn" class="btn" onclick="runAnalysis()">ЗАПУСТИТЬ КВАНТОВЫЙ ИИ-АНАЛИЗ</button>
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать трэйдинг</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать трейдинг</a>
         
         <div id="signalResult" class="signal-result"></div>
 
@@ -176,7 +175,7 @@
             </div>
         </div>
 
-        <!-- РАЗДЕЛ: ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ (ВСТАВЛЕН СРАЗУ ПОСЛЕ ВЫПЛАТ) -->
+        <!-- РАЗДЕЛ: ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ -->
         <div class="withdrawal-box" id="statsSection">
             <div style="font-weight:700; color:var(--accent-blue); margin-bottom:12px;">📊 ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ</div>
             
@@ -278,7 +277,7 @@
 
     <!-- АКАДЕМИЯ -->
     <div id="academy" class="card">
-        <div style="font-size:14px; font-weight:900; color:var(--accent-blue); margin-bottom:12px;">🎓 АКАДЕМИЯ ЭЛИТНОГО ТРЭЙДЕРА</div>
+        <div style="font-size:14px; font-weight:900; color:var(--accent-blue); margin-bottom:12px;">🎓 АКАДЕМИЯ ЭЛИТНОГО ТРЕЙДЕРА</div>
         
         <div class="academy-module">
             <h4>Передовые алгоритмы и синергия индикаторов</h4>
@@ -294,40 +293,43 @@
 
         <div class="academy-module">
             <h4>Психология и финансовая дисциплина</h4>
-            <p>Успешный трэйдинг — это на 80% контроль эмоций и строгий риск-менеджмент. Используйте калькулятор рисков, никогда не превышайте допустимый размер ставки на одну сделку и фиксируйте прибыль после серии успешных входов.</p>
+            <p>Успешный трейдинг — это на 80% контроль эмоций и строгий риск-менеджмент. Используйте калькулятор рисков, никогда не превышайте допустимый размер ставки на одну сделку и фиксируйте прибыль после серии успешных входов.</p>
         </div>
 
         <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">
             <h4 style="color:var(--accent-green);">Время зарабатывать профессионально!</h4>
-            <p>Используйте всю мощь передовых алгоритмов прямо сейчас и выводите свой трэйдинг на принципиально новый уровень.</p>
-            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать трэйдинг</a>
+            <p>Используйте всю мощь передовых алгоритмов прямо сейчас и выводите свой трейдинг на принципиально новый уровень.</p>
+            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Начать трейдинг</a>
         </div>
     </div>
 
-    <!-- VIP СТАТУС -->
+    <!-- VIP СТАТУС (РАСШИРЕННЫЙ И МАКСИМАЛЬНО МОТИВИРУЮЩИЙ) -->
     <div id="vip" class="card">
-        <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;">🎁 VIP СТАТУС: УСЛОВИЯ И ПРЕИМУЩЕСТВА</div>
+        <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;">🎁 VIP СТАТУС: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА</div>
         
         <div class="vip-card-box">
             <div style="font-weight:800; color:var(--accent-blue); margin-bottom:8px; font-size:13px;">📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:</div>
             <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;">
-                • <b>Вариант 1 (VIP на 30 дней):</b> Зарегистрируйте новый аккаунт по ссылке ниже и сделайте хотя бы одну сделку на реальном счете на любую сумму.<br>
-                • <b>Вариант 2 (VIP на 7 дней):</b> Пригласите всего 3 друзей в нашего бота по вашей реферальной ссылке.
+                • <b>Вариант 1 (VIP на 30 дней):</b> Зарегистрируйте новый аккаунт по ссылке ниже и пополните счет для комфортной торговли.<br>
+                • <b>Вариант 2 (VIP НАВСЕГДА):</b> Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.<br>
+                • <b>Вариант 3 (Эксклюзив):</b> Активные участники закрытого канала получают пожизненный VIP-доступ со всеми привилегиями автоматически!
             </div>
             <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:5px;">Зарегистрироваться и получить VIP</a>
         </div>
 
-        <div style="font-weight:800; color:var(--text-main); margin-bottom:8px; font-size:13px;">🚀 ЧТО ДАЕТ VIP СТАТУС:</div>
+        <div style="font-weight:800; color:var(--text-main); margin-bottom:8px; font-size:13px;">🚀 ЧТО ДАЕТ VIP СТАТУС (ВСЕ ПРИВИЛЕГИИ):</div>
         <ul class="vip-list">
-            <li><b>ПОВЫШЕННАЯ ТОЧНОСТЬ СИГНАЛОВ:</b> Доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией ложных пробоев.</li>
-            <li><b>АВТОМАТИЧЕСКИЙ КОПИ-ТРЭЙДИНГ:</b> Мгновенное зеркалирование прибыльных сделок лучших трэйдеров платформы в один клик.</li>
-            <li><b>ПРИОРИТЕТНЫЕ СЕРВЕРА 24/7:</b> Исполнение ордеров без задержек и проскальзываний на самых быстрых каналах связи.</li>
-            <li><b>АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:</b> Автоматическая защита депозита во время выхода важнейших макроэкономических новостей.</li>
-            <li><b>ЗАКРЫТЫЕ СТРАТЕГИИ И МОДУЛИ:</b> Расширенные обучающие курсы по разгону депозита и работе с крупным капиталом.</li>
-            <li><b>ЛИЧНЫЙ ИИ-КУРАТОР:</b> Глубокий разбор торговой статистики и персональные рекомендации по улучшению результатов.</li>
+            <li><b>ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:</b> Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.</li>
+            <li><b>ПОВЫШЕННАЯ ТОЧНОСТЬ АЛГОРИТМОВ ИИ:</b> Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.</li>
+            <li><b>АВТОМАТИЧЕСКИЙ КОПИ-ТРЭЙДИНГ:</b> Зеркалирование сделок лучших трейдеров платформы в один клик с защитой от просадок.</li>
+            <li><b>ПРИОРИТЕТНЫЕ СЕРВЕРА С МИНИМАЛЬНЫМ ПИНГОМ:</b> Мгновенное исполнение ордеров без задержек и проскальзываний на самых быстрых каналах.</li>
+            <li><b>ЕЖЕНЕДЕЛЬНЫЕ ДЕНЕЖНЫЕ ТУРНИРЫ:</b> Участие в закрытых розыгрышах ценных призов и депозитов среди участников VIP-команды.</li>
+            <li><b>ПЕРСОНАЛЬНЫЙ МАНИ-МЕНДЖМЕНТ ПЛАН:</b> Индивидуальная стратегия разгона депозита от профессиональных трейдеров с личным разбором ошибок.</li>
+            <li><b>АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:</b> Автоматическое предупреждение и защита депозита во время выхода важных макроэкономических новостей.</li>
+            <li><b>ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):</b> Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.</li>
         </ul>
 
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Получить VIP доступ</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Получить VIP доступ прямо сейчас</a>
     </div>
 
     <script>
