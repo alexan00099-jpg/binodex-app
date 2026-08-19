@@ -88,9 +88,10 @@
         .risk-input { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 8px; margin-top: 5px; margin-bottom: 10px; font-size: 12px; outline: none; }
         .vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
 
-        /* Кнопка ПОДЕЛИТЬСЯ в самом низу обычном потоке */
+        .daily-signal-box { background: linear-gradient(135deg, rgba(0,230,118,0.08), rgba(41,121,255,0.08)); border: 1px solid rgba(0, 230, 118, 0.4); border-radius: 14px; padding: 14px; margin-top: 15px; margin-bottom: 10px; }
+
         .share-container-bottom {
-            margin-top: 20px;
+            margin-top: 15px;
             margin-bottom: 10px;
             width: 100%;
         }
@@ -129,7 +130,7 @@
         </div>
         <div class="panel-right">
             <div class="winrate-badge" data-i18n="ai_active">🟢 AI СТАТУС: АКТИВЕН</div>
-            <button class="lang-switcher" onclick="triggerVibration('light'); toggleLanguage();">RU / EN</button>
+            <button class="lang-switcher" onclick="toggleLanguage();">RU / EN</button>
         </div>
     </div>
 
@@ -142,7 +143,7 @@
     <!-- ТЕРМИНАЛ -->
     <div id="terminal" class="card active-section">
         <div class="controls-grid">
-            <select id="assetSelect" class="select-custom" onchange="triggerVibration('light'); changeAsset();">
+            <select id="assetSelect" class="select-custom" onchange="changeAsset();">
                 <optgroup label="Криптовалюты / Crypto">
                     <option value="BINANCE:BTCUSDT">BTC/USDT</option>
                     <option value="BINANCE:ETHUSDT">ETH/USDT</option>
@@ -157,7 +158,7 @@
                     <option value="NASDAQ:TSLA">TSLA (Tesla)</option>
                 </optgroup>
             </select>
-            <select id="timeframeSelect" class="select-custom" onchange="triggerVibration('light'); changeTimeframe();">
+            <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe();">
                 <option value="1">1 Мин / Min</option>
                 <option value="3">3 Мин / Min</option>
                 <option value="5">5 Мин / Min</option>
@@ -170,7 +171,7 @@
         <div class="tradingview-container" id="chartContainer"></div>
 
         <button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">Запустить анализ</button>
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" onclick="triggerVibration('heavy')" data-i18n="btn_trade">Начать торговать</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать торговать</a>
         
         <div id="signalResult" class="signal-result"></div>
 
@@ -223,7 +224,7 @@
                 <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_balance">ТЕКУЩИЙ БАЛАНС ($):</label>
                 <input type="number" id="balanceInput" class="risk-input" value="1000">
             </div>
-            <button class="btn" onclick="triggerVibration('medium'); addTradeToStats();" style="margin-bottom:10px;" data-i18n="stats_btn">ЗАФИКСИРОВАТЬ РЕЗУЛЬТАТ</button>
+            <button class="btn" onclick="addTradeToStats();" style="margin-bottom:10px;" data-i18n="stats_btn">ЗАФИКСИРОВАТЬ РЕЗУЛЬТАТ</button>
             <div class="confluence-box" style="margin-top:8px; background: rgba(41, 121, 255, 0.05);">
                 <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span data-i18n="stats_wr">Общий винрейт:</span> <b id="totalWinrate" style="color:var(--accent-green);">0%</b></div>
                 <div style="display:flex; justify-content:space-between;"><span data-i18n="stats_profit">Чистая прибыль:</span> <b id="totalProfit" style="color:var(--accent-green);">+$0.00</b></div>
@@ -343,7 +344,7 @@
         <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">
             <h4 style="color:var(--accent-green);" data-i18n="acad_h5">Время зарабатывать профессионально!</h4>
             <p data-i18n="acad_p5">Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трЭйдинг на новый уровень прибыльности.</p>
-            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" onclick="triggerVibration('heavy')" data-i18n="btn_trade">Начать торговать</a>
+            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать торговать</a>
         </div>
     </div>
 
@@ -354,10 +355,10 @@
         <div class="vip-card-box">
             <div style="font-weight:800; color:var(--accent-blue); margin-bottom:8px; font-size:13px;" data-i18n="vip_how_title">📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:</div>
             <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="vip_how_text">
-                • Вариант 1 (VIP на 30 дней): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите одну сделку на реальном счёте на любой паре на любую сумму.<br>
-                • Вариант 2 (VIP НАВСЕГДА): Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.
+                • Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт и совершите сделку на реальном счёте.<br>
+                • Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.
             </div>
-            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" onclick="triggerVibration('heavy')" style="margin-top:5px; margin-bottom:5px;" data-i18n="vip_btn_top">Зарегистрироваться и получить VIP</a>
+            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:5px;" data-i18n="vip_btn_top">Зарегистрироваться и получить VIP</a>
         </div>
 
         <div style="font-weight:800; color:var(--text-main); margin-bottom:8px; font-size:13px;" data-i18n="vip_perks_title">🚀 ЧТО ДАЕТ VIP (ВСЕ ПРИВИЛЕГИИ):</div>
@@ -372,10 +373,24 @@
             <li><b data-i18n="v8_title">ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):</b> <span data-i18n="v8_desc">Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.</span></li>
         </ul>
 
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" onclick="triggerVibration('heavy')" data-i18n="vip_btn_bot">Получить VIP доступ прямо сейчас</a>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="vip_btn_bot">Получить VIP доступ прямо сейчас</a>
     </div>
 
-    <!-- КНОПКА ПОДЕЛИТЬСЯ В САМОМ НИЗУ (ОБЫЧНЫЙ ПОТОК) -->
+    <!-- ЕЖЕДНЕВНЫЙ ТОРГОВЫЙ СИГНАЛ -->
+    <div class="daily-signal-box">
+        <div style="font-weight:800; color:var(--accent-green); margin-bottom:8px; font-size:13px; display:flex; align-items:center; gap:6px;">
+            <span>⚡</span> <span data-i18n="daily_sig_title">ЕЖЕДНЕВНЫЙ ТОРГОВЫЙ СИГНАЛ ДНЯ</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="daily_sig_desc">
+            Актив: <b style="color:#fff;">EUR/USD</b><br>
+            Время экспирации: <b style="color:#fff;">5 Минут</b><br>
+            Рекомендация алгоритма ИИ: <b style="color:var(--accent-green);">ВВЕРХ (STRONG BUY)</b><br>
+            Точность прогноза: <b style="color:var(--accent-green);">94.8%</b>
+        </div>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:0;" data-i18n="daily_sig_btn">Открыть сделку по сигналу</a>
+    </div>
+
+    <!-- КНОПКА ПОДЕЛИТЬСЯ В САМОМ НИЗУ -->
     <div class="share-container-bottom">
         <button class="btn-share-bot" onclick="shareBotApp()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
@@ -384,28 +399,10 @@
     </div>
 
     <script>
-        // Функция тактильного отклика (вибрации) через Telegram Web App API
-        function triggerVibration(style = 'medium') {
-            try {
-                if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-                    window.Telegram.WebApp.HapticFeedback.impactOccurred(style);
-                } else if (window.Telegram && window.Telegram.WebApp) {
-                    // Альтернативный метод уведомления в Телеграме
-                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-                } else if (navigator.vibrate) {
-                    navigator.vibrate(50);
-                }
-            } catch (e) {
-                console.log("Vibration error:", e);
-            }
-        }
-
         // Функция кнопки Поделиться
         function shareBotApp() {
-            triggerVibration('heavy');
             const shareText = encodeURIComponent("🚀 Залетай в наш крутой бот-терминал BinoDex! Здесь бесплатное обучение, квантовый ИИ и трЭйдинг со своей командой в прямом эфире!");
-            const shareUrl = encodeURIComponent("https://t.me/ваш_бот_username"); // Замените на ссылку вашего бота в Telegram
-            
+            const shareUrl = encodeURIComponent("https://t.me/ваш_бот_username"); 
             window.open(`https://t.me/share/url?url=${shareUrl}&text=${shareText}`, '_blank');
         }
 
@@ -492,7 +489,7 @@
                 acad_p5: "Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трЭйдинг на новый уровень прибыльности.",
                 vip_main_title: "🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА",
                 vip_how_title: "📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:",
-                vip_how_text: "• Вариант 1 (VIP на 30 дней): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите одну сделку на реальном счёте на любой паре на любую сумму.<br>• Вариант 2 (VIP НАВСЕГДА): Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.",
+                vip_how_text: "• Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт и совершите сделку на реальном счёте.<br>• Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.",
                 vip_btn_top: "Зарегистрироваться и получить VIP",
                 vip_perks_title: "🚀 ЧТО ДАЕТ VIP (ВСЕ ПРИВИЛЕГИИ):",
                 v1_title: "ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:",
@@ -512,6 +509,9 @@
                 v8_title: "ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):",
                 v8_desc: "Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.",
                 vip_btn_bot: "Получить VIP доступ прямо сейчас",
+                daily_sig_title: "ЕЖЕДНЕВНЫЙ ТОРГОВЫЙ СИГНАЛ ДНЯ",
+                daily_sig_desc: "Актив: <b style='color:#fff;'>EUR/USD</b><br>Время экспирации: <b style='color:#fff;'>5 Минут</b><br>Рекомендация алгоритма ИИ: <b style='color:var(--accent-green);'>ВВЕРХ (STRONG BUY)</b><br>Точность прогноза: <b style='color:var(--accent-green);'>94.8%</b>",
+                daily_sig_btn: "Открыть сделку по сигналу",
                 share_btn_text: "ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ"
             },
             en: {
@@ -596,7 +596,7 @@
                 acad_p5: "Harness our terminal power, deposit from 5 dollars, and take your trading to new levels of profitability.",
                 vip_main_title: "🎁 VIP: CONDITIONS & EXCLUSIVE PERKS",
                 vip_how_title: "📌 HOW TO GET FREE VIP ACCESS:",
-                vip_how_text: "• Option 1 (VIP for 30 days): Register via the link below, fund your account with a comfortable amount, and execute one trade on a real account on any pair with any amount.<br>• Option 2 (FOREVER VIP): Invite just 3 friends via your referral link to our team.",
+                vip_how_text: "• Option 1 (VIP for 1 month): Register via the link below, fund your account, and execute a trade.<br>• Option 2 (VIP for 1 week): Invite just 3 friends via your referral link to our team.",
                 vip_btn_top: "Register & Get VIP",
                 vip_perks_title: "🚀 WHAT VIP INCLUDES (ALL PRIVILEGES):",
                 v1_title: "CLOSED VIP SIGNAL CHANNEL 24/7:",
@@ -616,6 +616,9 @@
                 v8_title: "ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):",
                 v8_desc: "Get a portion of fees refunded directly to your real balance on every executed trade.",
                 vip_btn_bot: "Get VIP Access Right Now",
+                daily_sig_title: "DAILY TRADING SIGNAL OF THE DAY",
+                daily_sig_desc: "Asset: <b style='color:#fff;'>EUR/USD</b><br>Expiry Time: <b style='color:#fff;'>5 Minutes</b><br>AI Algorithm Recommendation: <b style='color:var(--accent-green);'>UP (STRONG BUY)</b><br>Forecast Accuracy: <b style='color:var(--accent-green);'>94.8%</b>",
+                daily_sig_btn: "Open Trade by Signal",
                 share_btn_text: "SHARE WITH FRIENDS"
             }
         };
@@ -633,7 +636,6 @@
         }
 
         function switchTab(tabId, element) {
-            triggerVibration('light');
             document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(tabId).classList.add('active-section');
@@ -641,7 +643,6 @@
         }
 
         function switchTool(toolId, element) {
-            triggerVibration('light');
             document.querySelectorAll('.analysis-tool-box').forEach(b => b.classList.remove('active-tool'));
             document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(toolId).classList.add('active-tool');
@@ -671,7 +672,6 @@
         }
 
         function runAnalysis() {
-            triggerVibration('medium');
             const res = document.getElementById('signalResult');
             const btn = document.getElementById('scanBtn');
             res.style.display = 'block';
@@ -680,13 +680,12 @@
             res.style.color = 'var(--accent-blue)';
             res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 1/5] Сканирование стакана ордеров...' : '⚡ [Step 1/5] Scanning order book...';
             
-            setTimeout(() => { triggerVibration('light'); res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 2/5] Анализ Parabolic SAR и RSI...' : '⚡ [Step 2/5] Analyzing Parabolic SAR & RSI...'; }, 800);
-            setTimeout(() => { triggerVibration('light'); res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 3/5] Проверка волатильности Боллинджера...' : '⚡ [Step 3/5] Checking Bollinger volatility...'; }, 1600);
-            setTimeout(() => { triggerVibration('light'); res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 4/5] Синхронизация с нейросетью...' : '⚡ [Step 4/5] Synchronizing with neural network...'; }, 2400);
-            setTimeout(() => { triggerVibration('light'); res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 5/5] Формирование сигнала...' : '⚡ [Step 5/5] Generating final signal...'; }, 3200);
+            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 2/5] Анализ Parabolic SAR и RSI...' : '⚡ [Step 2/5] Analyzing Parabolic SAR & RSI...'; }, 800);
+            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 3/5] Проверка волатильности Боллинджера...' : '⚡ [Step 3/5] Checking Bollinger volatility...'; }, 1600);
+            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 4/5] Синхронизация с нейросетью...' : '⚡ [Step 4/5] Synchronizing with neural network...'; }, 2400);
+            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 5/5] Формирование сигнала...' : '⚡ [Step 5/5] Generating final signal...'; }, 3200);
 
             setTimeout(() => {
-                triggerVibration('heavy');
                 res.innerHTML = currentLang === 'ru' ? 
                     '📈 СИГНАЛ УСПЕШНО СФОРМИРОВАН<br><b style="color:var(--accent-green); font-size:14px;">НАПРАВЛЕНИЕ: ВВЕРХ (STRONG BUY)</b>' : 
                     '📈 SIGNAL SUCCESSFULLY GENERATED<br><b style="color:var(--accent-green); font-size:14px;">DIRECTION: UP (STRONG BUY)</b>';
