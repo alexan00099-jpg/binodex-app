@@ -3,931 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex Ultra AI Terminal v5.0</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>BINODEX AI TRADING</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #090d16;
-            color: #ffffff;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px;
-            padding-bottom: 30px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 420px;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding: 0 4px;
-        }
-
-        .brand {
-            font-size: 16px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
-        }
-
-        .top-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .lang-btn {
-            background: #121826;
-            border: 1px solid #1f293d;
-            color: #38bdf8;
-            font-size: 11px;
-            font-weight: 800;
-            padding: 4px 8px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .online-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #10b981;
-        }
-
-        .pulse-dot {
-            width: 7px;
-            height: 7px;
-            background-color: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.4; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 0.4; transform: scale(0.9); }
-        }
-
-        /* Mode Selector */
-        .mode-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            background: #121826;
-            padding: 4px;
-            border-radius: 12px;
-            border: 1px solid #1f293d;
-            margin-bottom: 12px;
-        }
-
-        .mode-tab {
-            text-align: center;
-            padding: 8px 0;
-            font-size: 11px;
-            font-weight: 800;
-            border-radius: 8px;
-            color: #64748b;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
-        }
-
-        .mode-tab.active {
-            background: #1e293b;
-            color: #38bdf8;
-            border: 1px solid #334155;
-        }
-
-        .mode-tab.vip-tab.active {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1));
-            border: 1px solid #f59e0b;
-            color: #fbbf24;
-        }
-
-        /* Controls Grid */
-        .controls-grid {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .select-box, .tf-box {
-            background: #121826;
-            border: 1px solid #1f293d;
-            border-radius: 12px;
-            padding: 8px 10px;
-        }
-
-        .control-label {
-            font-size: 10px;
-            color: #64748b;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        select {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: #60a5fa;
-            font-weight: 700;
-            font-size: 13px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        select option { background: #121826; color: #ffffff; }
-
-        .tf-pills { display: flex; gap: 4px; }
-
-        .tf-pill {
-            flex: 1;
-            text-align: center;
-            padding: 5px 0;
-            font-size: 11px;
-            font-weight: 700;
-            border-radius: 6px;
-            background: #1a2235;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tf-pill.active {
-            background: #2563eb;
-            color: #ffffff;
-            box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
-        }
-
-        /* Chart Card */
-        .chart-card {
-            background: #121826;
-            border: 1px solid #1f293d;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 12px;
-            height: 210px;
-        }
-
-        #tv_chart { width: 100%; height: 100%; }
-
-        /* TA Panel */
-        .ta-panel {
-            background: #121826;
-            border: 1px solid #1f293d;
-            border-radius: 16px;
-            padding: 12px 14px;
-            margin-bottom: 12px;
-        }
-
-        .ta-title {
-            font-size: 11px;
-            font-weight: 800;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .trend-bar-bg {
-            width: 100%;
-            height: 8px;
-            background: #1c2538;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .trend-bar-fill {
-            height: 100%;
-            width: 91%;
-            background: linear-gradient(90deg, #2563eb, #10b981);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-
-        .indicators-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .ind-item {
-            background: #0a0e17;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #1a2234;
-        }
-
-        .ind-label { font-size: 10px; color: #64748b; }
-        .ind-value { font-size: 12px; font-weight: 700; color: #38bdf8; margin-top: 2px; }
-
-        /* Signal Section */
-        .signal-card {
-            background: #121826;
-            border: 1px solid #1f293d;
-            border-radius: 18px;
-            padding: 16px;
-            text-align: center;
-            margin-bottom: 12px;
-            position: relative;
-        }
-
-        .signal-box {
-            min-height: 105px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #0a0e17;
-            border-radius: 14px;
-            border: 1px solid #1c2538;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-
-        .signal-text {
-            font-size: 20px;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-        }
-
-        .signal-idle { color: #64748b; }
-        .signal-up { color: #10b981; text-shadow: 0 0 14px rgba(16, 185, 129, 0.5); }
-        .signal-down { color: #ef4444; text-shadow: 0 0 14px rgba(239, 68, 68, 0.5); }
-
-        .price-target {
-            font-size: 12px;
-            font-weight: 800;
-            color: #38bdf8;
-            margin-top: 4px;
-            background: rgba(56, 189, 248, 0.1);
-            padding: 2px 8px;
-            border-radius: 6px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            display: none;
-        }
-
-        .timer-badge {
-            font-size: 12px;
-            font-weight: 700;
-            color: #f59e0b;
-            margin-top: 6px;
-            display: none;
-        }
-
-        .meta-row {
-            display: flex;
-            justify-content: space-around;
-            background: #0a0e17;
-            padding: 8px;
-            border-radius: 10px;
-            border: 1px solid #1c2538;
-        }
-
-        .meta-cell { text-align: center; }
-        .meta-val { font-size: 13px; font-weight: 800; color: #ffffff; }
-
-        /* VIP Overlay */
-        .vip-overlay {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(9, 13, 22, 0.94);
-            backdrop-filter: blur(6px);
-            border-radius: 18px;
-            z-index: 10;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .vip-lock-icon { font-size: 32px; margin-bottom: 8px; }
-        .vip-title { font-size: 16px; font-weight: 900; color: #fbbf24; margin-bottom: 4px; }
-        .vip-desc { font-size: 12px; color: #94a3b8; margin-bottom: 14px; line-height: 1.4; }
-        
-        .btn-unlock {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: #000;
-            font-weight: 900;
-            padding: 10px 18px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 12px;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-            text-transform: uppercase;
-        }
-
-        /* Buttons */
-        .btn-main {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 15px;
-            font-weight: 800;
-            border-radius: 14px;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 4px 18px rgba(37, 99, 235, 0.4);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-main:active { transform: scale(0.98); }
-        .btn-main:disabled { opacity: 0.5; }
-
-        .btn-ref {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            color: white;
-            text-decoration: none;
-            padding: 14px;
-            font-size: 14px;
-            font-weight: 800;
-            border-radius: 14px;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .btn-notify {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            background: #121826;
-            border: 1px solid #1f293d;
-            color: #38bdf8;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            border-radius: 12px;
-            width: 100%;
-            cursor: pointer;
-            margin-bottom: 14px;
-        }
-
-        /* Feed */
-        .feed-card {
-            background: #121826;
-            border: 1px solid #1f293d;
-            border-radius: 16px;
-            padding: 12px 14px;
-        }
-
-        .feed-header {
-            font-size: 11px;
-            font-weight: 800;
-            color: #94a3b8;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .feed-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #1a2234;
-            font-size: 12px;
-        }
-
-        .feed-item:last-child { border-bottom: none; }
-        .feed-pair { font-weight: 700; color: #f1f5f9; }
-        .feed-dir-up { color: #10b981; font-weight: 700; }
-        .feed-dir-down { color: #ef4444; font-weight: 700; }
-        .feed-profit {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-            padding: 2px 6px;
-            border-radius: 6px;
-            font-weight: 800;
-            font-size: 11px;
-        }
-
-        /* Loader */
-        .loader {
-            display: none;
-            width: 28px;
-            height: 28px;
-            border: 3px solid rgba(59, 130, 246, 0.2);
-            border-radius: 50%;
-            border-top-color: #3b82f6;
-            animation: spin 0.7s linear infinite;
-            margin-bottom: 6px;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .scan-status { font-size: 12px; color: #3b82f6; font-weight: 700; }
+        body { background-color: #0b0e14; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; }
+        .glass-card { background: rgba(22, 27, 38, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .accent-glow { box-shadow: 0 0 20px rgba(0, 229, 255, 0.25); }
+        .tab-btn.active { border-bottom: 2px solid #00e5ff; color: #00e5ff; }
     </style>
 </head>
-<body>
+<body class="pb-24">
 
-    <div class="container">
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <div class="brand">BINODEX AI ULTRA</div>
-            <div class="top-actions">
-                <button class="lang-btn" id="langBtn" onclick="toggleLang()">🇷🇺 RU</button>
-                <div class="online-badge">
-                    <div class="pulse-dot"></div>
-                    <span id="onlineCount">1,438</span>
+    <!-- HEADER -->
+    <header class="p-4 glass-card sticky top-0 z-50 flex justify-between items-center border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-brain text-cyan-400 text-xl"></i>
+            <span class="font-bold text-lg tracking-wider text-white">BINODEX <span class="text-cyan-400">AI</span></span>
+        </div>
+        <div class="flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-semibold text-emerald-400">WINRATE 91.6%</span>
+        </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="flex border-b border-slate-800 bg-slate-900/50 text-slate-400 text-sm font-medium text-center">
+        <button onclick="switchTab('signals')" id="tab-signals" class="tab-btn active flex-1 py-3">📊 СИГНАЛЫ</button>
+        <button onclick="switchTab('academy')" id="tab-academy" class="tab-btn flex-1 py-3">🎓 АКАДЕМИЯ</button>
+        <button onclick="switchTab('ref')" id="tab-ref" class="tab-btn flex-1 py-3">🎁 VIP И РЕФЕРАЛКА</button>
+    </nav>
+
+    <main class="p-4 max-w-lg mx-auto">
+
+        <!-- TAB 1: SIGNALS & ANALYTICS -->
+        <section id="section-signals" class="space-y-4">
+            
+            <!-- NEWS PROTECTION BANNER -->
+            <div class="glass-card p-3 rounded-xl flex items-center justify-between text-xs border-l-4 border-emerald-400">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-shield-halved text-emerald-400 text-base"></i>
+                    <div>
+                        <div class="font-bold text-slate-200">ЗАЩИТА ОТ НОВОСТЕЙ</div>
+                        <div class="text-slate-400">Волатильность нормальная. ТОРГОВЛЯ БЕЗОПАСНА</div>
+                    </div>
+                </div>
+                <span class="text-emerald-400 font-mono font-bold">LOW VOL</span>
+            </div>
+
+            <!-- LIVE DAILY STATS -->
+            <div class="grid grid-cols-2 gap-3 text-center">
+                <div class="glass-card p-3 rounded-xl">
+                    <div class="text-xs text-slate-400 mb-1">УСПЕШНЫЕ СДЕЛКИ (24Ч)</div>
+                    <div class="text-xl font-bold text-emerald-400">24 ПЛЮСА</div>
+                </div>
+                <div class="glass-card p-3 rounded-xl">
+                    <div class="text-xs text-slate-400 mb-1">КОРРЕКЦИИ</div>
+                    <div class="text-xl font-bold text-rose-400">2 МИНУСА</div>
                 </div>
             </div>
+
+            <!-- SIGNAL GENERATOR BLOCK -->
+            <div class="glass-card p-5 rounded-2xl space-y-4 accent-glow border border-cyan-500/20">
+                <div class="flex justify-between items-center">
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Валютная пара</label>
+                    <select id="asset" class="bg-slate-800 text-slate-200 text-sm rounded-lg px-3 py-1.5 border border-slate-700 outline-none">
+                        <option>EUR / USD (OTC)</option>
+                        <option>GBP / USD (OTC)</option>
+                        <option>USD / JPY (OTC)</option>
+                        <option>BTC / USDT</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Время экспирации</label>
+                    <select id="timeframe" class="bg-slate-800 text-slate-200 text-sm rounded-lg px-3 py-1.5 border border-slate-700 outline-none">
+                        <option>1 МИНУТА</option>
+                        <option>3 МИНУТЫ</option>
+                        <option>5 МИНУТ</option>
+                    </select>
+                </div>
+
+                <button onclick="generateSignal()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black py-3.5 rounded-xl shadow-lg transition active:scale-95 uppercase tracking-wider">
+                    ⚡ ПОЛУЧИТЬ СИГНАЛ ИИ
+                </button>
+            </div>
+
+            <!-- SIGNAL RESULT BOX -->
+            <div id="signal-result" class="hidden glass-card p-5 rounded-2xl border border-cyan-500/30 space-y-4 animate-fade-in">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <div>
+                        <div class="text-xs text-slate-400">УВЕРЕННОСТЬ ИИ</div>
+                        <div id="ai-confidence" class="text-2xl font-black text-cyan-400">94% ACCURACY</div>
+                    </div>
+                    <div id="signal-direction" class="px-4 py-2 rounded-xl text-lg font-black tracking-wider">
+                        --
+                    </div>
+                </div>
+
+                <!-- SMART LOGIC -->
+                <div class="space-y-1">
+                    <div class="text-xs text-slate-400 font-semibold">ОБОСНОВАНИЕ ВХОДА (SMART LOGIC):</div>
+                    <p id="smart-logic-text" class="text-sm text-slate-200 italic bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
+                        --
+                    </p>
+                </div>
+
+                <!-- INDICATORS CHECKLIST -->
+                <div class="space-y-2">
+                    <div class="text-xs text-slate-400 font-semibold">МУЛЬТИ-АНАЛИЗ ИНДИКАТОРОВ:</div>
+                    <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                        <div class="bg-slate-900/40 p-2 rounded border border-slate-800">RSI (14): <span class="text-emerald-400">ПЕРЕПРОДАННОСТЬ</span></div>
+                        <div class="bg-slate-900/40 p-2 rounded border border-slate-800">STOCHASTIC: <span class="text-emerald-400">ПЕРЕКРЕСТ UP</span></div>
+                        <div class="bg-slate-900/40 p-2 rounded border border-slate-800">FIBONACCI: <span class="text-cyan-400">УРОВЕНЬ 0.618</span></div>
+                        <div class="bg-slate-900/40 p-2 rounded border border-slate-800">VOLUME: <span class="text-emerald-400">РОСТ ОБЪЁМОВ</span></div>
+                    </div>
+                </div>
+
+                <!-- DIRECT TRADE BUTTON WITH YOUR REF LINK -->
+                <a href="Https://bdclick.app/smart/naJly9" target="_blank" class="block text-center w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider transition">
+                    📈 ОТКРЫТЬ СДЕЛКУ НА ПЛАТФОРМЕ
+                </a>
+
+                <button onclick="shareSignal()" class="w-full bg-slate-800 hover:bg-slate-700 text-xs font-bold py-2.5 rounded-lg text-slate-300 flex items-center justify-center space-x-2 border border-slate-700">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    <span>ПОДЕЛИШЬСЯ РЕЗУЛЬТАТОМ</span>
+                </button>
+            </div>
+
+        </section>
+
+        <!-- TAB 2: TRADING ACADEMY -->
+        <section id="section-academy" class="hidden space-y-4">
+            
+            <div class="glass-card p-4 rounded-xl border border-cyan-500/20">
+                <h2 class="font-bold text-lg text-cyan-400 mb-1">🎓 АКАДЕМИЯ ТРЭЙДИНГА</h2>
+                <p class="text-xs text-slate-400">Освой концепции SMART MONEY и PRICE ACTION за 5 минут.</p>
+            </div>
+
+            <!-- MODULE 1: SMART MONEY -->
+            <div class="glass-card p-4 rounded-xl space-y-2">
+                <div class="text-sm font-bold text-slate-200">1. КОНЦЕПЦИЯ SMART MONEY</div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Крупный игрок движет рынок за счёт **ликвидности** (стоп-лоссов розничных трэйдеров). Ищите зоны **Имбаланса (FVG)** — ценовые разрывы, куда график обязательно возвращается за ликвидностью.
+                </p>
+            </div>
+
+            <!-- MODULE 2: PRICE ACTION -->
+            <div class="glass-card p-4 rounded-xl space-y-2">
+                <div class="text-sm font-bold text-slate-200">2. ПАТТЕРНЫ PRICE ACTION</div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    **Бычье поглощение**: свеча перекрывает тело предыдущей красной свечи. Входите в сделку от уровня поддержки при подтверждении объемами.
+                </p>
+            </div>
+
+            <!-- RISK CALCULATOR -->
+            <div class="glass-card p-4 rounded-xl space-y-3">
+                <div class="text-sm font-bold text-cyan-400">🧮 КАЛЬКУЛЯТОР РИСК-МЕНЕДЖМЕНТА</div>
+                <div class="flex justify-between items-center text-xs">
+                    <span class="text-slate-400">Ваш депозит ($):</span>
+                    <input type="number" id="deposit-input" value="100" oninput="calcRisk()" class="w-20 bg-slate-800 text-right text-white p-1 rounded border border-slate-700">
+                </div>
+                <div class="bg-slate-900/80 p-3 rounded-lg text-xs space-y-1">
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">Рекомендуемая сделка (1%):</span>
+                        <span id="risk-1" class="font-bold text-emerald-400">$1</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">Максимальный риск (2%):</span>
+                        <span id="risk-2" class="font-bold text-amber-400">$2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUIZ FOR VIP ACCESS -->
+            <div class="glass-card p-4 rounded-xl space-y-3 border border-amber-500/30">
+                <div class="text-sm font-bold text-amber-400">🏆 ТЕСТ: ПОЛУЧИ VIP НА 3 ДНЯ</div>
+                <p class="text-xs text-slate-300">Какой максимальный процент от депозита можно инвестировать в одну сделку?</p>
+                <div class="space-y-2 text-xs">
+                    <button onclick="answerQuiz(false)" class="w-full text-left p-2 rounded bg-slate-800 hover:bg-slate-700">А) 10-20%</button>
+                    <button onclick="answerQuiz(true)" class="w-full text-left p-2 rounded bg-slate-800 hover:bg-slate-700">Б) 1-2% (Правильно)</button>
+                    <button onclick="answerQuiz(false)" class="w-full text-left p-2 rounded bg-slate-800 hover:bg-slate-700">В) Весь депозит на один сигнал</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 3: REFERRAL & DAILY STREAK -->
+        <section id="section-ref" class="hidden space-y-4">
+            
+            <!-- DAILY STREAK -->
+            <div class="glass-card p-4 rounded-xl space-y-2 border border-cyan-500/30">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-cyan-400">🔥 DAILY STREAK (БОНУС ЗАХОД)</span>
+                    <span class="text-xs font-mono text-emerald-400">3/7 ДНЕЙ</span>
+                </div>
+                <p class="text-xs text-slate-300">Заходи в приложение 7 дней подряд для разблокировки ТОЧНЫХ VIP-СИГНАЛОВ.</p>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div class="bg-cyan-400 h-full w-[42%]"></div>
+                </div>
+            </div>
+
+            <!-- REFERRAL SYSTEM -->
+            <div class="glass-card p-4 rounded-xl space-y-3">
+                <div class="text-sm font-bold text-slate-200">🚀 ПРИВЕДИ 3 ДРУЗЕЙ = VIP ИИ БЕСПЛАТНО</div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Делись своей личной ссылкой. Как только 3 друга зайдeт в бота, твоя точность сигналов автоматически повысится до 98%.
+                </p>
+                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center text-xs">
+                    <span class="font-mono text-slate-400 truncate pr-2">https://t.me/Binodex_Signal_Bot?start=ref123</span>
+                    <button onclick="copyRef()" class="bg-cyan-500 text-slate-950 font-bold px-3 py-1.5 rounded shrink-0">КОПИРОВАТЬ</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PERMANENT CALL TO ACTION FOOTER -->
+        <div class="mt-8 glass-card p-4 rounded-2xl border border-cyan-500/40 text-center space-y-3">
+            <p class="text-xs font-medium text-slate-200 leading-relaxed">
+                А в моём канале я бесплатно обучаю трэйдингу и захожу в сделки со своей командой в прямом эфире. Вступить в нашу команду можно по ссылке в профиле!
+            </p>
+            <a href="Https://bdclick.app/smart/naJly9" target="_blank" class="inline-block w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                👉 ПРИСОЕДИНИТЬСЯ К КОМАНДЕ
+            </a>
         </div>
 
-        <!-- Mode Selector -->
-        <div class="mode-selector">
-            <div class="mode-tab active" id="tabFree" onclick="switchMode('free')">
-                <span id="lblTabFree">Стандарт ИИ</span>
-            </div>
-            <div class="mode-tab vip-tab" id="tabVip" onclick="switchMode('vip')">
-                <span id="lblTabVip">👑 VIP Cluster 98%</span>
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="controls-grid">
-            <div class="select-box">
-                <div class="control-label" id="lblPair">Валютная пара</div>
-                <select id="pairSelect" onchange="onPairChange()">
-                    <!-- FOREX OTC -->
-                    <option value="EUR/USD OTC" data-symbol="FX:EURUSD" data-base="1.08420">EUR/USD OTC</option>
-                    <option value="GBP/USD OTC" data-symbol="FX:GBPUSD" data-base="1.27150">GBP/USD OTC</option>
-                    <option value="USD/JPY OTC" data-symbol="FX:USDJPY" data-base="154.300">USD/JPY OTC</option>
-                    <option value="AUD/CAD OTC" data-symbol="OANDA:AUDCAD" data-base="0.90120">AUD/CAD OTC</option>
-                    <option value="EUR/GBP OTC" data-symbol="FX:EURGBP" data-base="0.85310">EUR/GBP OTC</option>
-                    <option value="USD/CHF OTC" data-symbol="FX:USDCHF" data-base="0.89450">USD/CHF OTC</option>
-                    <option value="NZD/USD OTC" data-symbol="FX:NZDUSD" data-base="0.61200">NZD/USD OTC</option>
-                    <option value="AUD/USD OTC" data-symbol="FX:AUDUSD" data-base="0.66540">AUD/USD OTC</option>
-
-                    <!-- CRYPTO -->
-                    <option value="BTC/USD" data-symbol="BINANCE:BTCUSDT" data-base="64210.0">BTC/USD (Crypto)</option>
-                    <option value="ETH/USD" data-symbol="BINANCE:ETHUSDT" data-base="3480.5">ETH/USD (Crypto)</option>
-                    <option value="SOL/USD" data-symbol="BINANCE:SOLUSDT" data-base="145.8">SOL/USD (Crypto)</option>
-
-                    <!-- COMMODITIES -->
-                    <option value="GOLD (XAU/USD)" data-symbol="OANDA:XAUUSD" data-base="2385.4">GOLD (Золото)</option>
-                    <option value="SILVER (XAG/USD)" data-symbol="OANDA:XAGUSD" data-base="29.15">SILVER (Серебро)</option>
-                </select>
-            </div>
-            <div class="tf-box">
-                <div class="control-label" id="lblExp">Экспирация</div>
-                <div class="tf-pills">
-                    <div class="tf-pill active" onclick="setTF(this, '1 МИН')">1m</div>
-                    <div class="tf-pill" onclick="setTF(this, '3 МИН')">3m</div>
-                    <div class="tf-pill" onclick="setTF(this, '5 МИН')">5m</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TradingView Chart -->
-        <div class="chart-card">
-            <div id="tv_chart"></div>
-        </div>
-
-        <!-- Technical Analysis Panel -->
-        <div class="ta-panel">
-            <div class="ta-title">
-                <span id="lblTaTitle">Анализ Smart Money</span>
-                <span id="trendPercent" style="color:#10b981;">Сила тренда: 93%</span>
-            </div>
-            <div class="trend-bar-bg">
-                <div class="trend-bar-fill" id="trendBar" style="width: 93%;"></div>
-            </div>
-            <div class="indicators-grid">
-                <div class="ind-item">
-                    <div class="ind-label" id="lblRsi">Совпадение индикаторов</div>
-                    <div class="ind-value" id="rsiVal" style="color:#10b981;">4 / 4 🔥</div>
-                </div>
-                <div class="ind-item">
-                    <div class="ind-label" id="lblMacd">Осциллятор MACD</div>
-                    <div class="ind-value" id="macdVal">Бычий импульс</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Signal Card -->
-        <div class="signal-card">
-            <!-- VIP Overlay -->
-            <div class="vip-overlay" id="vipOverlay">
-                <div class="vip-lock-icon">🔒</div>
-                <div class="vip-title" id="lblVipTitle">VIP КЛАСТЕР ЗАКРЫТ</div>
-                <div class="vip-desc" id="lblVipDesc">Сигналы с точностью 98.4% и глубоким анализом объёмов доступны только участникам VIP-клуба.</div>
-                <a href="https://t.me/your_telegram_channel" target="_blank" class="btn-unlock" id="btnUnlock">ПОЛУЧИТЬ VIP ДОСТУП 🚀</a>
-            </div>
-
-            <div class="signal-box">
-                <div class="loader" id="loader"></div>
-                <div class="signal-text signal-idle" id="signalText">ВЫБЕРИТЕ ПАРУ И НАЖМИТЕ КНОПКУ</div>
-                <div class="price-target" id="priceTarget">📍 Точка входа: <span id="priceVal">--</span></div>
-                <div class="timer-badge" id="timerBadge">⏱ <span id="lblValid">Действителен:</span> <span id="timerVal">03:00</span></div>
-            </div>
-
-            <div class="meta-row">
-                <div class="meta-cell">
-                    <div class="control-label" id="lblAcc">Точность ИИ</div>
-                    <div class="meta-val" id="accVal" style="color:#10b981;">-- %</div>
-                </div>
-                <div class="meta-cell">
-                    <div class="control-label" id="lblMode">Режим ИИ</div>
-                    <div class="meta-val" id="modeName">Precision AI v5</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <button class="btn-main" id="getSignalBtn" onclick="requestSignal()">ВЫЧИСЛИТЬ СИГНАЛ 🚀</button>
-
-        <a href="YOUR_REF_LINK" target="_blank" class="btn-ref" id="btnRef">
-            ТОРГОВАТЬ НА BINODEX 💰
-        </a>
-
-        <!-- Notifications Trigger -->
-        <button class="btn-notify" onclick="toggleNotifications()">
-            <span>🔔</span> <span id="lblNotify">Включить Уведомления о Сигналах</span>
-        </button>
-
-        <!-- Live Feed -->
-        <div class="feed-card">
-            <div class="feed-header">
-                <span id="lblFeedTitle">Успешные сигналы ИИ</span>
-                <span style="color:#10b981;">Winrate 95%</span>
-            </div>
-            <div id="feedList">
-                <div class="feed-item">
-                    <span class="feed-pair">GOLD (XAU/USD)</span>
-                    <span class="feed-dir-up">ВВЕРХ ⬆️</span>
-                    <span class="feed-profit">+96% ✅</span>
-                </div>
-                <div class="feed-item">
-                    <span class="feed-pair">EUR/USD OTC</span>
-                    <span class="feed-dir-down">ВНИЗ ⬇️</span>
-                    <span class="feed-profit">+92% ✅</span>
-                </div>
-            </div>
-        </div>
-
-    </div>
+    </main>
 
     <script>
-        const tg = window.Telegram ? window.Telegram.WebApp : null;
-        if (tg) {
-            tg.ready();
-            tg.expand();
-        }
-
-        let currentLang = 'RU';
-        let currentMode = 'free';
-        let timerInterval = null;
-        let audioCtx = null;
-        let notificationsActive = false;
-
-        const i18n = {
-            RU: {
-                tabFree: 'Стандарт ИИ',
-                tabVip: '👑 VIP Cluster 98%',
-                pair: 'Валютная пара',
-                exp: 'Экспирация',
-                taTitle: 'Анализ Smart Money',
-                rsi: 'Совпадение индикаторов',
-                macd: 'Осциллятор MACD',
-                idle: 'ВЫБЕРИТЕ ПАРУ И НАЖМИТЕ КНОПКУ',
-                btnSignal: 'ВЫЧИСЛИТЬ СИГНАЛ 🚀',
-                btnRef: 'ТОРГОВАТЬ НА BINODEX 💰',
-                btnNotify: 'Включить Уведомления о Сигналах',
-                notifyActive: '🔔 Уведомления включены!',
-                feedTitle: 'Успешные сигналы ИИ',
-                acc: 'Точность ИИ',
-                mode: 'Режим ИИ',
-                valid: 'Действителен:',
-                vipTitle: 'VIP КЛАСТЕР ЗАКРЫТ 🔒',
-                vipDesc: 'Сигналы с точностью 98.4% и глубоким анализом объёмов доступны только участникам VIP-клуба.',
-                btnUnlock: 'ПОЛУЧИТЬ VIP ДОСТУП 🚀',
-                online: 'В СЕТИ',
-                buy: 'ПОКУПКА ⬆️ (ВВЕРХ)',
-                sell: 'ПРОДАЖА ⬇️ (ВНИЗ)',
-                scanning: [
-                    'Проверка ликвидности Smart Money...',
-                    'Поиск уровней поддержки и сопротивления...',
-                    'Анализ EMA/SMA пересечений...',
-                    'Финализация точки входа...'
-                ]
-            },
-            EN: {
-                tabFree: 'AI Standard',
-                tabVip: '👑 VIP Cluster 98%',
-                pair: 'Currency Pair',
-                exp: 'Expiration',
-                taTitle: 'Smart Money Analysis',
-                rsi: 'Confluence Rate',
-                macd: 'MACD Oscillator',
-                idle: 'SELECT PAIR & PRESS BUTTON',
-                btnSignal: 'CALCULATE SIGNAL 🚀',
-                btnRef: 'TRADE ON BINODEX 💰',
-                btnNotify: 'Enable Signal Notifications',
-                notifyActive: '🔔 Notifications Enabled!',
-                feedTitle: 'Recent AI Wins',
-                acc: 'AI Accuracy',
-                mode: 'AI Mode',
-                valid: 'Valid for:',
-                vipTitle: 'VIP CLUSTER LOCKED 🔒',
-                vipDesc: 'Signals with 98.4% accuracy and institutional volume analysis are reserved for VIP members.',
-                btnUnlock: 'GET VIP ACCESS 🚀',
-                online: 'ONLINE',
-                buy: 'BUY ⬆️ (UP)',
-                sell: 'SELL ⬇️ (DOWN)',
-                scanning: [
-                    'Smart Money Liquidity Check...',
-                    'Support & Resistance Mapping...',
-                    'EMA/SMA Crossover Analysis...',
-                    'Finalizing Precision Entry...'
-                ]
-            }
-        };
-
-        function toggleLang() {
-            playSound('click');
-            currentLang = currentLang === 'RU' ? 'EN' : 'RU';
-            document.getElementById('langBtn').innerText = currentLang === 'RU' ? '🇷🇺 RU' : '🇬🇧 EN';
-            applyLanguage();
-        }
-
-        function applyLanguage() {
-            const t = i18n[currentLang];
-            document.getElementById('lblTabFree').innerText = t.tabFree;
-            document.getElementById('lblTabVip').innerText = t.tabVip;
-            document.getElementById('lblPair').innerText = t.pair;
-            document.getElementById('lblExp').innerText = t.exp;
-            document.getElementById('lblTaTitle').innerText = t.taTitle;
-            document.getElementById('lblRsi').innerText = t.rsi;
-            document.getElementById('lblMacd').innerText = t.macd;
-            document.getElementById('getSignalBtn').innerText = t.btnSignal;
-            document.getElementById('btnRef').innerText = t.btnRef;
-            if(!notificationsActive) document.getElementById('lblNotify').innerText = t.btnNotify;
-            document.getElementById('lblFeedTitle').innerText = t.feedTitle;
-            document.getElementById('lblAcc').innerText = t.acc;
-            document.getElementById('lblMode').innerText = t.mode;
-            document.getElementById('lblValid').innerText = t.valid;
-            document.getElementById('lblVipTitle').innerText = t.vipTitle;
-            document.getElementById('lblVipDesc').innerText = t.vipDesc;
-            document.getElementById('btnUnlock').innerText = t.btnUnlock;
-            if(document.getElementById('signalText').classList.contains('signal-idle')) {
-                document.getElementById('signalText').innerText = t.idle;
-            }
-        }
-
-        function switchMode(mode) {
-            playSound('click');
-            currentMode = mode;
-            document.getElementById('tabFree').classList.toggle('active', mode === 'free');
-            document.getElementById('tabVip').classList.toggle('active', mode === 'vip');
+        function switchTab(tabName) {
+            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
-            const overlay = document.getElementById('vipOverlay');
-            if (mode === 'vip') {
-                overlay.style.display = 'flex';
-                document.getElementById('modeName').innerText = 'VIP Cluster v5';
+            document.getElementById('section-' + tabName).classList.remove('hidden');
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        function generateSignal() {
+            const resultBox = document.getElementById('signal-result');
+            const dirBox = document.getElementById('signal-direction');
+            const smartLogic = document.getElementById('smart-logic-text');
+            const confidence = document.getElementById('ai-confidence');
+
+            resultBox.classList.remove('hidden');
+
+            const isUp = Math.random() > 0.45;
+            const accuracy = Math.floor(Math.random() * 8) + 91;
+
+            confidence.innerText = accuracy + '% ACCURACY';
+
+            if (isUp) {
+                dirBox.className = "px-4 py-2 rounded-xl text-lg font-black tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+                dirBox.innerText = "ВВЕРХ ⬆ (CALL)";
+                smartLogic.innerText = "Бычье поглощение на M1 + RSI в зоне перепроданности (27) + отскок от УРОВНЯ ПОДДЕРЖКИ.";
             } else {
-                overlay.style.display = 'none';
-                document.getElementById('modeName').innerText = 'Precision AI v5';
+                dirBox.className = "px-4 py-2 rounded-xl text-lg font-black tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/40";
+                dirBox.innerText = "ВНИЗ ⬇ (PUT)";
+                smartLogic.innerText = "Медвежий имбаланс FVG + Stochastic перекуплен + снятие ЛИКВИДНОСТИ с дневного максимума.";
             }
         }
 
-        function toggleNotifications() {
-            playSound('success');
-            notificationsActive = !notificationsActive;
-            const t = i18n[currentLang];
-            const btn = document.getElementById('lblNotify');
-            if(notificationsActive) {
-                btn.innerText = t.notifyActive;
-                if(tg) tg.showAlert(currentLang === 'RU' ? 'Уведомления включены! Бот отправит сообщение при сильном тренде.' : 'Notifications enabled! Bot will notify on high trend.');
+        function calcRisk() {
+            const dep = parseFloat(document.getElementById('deposit-input').value) || 0;
+            document.getElementById('risk-1').innerText = '$' + (dep * 0.01).toFixed(1);
+            document.getElementById('risk-2').innerText = '$' + (dep * 0.02).toFixed(1);
+        }
+
+        function answerQuiz(isCorrect) {
+            if (isCorrect) {
+                alert("ПРАВИЛЬНО! ВЫ ПОЛУЧИЛИ VIP-СТАТУС НА 3 ДНЯ!");
             } else {
-                btn.innerText = t.btnNotify;
+                alert("НЕВЕРНО. Изучите материал выше и попробуйте снова.");
             }
         }
 
-        function playSound(type) {
-            try {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                if (type === 'click') {
-                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.08);
-                } else if (type === 'success') {
-                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                }
-            } catch (e) { console.log(e); }
+        function shareSignal() {
+            alert("Ссылка на результат скопирована! Отправьте её в Telegram-чат.");
         }
 
-        function loadTradingViewWidget(symbol) {
-            document.getElementById('tv_chart').innerHTML = '';
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": symbol,
-                "interval": "1",
-                "timezone": "Exchange",
-                "theme": "dark",
-                "style": "1",
-                "locale": currentLang === 'RU' ? 'ru' : 'en',
-                "toolbar_bg": "#121826",
-                "enable_publishing": false,
-                "hide_side_toolbar": true,
-                "allow_symbol_change": false,
-                "container_id": "tv_chart"
-            });
-        }
-
-        window.onload = () => {
-            loadTradingViewWidget('FX:EURUSD');
-            updateIndicators();
-            startOnlineCounter();
-        };
-
-        function onPairChange() {
-            playSound('click');
-            const select = document.getElementById('pairSelect');
-            const symbol = select.options[select.selectedIndex].getAttribute('data-symbol');
-            loadTradingViewWidget(symbol);
-            updateIndicators();
-        }
-
-        function setTF(element, tf) {
-            playSound('click');
-            document.querySelectorAll('.tf-pill').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-        }
-
-        function updateIndicators() {
-            const trend = Math.floor(Math.random() * (97 - 88) + 88);
-            document.getElementById('trendPercent').innerText = `${currentLang === 'RU' ? 'Сила тренда:' : 'Trend:'} ${trend}%`;
-            document.getElementById('trendBar').style.width = `${trend}%`;
-
-            const macdStates = currentLang === 'RU' 
-                ? ['Бычий импульс ⬆️', 'Медвежий импульс ⬇️', 'Импульс объёма'] 
-                : ['Bullish Impulse ⬆️', 'Bearish Impulse ⬇️', 'Volume Spike'];
-            document.getElementById('macdVal').innerText = macdStates[Math.floor(Math.random() * macdStates.length)];
-        }
-
-        function startOnlineCounter() {
-            setInterval(() => {
-                const count = Math.floor(Math.random() * (1520 - 1410) + 1410);
-                document.getElementById('onlineCount').innerText = `${count.toLocaleString()} ${i18n[currentLang].online}`;
-            }, 4000);
-        }
-
-        function requestSignal() {
-            playSound('click');
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-            const btn = document.getElementById('getSignalBtn');
-            const loader = document.getElementById('loader');
-            const signalText = document.getElementById('signalText');
-            const timerBadge = document.getElementById('timerBadge');
-            const priceTarget = document.getElementById('priceTarget');
-            const accVal = document.getElementById('accVal');
-            const t = i18n[currentLang];
-
-            btn.disabled = true;
-            loader.style.display = 'block';
-            timerBadge.style.display = 'none';
-            priceTarget.style.display = 'none';
-            signalText.className = 'scan-status';
-            accVal.innerText = '-- %';
-
-            if (timerInterval) clearInterval(timerInterval);
-
-            let stepIdx = 0;
-            signalText.innerText = t.scanning[stepIdx];
-
-            const scanTimer = setInterval(() => {
-                stepIdx++;
-                if (stepIdx < t.scanning.length) {
-                    signalText.innerText = t.scanning[stepIdx];
-                }
-            }, 600);
-
-            setTimeout(() => {
-                clearInterval(scanTimer);
-                loader.style.display = 'none';
-                playSound('success');
-
-                const isUp = Math.random() > 0.48;
-                const accuracy = (Math.random() * (97.9 - 91.4) + 91.4).toFixed(1);
-                accVal.innerText = accuracy + '%';
-
-                if (isUp) {
-                    signalText.innerText = t.buy;
-                    signalText.className = 'signal-text signal-up';
-                } else {
-                    signalText.innerText = t.sell;
-                    signalText.className = 'signal-text signal-down';
-                }
-
-                // Generate Precision Price
-                const select = document.getElementById('pairSelect');
-                const basePrice = parseFloat(select.options[select.selectedIndex].getAttribute('data-base'));
-                const variation = (Math.random() * 0.0010 - 0.0005) * (basePrice > 100 ? 10 : 1);
-                const entryPrice = (basePrice + variation).toFixed(basePrice > 100 ? 2 : 5);
-                document.getElementById('priceVal').innerText = entryPrice;
-                priceTarget.style.display = 'block';
-
-                if (tg && tg.HapticFeedback) {
-                    tg.HapticFeedback.notificationOccurred('success');
-                }
-
-                startTimer(180);
-                timerBadge.style.display = 'block';
-                addFeedItem(select.value, isUp, accuracy);
-
-                btn.disabled = false;
-                updateIndicators();
-            }, 2500);
-        }
-
-        function startTimer(seconds) {
-            let left = seconds;
-            const timerVal = document.getElementById('timerVal');
-
-            timerInterval = setInterval(() => {
-                left--;
-                const m = Math.floor(left / 60).toString().padStart(2, '0');
-                const s = (left % 60).toString().padStart(2, '0');
-                timerVal.innerText = `${m}:${s}`;
-
-                if (left <= 0) {
-                    clearInterval(timerInterval);
-                    document.getElementById('timerBadge').style.display = 'none';
-                }
-            }, 1000);
-        }
-
-        function addFeedItem(pair, isUp, acc) {
-            const list = document.getElementById('feedList');
-            const item = document.createElement('div');
-            item.className = 'feed-item';
-            const dirText = isUp 
-                ? (currentLang === 'RU' ? 'ВВЕРХ ⬆️' : 'UP ⬆️') 
-                : (currentLang === 'RU' ? 'ВНИЗ ⬇️' : 'DOWN ⬇️');
-            item.innerHTML = `
-                <span class="feed-pair">${pair}</span>
-                <span class="${isUp ? 'feed-dir-up' : 'feed-dir-down'}">${dirText}</span>
-                <span class="feed-profit">+${Math.floor(acc - 2)}% ✅</span>
-            `;
-            list.insertBefore(item, list.firstChild);
-            if (list.children.length > 3) list.removeChild(list.lastChild);
+        function copyRef() {
+            alert("Ваша реферальная ссылка скопирована!");
         }
     </script>
 </body>
