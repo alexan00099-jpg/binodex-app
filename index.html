@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex AI Pro Terminal</title>
+    <title>BinoDex AI Pro Terminal</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -20,8 +20,8 @@
         body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 80px; }
         
         .top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-        .brand-title { font-size: 15px; font-weight: 900; letter-spacing: 0.5px; }
-        .brand-title span { color: var(--accent-blue); }
+        .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+        .brand-title span { color: var(--accent-green); }
         
         .panel-right { display: flex; align-items: center; gap: 8px; }
         .winrate-badge { background: rgba(0, 230, 118, 0.1); color: var(--accent-green); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; border: 1px solid rgba(0, 230, 118, 0.3); animation: pulseGlow 2s infinite; }
@@ -95,7 +95,13 @@
     <script>window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();</script>
 
     <div class="top-panel">
-        <div class="brand-title">BINODEX <span>AI PRO</span></div>
+        <div class="brand-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M3 17L9 11L13 15L21 7" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 7H21V12" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Bino<span>Dex</span>
+        </div>
         <div class="panel-right">
             <div class="winrate-badge" data-i18n="ai_active">🟢 AI СТАТУС: АКТИВЕН</div>
             <button class="lang-switcher" onclick="toggleLanguage()">RU / EN</button>
@@ -138,7 +144,7 @@
 
         <div class="tradingview-container" id="chartContainer"></div>
 
-        <button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">ЗАПУСТИТЬ АНАЛИЗ</button>
+        <button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">Запустить анализ</button>
         <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать торговать</a>
         
         <div id="signalResult" class="signal-result"></div>
