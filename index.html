@@ -138,8 +138,8 @@
 
         <div class="tradingview-container" id="chartContainer"></div>
 
-        <button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">ЗАПУСТИТЬ КВАНТОВЫЙ ИИ-АНАЛИЗ</button>
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трэйдинг</a>
+        <button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">ЗАПУСТИТЬ АНАЛИЗ</button>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать торговать</a>
         
         <div id="signalResult" class="signal-result"></div>
 
@@ -235,33 +235,45 @@
     <div id="academy" class="card">
         <div style="font-size:15px; font-weight:900; color:var(--accent-blue); margin-bottom:10px;" data-i18n="acad_main_title">📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ</div>
         
-        <!-- ПРЕИМУЩЕСТВА В САМОМ ВЕРХУ -->
+        <!-- ПРЕИМУЩЕСТВА И ДЕМО-СЧЕТ В САМОМ ВЕРХУ -->
         <div class="academy-module" style="background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border-color: rgba(41,121,255,0.3);">
             <h4 style="color:var(--accent-green); font-size:15px;" data-i18n="acad_perks_head">⚡ ПОЧЕМУ ТРЕЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:</h4>
             <div class="platform-perks-grid" style="margin-top:10px;">
                 <div class="perk-mini-card">
                     <b>ОТ $5</b>
-                    <span data-i18n="perk_min">МИНЕМАЛЬНЫЙ ДЕПОЗИТ</span>
+                    <span data-i18n="perk_min">МИНИМАЛЬНЫЙ ДЕПОЗИТ</span>
                 </div>
                 <div class="perk-mini-card">
                     <b>ДО 96%</b>
                     <span data-i18n="perk_payout">ДОХОДНОСТЬ СДЕЛОК</span>
                 </div>
                 <div class="perk-mini-card">
-                    <b>МОМЕНТАЛЬНО</b>
-                    <span data-i18n="perk_withdraw">ВЫВОД СРЕДСТВ</span>
+                    <b>БЕСПЛАТНО</b>
+                    <span data-i18n="perk_demo">ДЕМО-СЧЕТ ДЛЯ ТРЕНИРОВОК</span>
                 </div>
                 <div class="perk-mini-card">
-                    <b>50+ ПАР</b>
-                    <span data-i18n="perk_assets">АКТИВОВ ДЛЯ ТОРГОВЛИ</span>
+                    <b>МОМЕНТАЛЬНО</b>
+                    <span data-i18n="perk_withdraw">ВЫВОД СРЕДСТВ</span>
                 </div>
             </div>
             <p style="margin-top:8px; font-size:12px;" data-i18n="acad_perks_sub">Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.</p>
         </div>
 
+        <!-- ПОДРОБНО ПРО ДЕМО-СЧЕТ -->
+        <div class="academy-module" style="border-color: rgba(0, 230, 118, 0.4);">
+            <h4 style="color: var(--accent-green);" data-i18n="demo_block_title">🎯 ПОДРОБНО О ДЕМО-СЧЕТЕ: БЕЗОПАСНЫЙ СТАРТ</h4>
+            <p data-i18n="demo_block_desc">Демо-счет — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:</p>
+            <ul>
+                <li data-i18n="demo_li_1"><b>Виртуальный баланс:</b> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.</li>
+                <li data-i18n="demo_li_2"><b>Полная имитация рынка:</b> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.</li>
+                <li data-i18n="demo_li_3"><b>Тест стратегий:</b> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.</li>
+                <li data-i18n="demo_li_4"><b>Мгновенное переключение:</b> Как только вы почувствуете уверенность, можно в один клик переключиться на реальный счет и начать зарабатывать.</li>
+            </ul>
+        </div>
+
         <div class="academy-module">
             <h4 data-i18n="acad_h0">1. С чего начать новичку: от регистрации до первой прибыли</h4>
-            <p data-i18n="acad_p0">Если вы никогда раньше не занимались трэйдингом, путь к успешной торговле состоит из 4 простых шагов:</p>
+            <p data-i18n="acad_p0">Если вы никогда раньше не занимались трейдингом, путь к успешной торговле состоит из 4 простых шагов:</p>
             <ul>
                 <li data-i18n="acad_li_step1"><b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.</li>
                 <li data-i18n="acad_li_step2"><b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 часа).</li>
@@ -301,8 +313,8 @@
 
         <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">
             <h4 style="color:var(--accent-green);" data-i18n="acad_h5">Время зарабатывать профессионально!</h4>
-            <p data-i18n="acad_p5">Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трэйдинг на новый уровень прибыльности.</p>
-            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трэйдинг</a>
+            <p data-i18n="acad_p5">Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трейдинг на новый уровень прибыльности.</p>
+            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать торговать</a>
         </div>
     </div>
 
@@ -323,10 +335,10 @@
         <ul class="vip-list">
             <li><b data-i18n="v1_title">ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:</b> <span data-i18n="v1_desc">Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.</span></li>
             <li><b data-i18n="v2_title">ПОВЫШЕННАЯ ТОЧНОСТЬ АЛГОРИТМОВ ИИ:</b> <span data-i18n="v2_desc">Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.</span></li>
-            <li><b data-i18n="v3_title">АВТОМАТИЧЕСКИЙ КОПИ-ТРЭЙДИНГ:</b> <span data-i18n="v3_desc">Зеркалирование сделок лучших трэйдеров платформы в один клик с защитой от просадок.</span></li>
+            <li><b data-i18n="v3_title">АВТОМАТИЧЕСКИЙ КОПИ-ТРЕЙДИНГ:</b> <span data-i18n="v3_desc">Зеркалирование сделок лучших трейдеров платформы в один клик с защитой от просадок.</span></li>
             <li><b data-i18n="v4_title">ПРИОРИТЕТНЫЕ СЕРВЕРА С МИНИМАЛЬНЫМ ПИНГОМ:</b> <span data-i18n="v4_desc">Мгновенное исполнение ордеров без задержек и проскальзываний на самых быстрых каналах.</span></li>
             <li><b data-i18n="v5_title">ЕЖЕНЕДЕЛЬНЫЕ ДЕНЕЖНЫЕ ТУРНИРЫ:</b> <span data-i18n="v5_desc">Участие в закрытых розыгрышах ценных призов и депозитов среди участников VIP-команды.</span></li>
-            <li><b data-i18n="v6_title">ПЕРСОНАЛЬНЫЙ МАНИ-МЕНДЖМЕНТ ПЛАН:</b> <span data-i18n="v6_desc">Индивидуальная стратегия разгона депозита от профессиональных трэйдеров с личным разбором ошибок.</span></li>
+            <li><b data-i18n="v6_title">ПЕРСОНАЛЬНЫЙ МАНИ-МЕНДЖМЕНТ ПЛАН:</b> <span data-i18n="v6_desc">Индивидуальная стратегия разгона депозита от профессиональных трейдеров с личным разбором ошибок.</span></li>
             <li><b data-i18n="v7_title">АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:</b> <span data-i18n="v7_desc">Автоматическое предупреждение и защита депозита во время выхода важных макроэкономических новостей.</span></li>
             <li><b data-i18n="v8_title">ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):</b> <span data-i18n="v8_desc">Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.</span></li>
         </ul>
@@ -341,8 +353,8 @@
                 tab_terminal: "📊 ТЕРМИНАЛ",
                 tab_academy: "📚 ОБУЧЕНИЕ",
                 tab_vip: "🎁 VIP",
-                btn_scan: "ЗАПУСТИТЬ КВАНТОВЫЙ ИИ-АНАЛИЗ",
-                btn_trade: "Начать трэйдинг",
+                btn_scan: "ЗАПУСТИТЬ АНАЛИЗ",
+                btn_trade: "Начать торговать",
                 conf_title: "📊 Мультииндикаторная конфлюэнтность:",
                 conf_sar: "Parabolic SAR (на свечах):",
                 conf_rsi: "RSI Моментум (14):",
@@ -383,13 +395,19 @@
                 t_pool_desc: "Мониторинг китовых ордеров и пулов ликвидности...",
                 acad_main_title: "📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ",
                 acad_perks_head: "⚡ ПОЧЕМУ ТРЕЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:",
-                perk_min: "МИНЕМАЛЬНЫЙ ДЕПОЗИТ",
+                perk_min: "МИНИМАЛЬНЫЙ ДЕПОЗИТ",
                 perk_payout: "ДОХОДНОСТЬ СДЕЛОК",
+                perk_demo: "ДЕМО-СЧЕТ ДЛЯ ТРЕНИРОВОК",
                 perk_withdraw: "ВЫВОД СРЕДСТВ",
-                perk_assets: "АКТИВОВ ДЛЯ ТОРГОВЛИ",
                 acad_perks_sub: "Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.",
+                demo_block_title: "🎯 ПОДРОБНО О ДЕМО-СЧЕТЕ: БЕЗОПАСНЫЙ СТАРТ",
+                demo_block_desc: "Демо-счет — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:",
+                demo_li_1: "<b>Виртуальный баланс:</b> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.",
+                demo_li_2: "<b>Полная имитация рынка:</b> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.",
+                demo_li_3: "<b>Тест стратегий:</b> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.",
+                demo_li_4: "<b>Мгновенное переключение:</b> Как только вы почувствуете уверенность, можно в один клик переключиться на реальный счет и начать зарабатывать.",
                 acad_h0: "1. С чего начать новичку: от регистрации до первой прибыли",
-                acad_p0: "Если вы никогда раньше не занимались трэйдингом, путь к успешной торговле состоит из 4 простых шагов:",
+                acad_p0: "Если вы никогда раньше не занимались трейдингом, путь к успешной торговле состоит из 4 простых шагов:",
                 acad_li_step1: "<b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.",
                 acad_li_step2: "<b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 часа).",
                 acad_li_step3: "<b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.",
@@ -409,7 +427,7 @@
                 acad_li7: "<b>Риск на сделку:</b> Выделяйте не более 2-5% от депозита на одну позицию.",
                 acad_li8: "<b>Дисциплина:</b> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.",
                 acad_h5: "Время зарабатывать профессионально!",
-                acad_p5: "Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трэйдинг на новый уровень прибыльности.",
+                acad_p5: "Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трейдинг на новый уровень прибыльности.",
                 vip_main_title: "🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА",
                 vip_how_title: "📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:",
                 vip_how_text: "• Вариант 1 (VIP на 30 дней): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите одну сделку на реальном счёте на любой паре на любую сумму.<br>• Вариант 2 (VIP НАВСЕГДА): Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.",
@@ -419,14 +437,14 @@
                 v1_desc: "Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.",
                 v2_title: "ПОВЫШЕННАЯ ТОЧНОСТЬ АЛГОРИТМОВ ИИ:",
                 v2_desc: "Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.",
-                v3_title: "АВТОМАТИЧЕСКИЙ КОПИ-ТРЭЙДИНГ:",
-                v3_desc: "Зеркалирование сделок лучших трэйдеров платформы в один клик с защитой от просадок.",
+                v3_title: "АВТОМАТИЧЕСКИЙ КОПИ-ТРЕЙДИНГ:",
+                v3_desc: "Зеркалирование сделок лучших трейдеров платформы в один клик с защитой от просадок.",
                 v4_title: "ПРИОРИТЕТНЫЕ СЕРВЕРА С МИНИМАЛЬНЫМ ПИНГОМ:",
                 v4_desc: "Мгновенное исполнение ордеров без задержек и проскальзываний на самых быстрых каналах.",
                 v5_title: "ЕЖЕНЕДЕЛЬНЫЕ ДЕНЕЖНЫЕ ТУРНИРЫ:",
                 v5_desc: "Участие в закрытых розыгрышах ценных призов и депозитов среди участников VIP-команды.",
                 v6_title: "ПЕРСОНАЛЬНЫЙ МАНИ-МЕНДЖМЕНТ ПЛАН:",
-                v6_desc: "Индивидуальная стратегия разгона депозита от профессиональных трэйдеров с личным разбором ошибок.",
+                v6_desc: "Индивидуальная стратегия разгона депозита от профессиональных трейдеров с личным разбором ошибок.",
                 v7_title: "АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:",
                 v7_desc: "Автоматическое предупреждение и защита депозита во время выхода важных макроэкономических новостей.",
                 v8_title: "ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):",
@@ -438,7 +456,7 @@
                 tab_terminal: "📊 TERMINAL",
                 tab_academy: "📚 LEARNING",
                 tab_vip: "🎁 VIP",
-                btn_scan: "RUN QUANTUM AI ANALYSIS",
+                btn_scan: "RUN ANALYSIS",
                 btn_trade: "Start Trading",
                 conf_title: "📊 Multi-Indicator Confluence:",
                 conf_sar: "Parabolic SAR (on candles):",
@@ -482,9 +500,15 @@
                 acad_perks_head: "⚡ WHY TRADERS CHOOSE OUR PLATFORM:",
                 perk_min: "MINIMUM DEPOSIT",
                 perk_payout: "PAYOUT UP TO 96%",
+                perk_demo: "FREE DEMO ACCOUNT",
                 perk_withdraw: "INSTANT WITHDRAWAL",
-                perk_assets: "TRADING ASSETS",
                 acad_perks_sub: "Reliable terminal, high liquidity, and instant order execution without slippage allow both beginners and pros to trade comfortably.",
+                demo_block_title: "🎯 DEMO ACCOUNT: SAFE START",
+                demo_block_desc: "A demo account is your ideal tool for learning and testing strategies with absolutely zero risk to real funds:",
+                demo_li_1: "<b>Virtual Balance:</b> Upon registration, virtual funds are automatically credited to your account for unlimited practice.",
+                demo_li_2: "<b>Full Market Simulation:</b> Charts, quotes, and execution speed fully match real trading conditions.",
+                demo_li_3: "<b>Strategy Testing:</b> Test AI quantum signals and indicators without psychological pressure.",
+                demo_li_4: "<b>Instant Switch:</b> Once confident, switch to a real account in one click.",
                 acad_h0: "1. Beginner's Guide: From Registration to First Profit",
                 acad_p0: "If you have never traded before, your path to success consists of 4 simple steps:",
                 acad_li_step1: "<b>Step 1. Registration & Demo Account:</b> Create an account and practice on a free virtual balance to master the interface without risk.",
