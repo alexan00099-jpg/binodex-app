@@ -88,8 +88,6 @@
         .risk-input { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 8px; margin-top: 5px; margin-bottom: 10px; font-size: 12px; outline: none; }
         .vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
 
-        .daily-signal-box { background: linear-gradient(135deg, rgba(0,230,118,0.08), rgba(41,121,255,0.08)); border: 1px solid rgba(0, 230, 118, 0.4); border-radius: 14px; padding: 14px; margin-top: 15px; margin-bottom: 10px; }
-
         .share-container-bottom {
             margin-top: 15px;
             margin-bottom: 10px;
@@ -405,20 +403,6 @@
         </div>
     </div>
 
-    <!-- ЕЖЕДНЕВНЫЙ ТОРГОВЫЙ СИГНАЛ -->
-    <div class="daily-signal-box">
-        <div style="font-weight:800; color:var(--accent-green); margin-bottom:8px; font-size:13px; display:flex; align-items:center; gap:6px;">
-            <span>⚡</span> <span data-i18n="daily_sig_title">ЕЖЕДНЕВНЫЙ ТОРГОВЫЙ СИГНАЛ ДНЯ</span>
-        </div>
-        <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="daily_sig_desc">
-            Актив: <b style="color:#fff;">EUR/USD</b><br>
-            Время экспирации: <b style="color:#fff;">5 Минут</b><br>
-            Рекомендация алгоритма ИИ: <b style="color:var(--accent-green);">ВВЕРХ (STRONG BUY)</b><br>
-            Точность прогноза: <b style="color:var(--accent-green);">94.8%</b>
-        </div>
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:0;" data-i18n="daily_sig_btn">Открыть сделку по сигналу</a>
-    </div>
-
     <!-- КНОПКА ПОДЕЛИТЬСЯ В САМОМ НИЗУ -->
     <div class="share-container-bottom">
         <button class="btn-share-bot" onclick="shareBotApp()">
@@ -574,9 +558,6 @@
                 manager_box_title: "ВАШ ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР:",
                 manager_box_desc: "Остались вопросы по VIP доступу, пополнению или стратегии? Напишите нашему официальному представителю в Telegram, и вам помогут моментально!",
                 manager_btn: "Написать менеджеру (@jenna_mo1)",
-                daily_sig_title: "ЕЖЕДНЕВНЫЙ ТОРГОВЫЙ СИГНАЛ ДНЯ",
-                daily_sig_desc: "Актив: <b style='color:#fff;'>EUR/USD</b><br>Время экспирации: <b style='color:#fff;'>5 Минут</b><br>Рекомендация алгоритма ИИ: <b style='color:var(--accent-green);'>ВВЕРХ (STRONG BUY)</b><br>Точность прогноза: <b style='color:var(--accent-green);'>94.8%</b>",
-                daily_sig_btn: "Открыть сделку по сигналу",
                 share_btn_text: "ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ"
             },
             en: {
@@ -689,9 +670,6 @@
                 manager_box_title: "YOUR PERSONAL MANAGER:",
                 manager_box_desc: "Have questions about VIP access, deposits, or strategy? Contact our official representative on Telegram for instant support!",
                 manager_btn: "Contact Manager (@jenna_mo1)",
-                daily_sig_title: "DAILY TRADING SIGNAL OF THE DAY",
-                daily_sig_desc: "Asset: <b style='color:#fff;'>EUR/USD</b><br>Expiry Time: <b style='color:#fff;'>5 Minutes</b><br>AI Algorithm Recommendation: <b style='color:var(--accent-green);'>UP (STRONG BUY)</b><br>Forecast Accuracy: <b style='color:var(--accent-green);'>94.8%</b>",
-                daily_sig_btn: "Open Trade by Signal",
                 share_btn_text: "SHARE WITH FRIENDS"
             }
         };
