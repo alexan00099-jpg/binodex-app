@@ -1,34 +1,122 @@
-    <!-- ВКЛАДКА 3: VIP ВЕРСИЯ -->
+html_content = """
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Binodex AI Pro Terminal</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #131b2e;
+            --accent-green: #00c853;
+            --accent-red: #ff3d00;
+            --accent-blue: #00bcd4;
+            --text-main: #ffffff;
+            --text-secondary: #8a9ba8;
+            --border-color: #1e293b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 50px; }
+        .top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .brand-title { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
+        .brand-title span { color: var(--accent-blue); }
+        .winrate-badge { background: rgba(0, 200, 83, 0.15); color: var(--accent-green); padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .nav-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+        .nav-tab { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 4px; text-align: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: 0.2s; }
+        .nav-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: none; }
+        .card.active-section { display: block; }
+        .section-title { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+        .controls-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .select-custom { width: 100%; background: #0f172a; border: 1px solid var(--border-color); color: #fff; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 700; outline: none; }
+        .tradingview-container { width: 100%; height: 360px; border-radius: 8px; overflow: hidden; background: #131722; border: 1px solid var(--border-color); }
+        .news-filter { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 200, 83, 0.08); border: 1px solid rgba(0, 200, 83, 0.3); border-radius: 8px; padding: 10px 12px; font-size: 12px; font-weight: 700; color: var(--accent-green); margin-bottom: 10px; }
+        .btn { width: 100%; background: linear-gradient(135deg, #00c853, #009624); color: #fff; border: none; border-radius: 10px; padding: 13px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3); margin-top: 8px; }
+        .btn-trade { background: linear-gradient(135deg, #00bcd4, #008ba3); box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3); margin-top: 8px; text-decoration: none; display: block; text-align: center; }
+        .signal-result { margin-top: 8px; padding: 12px; border-radius: 8px; background: rgba(0, 200, 83, 0.1); border: 1px solid var(--accent-green); text-align: center; font-weight: 700; font-size: 13px; color: var(--accent-green); display: none; }
+        .sub-nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 12px; margin-bottom: 10px; }
+        .sub-nav-btn { background: #0f172a; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 4px; border-radius: 6px; font-size: 9px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }
+        .sub-nav-btn.active { background: rgba(0, 188, 212, 0.15); color: var(--accent-blue); border-color: var(--accent-blue); }
+        .analysis-tool-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-top: 8px; display: none; }
+        .analysis-tool-box.active-tool { display: block; }
+        .academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+        .academy-module h4 { color: var(--accent-blue); font-size: 13px; margin-bottom: 6px; }
+        .academy-module p { font-size: 11px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 8px; }
+        .confluence-box { background: rgba(0, 188, 212, 0.05); border: 1px solid rgba(0, 188, 212, 0.2); border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 11px; }
+        .confluence-item { display: flex; justify-content: space-between; margin-top: 4px; color: var(--text-secondary); }
+        .confluence-item span { color: var(--accent-green); font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="top-panel">
+        <div class="brand-title">BINODEX <span>AI PRO</span></div>
+        <div class="winrate-badge">🟢 WINRATE 98.2%</div>
+    </div>
+    <div class="nav-tabs">
+        <div class="nav-tab active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</div>
+        <div class="nav-tab" onclick="switchTab('academy', this)">🎓 АКАДЕМИЯ (ПРО)</div>
+        <div class="nav-tab" onclick="switchTab('vip', this)">🎁 VIP ВЕРСИЯ</div>
+    </div>
+
+    <!-- ТЕРМИНАЛ -->
+    <div id="terminal" class="card active-section">
+        <div class="news-filter"><span>🛡️ Новостной фильтр: РЫНОК ИДЕАЛЕН</span></div>
+        <div class="controls-grid">
+            <select class="select-custom"><option>GBP/USD (ОТС)</option></select>
+            <select class="select-custom"><option>1 Мин</option></select>
+        </div>
+        <div class="tradingview-container"></div>
+        <button class="btn">ЗАПУСТИТЬ АНАЛИЗ ИИ</button>
+        <div class="confluence-box">
+            <div style="font-weight:700; color:var(--accent-blue);">📊 Совпадение индикаторов:</div>
+            <div class="confluence-item"><span>RSI (14) Перепроданность:</span> <span>СОВПАДЕНИЕ (OK)</span></div>
+        </div>
+    </div>
+
+    <!-- VIP ВЕРСИЯ -->
     <div id="vip" class="card">
         <div class="section-title">🎁 VIP ВЕРСИЯ: ТВОЙ ПУТЬ К ПРОФЕССИОНАЛЬНОМУ ТРЭЙДИНГУ</div>
-        
         <div style="font-size: 13px; color: var(--text-main); margin-bottom: 15px; line-height: 1.5;">
             Получи ПОЛНЫЙ ДОСТУП к закрытым инструментам, которые используют ПРОФЕССИОНАЛЬНЫЕ ТРЭЙДЕРЫ. Твои возможности в VIP версии:
         </div>
-
         <div class="academy-module" style="background: rgba(0, 188, 212, 0.05); border: 1px solid var(--accent-blue); padding: 15px;">
             <ul style="list-style: none; padding: 0; font-size: 12px; color: var(--text-main);">
-                <li style="margin-bottom: 10px;">✅ <b>КОПИ-ТРЭЙДИНГ:</b> Автоматически повторяй сделки лучших ТРЭЙДЕРОВ нашей команды в реальном времени.</li>
-                <li style="margin-bottom: 10px;">✅ <b>ПРИОРИТЕТНЫЕ СИГНАЛЫ:</b> Получай доступ к торговым идеям с анализом на 5 минут раньше обычных пользователей.</li>
-                <li style="margin-bottom: 10px;">✅ <b>КВАНТОВЫЙ АНАЛИЗ ИИ:</b> Глубокое сканирование рынка с точностью 99% на любых таймфреймах.</li>
-                <li style="margin-bottom: 10px;">✅ <b>ЛИЧНЫЙ ТРЭЙДЕР-КУРАТОР:</b> Получи ответы на любые вопросы по торговле и разбору твоих сделок в личке.</li>
-                <li style="margin-bottom: 10px;">✅ <b>ЗАКРЫТЫЕ СТРАТЕГИИ:</b> Обучение секретным методам разгона депозита и быстрого выхода в плюс.</li>
-                <li style="margin-bottom: 10px;">✅ <b>НОВОСТНОЙ ФИЛЬТР:</b> Система защиты, которая спасает от СЛИВА депозита на высокой волатильности рынка.</li>
-                <li style="margin-bottom: 10px;">✅ <b>ПЕРСОНАЛЬНЫЙ РИСК-МЕНЕДЖМЕНТ:</b> Доступ к таблицам расчета размера сделки для идеального КОНТРОЛЯ РИСКОВ.</li>
+                <li style="margin-bottom: 10px;">✅ <b>КОПИ-ТРЭЙДИНГ:</b> Автоматически повторяй сделки лучших ТРЭЙДЕРОВ нашей команды.</li>
+                <li style="margin-bottom: 10px;">✅ <b>ПРИОРИТЕТНЫЕ СИГНАЛЫ:</b> Получай доступ к торговым идеям с анализом на 5 минут раньше.</li>
+                <li style="margin-bottom: 10px;">✅ <b>КВАНТОВЫЙ АНАЛИЗ ИИ:</b> Глубокое сканирование рынка с точностью 99%.</li>
+                <li style="margin-bottom: 10px;">✅ <b>ЛИЧНЫЙ ТРЭЙДЕР-КУРАТОР:</b> Ответы на любые вопросы и разбор твоих сделок.</li>
+                <li style="margin-bottom: 10px;">✅ <b>ЗАКРЫТЫЕ СТРАТЕГИИ:</b> Обучение методам разгона депозита.</li>
+                <li style="margin-bottom: 10px;">✅ <b>НОВОСТНОЙ ФИЛЬТР:</b> Система защиты от СЛИВА депозита.</li>
+                <li style="margin-bottom: 10px;">✅ <b>ПЕРСОНАЛЬНЫЙ РИСК-МЕНЕДЖМЕНТ:</b> Доступ к таблицам для контроля рисков.</li>
             </ul>
         </div>
-
-        <!-- СПОСОБ 1: РЕГИСТРАЦИЯ И СДЕЛКА -->
         <div class="academy-module" style="border-left: 3px solid var(--accent-green);">
             <h4 style="color: var(--accent-green);">🔥 Способ 1: VIP на 30 ДНЕЙ</h4>
-            <p>Зарегистрируйся по ссылке, соверши хотя бы <b>ОДНУ СДЕЛКУ</b> на любую сумму на реальном счёте и отправь ID своего профиля мне в личку в Telegram!</p>
-            <a href="https://t.me/" class="btn btn-trade" style="text-align: center; margin-top: 8px; background: linear-gradient(135deg, #00c853, #009624); box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);" target="_blank">ПОЛУЧИТЬ VIP НА 30 ДНЕЙ</a>
+            <p>Зарегистрируйся, соверши <b>ОДНУ СДЕЛКУ</b> на реальном счёте и отправь ID профиля мне в личку!</p>
+            <a href="https://t.me/" class="btn btn-trade">ПОЛУЧИТЬ VIP НА 30 ДНЕЙ</a>
         </div>
-
-        <!-- СПОСОБ 2: ПРИГЛАСИ ДРУЗЕЙ -->
         <div class="academy-module" style="border-left: 3px solid var(--accent-blue);">
-            <h4 style="color: var(--accent-blue);">👥 Способ 2: VIP на 7 ДНЕЙ за друзей</h4>
-            <p>Пригласи <b>ТРИ ДРУГА</b> в наш проект по своей персональной реферальной ссылке и получи полный доступ к закрытой VIP версии на целую неделю!</p>
-            <a href="https://t.me/" class="btn btn-trade" style="text-align: center; margin-top: 8px;" target="_blank">ПРИГЛАСИТЬ 3 ДРУЗЕЙ И ЗАБРАТЬ VIP</a>
+            <h4 style="color: var(--accent-blue);">👥 Способ 2: VIP на 7 ДНЕЙ</h4>
+            <p>Пригласи <b>ТРИ ДРУГА</b> и получи доступ к закрытой VIP версии!</p>
+            <a href="https://t.me/" class="btn btn-trade">ПРИГЛАСИТЬ 3 ДРУЗЕЙ И ЗАБРАТЬ VIP</a>
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); text-align: center; margin-top: 15px;">
+            А в моём канале я бесплатно обучаю трэйдингу и захожу в сделки со своей командой в прямом эфире. Вступить в нашу команду можно по ссылке в профиле!
         </div>
     </div>
+    
+    <script>
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active-section');
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
+"""
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
