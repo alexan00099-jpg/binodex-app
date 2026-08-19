@@ -11,7 +11,6 @@
             --accent-green: #00c853;
             --accent-red: #ff3d00;
             --accent-blue: #2979ff;
-            --accent-purple: #9c27b0;
             --text-main: #ffffff;
             --text-secondary: #8a9ba8;
             --border-color: #222b38;
@@ -25,35 +24,34 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding: 10px;
-            padding-bottom: 80px;
+            padding: 8px;
+            padding-bottom: 70px;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--card-bg);
-            padding: 10px 14px;
-            border-radius: 12px;
-            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
             border: 1px solid var(--border-color);
         }
         .logo {
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 800;
-            letter-spacing: 0.5px;
         }
         .logo span {
             color: var(--accent-blue);
         }
         .badges-header {
             display: flex;
-            gap: 6px;
+            gap: 5px;
         }
         .badge {
-            padding: 3px 8px;
+            padding: 2px 6px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
         }
         .winrate-badge {
@@ -69,23 +67,21 @@
         .nav-tabs {
             display: flex;
             gap: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             overflow-x: auto;
-            padding-bottom: 2px;
         }
         .tab-btn {
             flex: 1;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            padding: 8px 5px;
-            border-radius: 8px;
-            font-size: 10px;
+            padding: 6px 4px;
+            border-radius: 6px;
+            font-size: 9px;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
             white-space: nowrap;
-            transition: all 0.2s ease;
         }
         .tab-btn.active {
             background: var(--accent-blue);
@@ -101,9 +97,9 @@
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
         }
         .news-filter {
             display: flex;
@@ -111,35 +107,35 @@
             align-items: center;
             background: rgba(41, 121, 255, 0.08);
             border: 1px solid rgba(41, 121, 255, 0.2);
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 11px;
-            margin-bottom: 10px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
         .news-status {
             color: var(--accent-green);
             background: rgba(0, 200, 83, 0.15);
-            padding: 2px 6px;
-            border-radius: 6px;
-            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 9px;
         }
         .chart-container {
             width: 100%;
-            height: 240px;
-            border-radius: 10px;
+            height: 180px;
+            border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             background: #000;
         }
         .select-group {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .select-label {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-secondary);
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             display: block;
             font-weight: 700;
             text-transform: uppercase;
@@ -148,10 +144,10 @@
             background: #1a2230;
             border: 1px solid var(--border-color);
             color: white;
-            padding: 9px;
-            border-radius: 8px;
+            padding: 7px;
+            border-radius: 6px;
             width: 100%;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
         }
@@ -160,15 +156,14 @@
             color: white;
             border: none;
             width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 13px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
             font-weight: 800;
             cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
             margin-top: 4px;
-            transition: opacity 0.2s;
         }
         .signal-btn:disabled {
             background: #2a3b4c;
@@ -179,79 +174,79 @@
         .analysis-loader {
             background: #17212f;
             border: 1px solid #283850;
-            border-radius: 12px;
-            padding: 14px;
-            margin-top: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 8px;
             display: none;
             text-align: center;
         }
         .spinner {
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             border: 3px solid rgba(41, 121, 255, 0.2);
             border-top-color: var(--accent-blue);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto 8px auto;
+            margin: 0 auto 6px auto;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         .loader-text {
-            font-size: 11px;
+            font-size: 10px;
             color: #b0bec5;
             font-weight: 600;
         }
         .signal-result {
             background: #17212f;
             border: 1px solid #283850;
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 8px;
             display: none;
         }
         .signal-header {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 8px;
+            font-size: 11px;
+            margin-bottom: 6px;
             color: var(--text-secondary);
         }
         .signal-action {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
             color: var(--accent-green);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
         .analysis-list {
-            font-size: 11px;
+            font-size: 10px;
             color: #b0bec5;
-            line-height: 1.5;
+            line-height: 1.4;
             border-top: 1px solid var(--border-color);
-            padding-top: 8px;
-            margin-top: 8px;
+            padding-top: 6px;
+            margin-top: 6px;
         }
         .order-book {
-            margin-top: 10px;
+            margin-top: 8px;
             background: #0f1520;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 6px;
+            border-radius: 6px;
+            font-size: 10px;
         }
         .order-bar {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
         .progress-line {
-            height: 4px;
+            height: 3px;
             border-radius: 2px;
             background: #222b38;
             overflow: hidden;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .progress-fill {
             height: 100%;
@@ -263,18 +258,18 @@
             background: var(--accent-blue);
             color: white;
             text-align: center;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 9px;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 12px;
-            margin-top: 10px;
+            font-size: 11px;
+            margin-top: 8px;
         }
         #toast-container {
             position: fixed;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
             z-index: 9999;
             pointer-events: none;
         }
@@ -283,32 +278,32 @@
             border: 1px solid rgba(0, 200, 83, 0.4);
             backdrop-filter: blur(10px);
             color: white;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 11px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             animation: slideUp 0.3s ease, fadeOut 0.3s ease 3.7s;
             pointer-events: auto;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         .toast-icon {
             background: rgba(0, 200, 83, 0.2);
             color: var(--accent-green);
-            width: 26px;
-            height: 26px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             flex-shrink: 0;
-            font-size: 12px;
+            font-size: 11px;
         }
         @keyframes slideUp {
-            from { transform: translateY(40px); opacity: 0; }
+            from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
         @keyframes fadeOut {
@@ -320,32 +315,32 @@
             background: #1a2230;
             border: 1px solid var(--border-color);
             color: white;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-top: 4px;
-            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-top: 3px;
+            margin-bottom: 6px;
         }
         .leaderboard-item, .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px solid var(--border-color);
-            font-size: 12px;
+            font-size: 11px;
         }
         .diagnostics-log {
             font-family: monospace;
-            font-size: 10px;
+            font-size: 9px;
             color: #00c853;
             background: #080b10;
-            padding: 8px;
-            border-radius: 6px;
-            max-height: 120px;
+            padding: 6px;
+            border-radius: 5px;
+            max-height: 100px;
             overflow-y: auto;
-            margin-top: 8px;
+            margin-top: 6px;
             border: 1px solid #142215;
-            line-height: 1.4;
+            line-height: 1.3;
         }
     </style>
 </head>
@@ -359,20 +354,23 @@
         </div>
     </div>
 
+    <!-- МЕНЬЮ ВКЛАДОК -->
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ И ГРАФИК</button>
+        <button class="tab-btn active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</button>
         <button class="tab-btn" onclick="switchTab('history', this)">📜 ИСТОРИЯ</button>
-        <button class="tab-btn" onclick="switchTab('calc', this)">🧮 РИСК-МЕНЕДЖЕР</button>
-        <button class="tab-btn" onclick="switchTab('ai-net', this)">🤖 СЕРВЕР ИИ</button>
-        <button class="tab-btn" onclick="switchTab('vip', this)">👑 ТОП И VIP</button>
+        <button class="tab-btn" onclick="switchTab('calc', this)">🧮 РИСК</button>
+        <button class="tab-btn" onclick="switchTab('ai-net', this)">🤖 СЕРВЕР</button>
+        <button class="tab-btn" onclick="switchTab('vip', this)">👑 VIP</button>
     </div>
 
+    <!-- 1. ТЕРМИНАЛ: ГРАФИК СВЕРХУ, ДАЛЕЕ КНОПКА И ИНФОРМАЦИЯ -->
     <div id="terminal" class="tab-content active">
         <div class="news-filter">
-            <span>🛡 НОВОСТНОЙ ФИЛЬТР: РЫНОК В БЕЗОПАСНОЙ ЗОНЕ</span>
-            <span class="news-status">SAFE ZONE</span>
+            <span>🛡 НОВОСТНОЙ ФИЛЬТР: SAFE ZONE</span>
+            <span class="news-status">ACTIVE</span>
         </div>
 
+        <!-- 1. Интерактивный график TradingView сверху (уменьшен до 180px) -->
         <div class="chart-container">
             <div class="tradingview-widget-container" style="height:100%;width:100%;">
                 <div id="tradingview_chart" style="height:100%;width:100%;"></div>
@@ -380,7 +378,7 @@
                 <script type="text/javascript">
                 new TradingView.widget({
                     "width": "100%",
-                    "height": "240",
+                    "height": "180",
                     "symbol": "FX:EURUSD",
                     "interval": "1",
                     "timezone": "Etc/UTC",
@@ -397,6 +395,7 @@
             </div>
         </div>
 
+        <!-- 2. Блок параметров и кнопка получения сигнала -->
         <div class="card">
             <div class="select-group">
                 <span class="select-label">ВЫБОР АКТИВА ДЛЯ ТРЭЙДИНГА</span>
@@ -408,4 +407,206 @@
                 </select>
             </div>
 
-            <div class
+            <div class="select-group">
+                <span class="select-label">ВРЕМЯ ЭКСПИРАЦИИ СДЕЛКИ</span>
+                <select id="timeSelect" class="dropdown">
+                    <option value="1 минута">⚡ 1 МИНУТА (СКАЛЬПИНГ)</option>
+                    <option value="3 минуты" selected>⏱ 3 МИНУТЫ (ОПТИМАЛЬНО ИИ)</option>
+                    <option value="5 минут">⏳ 5 МИНУТ (ТРЕНД)</option>
+                </select>
+            </div>
+
+            <button id="signalBtn" class="signal-btn" onclick="startAnalysis()">⚡ ПОЛУЧИТЬ СИГНАЛ ОТ НЕЙРОСЕТИ</button>
+
+            <!-- 3. Имитация глубокого многошагового анализа -->
+            <div id="analysisLoader" class="analysis-loader">
+                <div class="spinner"></div>
+                <div id="loaderText" class="loader-text">Инициализация квантовых матриц...</div>
+            </div>
+
+            <!-- 4. Результат сигнала -->
+            <div id="signalResult" class="signal-result">
+                <div class="signal-header">
+                    <span id="resImpulse">ИМПУЛЬС: 98.8%</span>
+                    <span id="resAccuracy">ТОЧНОСТЬ: 99.8%</span>
+                </div>
+                <div class="signal-action" id="resAction">ПОКУПКА ⬆ (ВВЕРХ)</div>
+                <div style="font-size: 10px; color: var(--text-secondary); margin-bottom: 5px;">
+                    🎯 Время входа: <span id="resTimer" style="color: white; font-weight: bold;">02:58</span>
+                </div>
+                
+                <div class="order-book">
+                    <div class="order-bar">
+                        <span>Покупатели (BUY: 87%)</span>
+                        <span>Продавцы (SELL: 13%)</span>
+                    </div>
+                    <div class="progress-line"><div class="progress-fill" style="width: 87%;"></div></div>
+                </div>
+
+                <div class="analysis-list">
+                    <div>1. <b>RSI + Stochastic:</b> Перепроданность ✅</div>
+                    <div>2. <b>MACD:</b> Импульсный пробой 🚀</div>
+                    <div>3. <b>Bollinger Bands:</b> Отскок от нижней границы</div>
+                    <div>4. <b>EMA (200):</b> Подтверждение тренда</div>
+                    <div>5. <b>Volume Profile:</b> Кластер ликвидности</div>
+                </div>
+                <a href="#" class="trade-link-btn" onclick="alert('Переход на защищенный торговый терминал брокера...'); return false;">🚀 ОТКРЫТЬ СДЕЛКУ У БРОКЕРА</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. ИСТОРИЯ -->
+    <div id="history" class="tab-content">
+        <div class="card">
+            <span class="select-label" style="margin-bottom: 6px;">📜 АРХИВ СИГНАЛОВ ИИ</span>
+            <div class="history-item">
+                <span>EUR/USD • 3 мин (ВВЕРХ)</span>
+                <b style="color: var(--accent-green);">+96% ✅</b>
+            </div>
+            <div class="history-item">
+                <span>BITCOIN • 3 мин (ВВЕРХ)</span>
+                <b style="color: var(--accent-green);">+98% ✅</b>
+            </div>
+            <div class="history-item" style="border: none;">
+                <span>XAU/USD • 5 мин (ВНИЗ)</span>
+                <b style="color: var(--accent-green);">+97% ✅</b>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. РИСК-МЕНЕДЖЕР -->
+    <div id="calc" class="tab-content">
+        <div class="card">
+            <span class="select-label">ВАШ ДЕПОЗИТ ТРЭЙДЕРА ($)</span>
+            <input type="number" id="depositInput" class="calc-input" value="300" oninput="calculateRisk()">
+            
+            <div style="font-size: 11px; line-height: 1.6; margin-top: 6px;">
+                <div>🟢 Безопасный вход (2%): <b id="riskSafe" style="color: var(--accent-green);">$6.00</b></div>
+                <div>🟡 Рекомендованный (5%): <b id="riskMax" style="color: #ff9800;">$15.00</b></div>
+                <div>📈 Профит (+96%): <b id="riskProfit" style="color: var(--accent-blue);">+$14.40</b></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. СЕРВЕР ИИ -->
+    <div id="ai-net" class="tab-content">
+        <div class="card">
+            <span class="select-label">СТАТУС НЕЙРОСЕТИ</span>
+            <div style="font-size: 11px; margin: 6px 0; line-height: 1.5;">
+                <div>🟢 Кластер: <b style="color: var(--accent-green);">ONLINE (Node-09)</b></div>
+                <div>⚡ Задержка: <b style="color: var(--accent-blue);">0.8 мс</b></div>
+            </div>
+            <span class="select-label" style="margin-top: 8px;">ЛОГИ АЛГОРИТМА</span>
+            <div class="diagnostics-log" id="diagnosticsLog">
+                [19:50:12] Multiplexing broker feed channels...<br>
+                [19:50:15] Neural weights v7.2 loaded successfully.
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. VIP -->
+    <div id="vip" class="tab-content">
+        <div class="card">
+            <span class="select-label" style="margin-bottom: 6px;">👑 ТОП ТРЭЙДЕРОВ</span>
+            <div class="leaderboard-item">
+                <span>1. @alex_trader***</span>
+                <b style="color: var(--accent-green);">+$8,450</b>
+            </div>
+            <div class="leaderboard-item" style="border: none;">
+                <span>2. @mikhail_vip***</span>
+                <b style="color: var(--accent-green);">+$6,120</b>
+            </div>
+        </div>
+        <div class="card">
+            <span class="select-label">ЗАКРЫТЫЙ VIP-КАНАЛ</span>
+            <p style="font-size: 10px; color: var(--text-secondary); margin-bottom: 8px;">Пригласите 3 друзей, чтобы открыть элитный канал с точностью 99.9%.</p>
+            <button class="trade-link-btn" onclick="navigator.clipboard.writeText('https://t.me/Binodex_Signal_Bot?start=vip'); alert('Ссылка скопирована!');">КОПИРОВАТЬ ССЫЛКУ</button>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function startAnalysis() {
+            const btn = document.getElementById('signalBtn');
+            const loader = document.getElementById('analysisLoader');
+            const loaderText = document.getElementById('loaderText');
+            const resBox = document.getElementById('signalResult');
+
+            btn.disabled = true;
+            resBox.style.display = 'none';
+            loader.style.display = 'block';
+
+            const steps = [
+                "Сканирование стакана ордеров...",
+                "Анализ RSI и Stochastic...",
+                "Сверка MACD и Bollinger...",
+                "Фильтрация тренда по EMA...",
+                "Генерация точного сигнала..."
+            ];
+
+            let stepIdx = 0;
+            loaderText.innerText = steps[stepIdx];
+
+            const interval = setInterval(() => {
+                stepIdx++;
+                if (stepIdx < steps.length) {
+                    loaderText.innerText = steps[stepIdx];
+                }
+            }, 800);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                loader.style.display = 'none';
+                btn.disabled = false;
+                resBox.style.display = 'block';
+
+                const actions = [
+                    { text: 'ПОКУПКА ⬆ (ВВЕРХ)', color: 'var(--accent-green)' },
+                    { text: 'ПРОДАЖА ⬇ (ВНИЗ)', color: 'var(--accent-red)' }
+                ];
+                const chosen = actions[Math.floor(Math.random() * actions.length)];
+                const actionEl = document.getElementById('resAction');
+                actionEl.innerText = chosen.text;
+                actionEl.style.color = chosen.color;
+            }, 4000);
+        }
+
+        function calculateRisk() {
+            let dep = parseFloat(document.getElementById('depositInput').value) || 0;
+            document.getElementById('riskSafe').innerText = '$' + (dep * 0.02).toFixed(2);
+            document.getElementById('riskMax').innerText = '$' + (dep * 0.05).toFixed(2);
+            document.getElementById('riskProfit').innerText = '+$' + (dep * 0.05 * 0.96).toFixed(2);
+        }
+
+        const fakeUsers = [
+            { name: '@alex_trader***', amount: '+$215', pair: 'EUR/USD (ВВЕРХ)' },
+            { name: '@dmitry_invest***', amount: '+$450', pair: 'XAU/USD (ВВЕРХ)' },
+            { name: '@anna_crypto***', amount: '+$290', pair: 'GBP/USD (ВНИЗ)' }
+        ];
+
+        function showToast() {
+            const container = document.getElementById('toast-container');
+            const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <div class="toast-icon">✓</div>
+                <div><b>${user.name}</b> забрал <b style="color: var(--accent-green);">${user.amount}</b> на ${user.pair}</div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        setInterval(showToast, 270000);
+        setTimeout(showToast, 15000);
+    </script>
+</body>
+</html>
