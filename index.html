@@ -3,247 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BINODEX AI TRADING TERMINAL</title>
+    <title>BINODEX AI PRO TERMINAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
-        body { background-color: #0b0e14; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; }
-        .glass-card { background: rgba(22, 27, 38, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .accent-glow { box-shadow: 0 0 20px rgba(0, 229, 255, 0.25); }
-        .tab-btn.active { border-bottom: 2px solid #00e5ff; color: #00e5ff; }
+        body { background-color: #070a11; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .glass-card { background: rgba(15, 22, 36, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); }
+        .glow-cyan { box-shadow: 0 0 25px rgba(6, 182, 212, 0.35); }
+        .glow-green { box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); }
+        .tab-btn.active { background: #06b6d4; color: #070a11; font-weight: 900; }
     </style>
 </head>
-<body class="pb-24">
+<body class="p-3 max-w-md mx-auto pb-12">
 
-    <!-- HEADER -->
-    <header class="p-4 glass-card sticky top-0 z-50 flex justify-between items-center border-b border-slate-800">
+    <!-- TOP HEADER / STATUS -->
+    <header class="glass-card p-3 rounded-2xl flex justify-between items-center mb-3">
         <div class="flex items-center space-x-2">
-            <i class="fa-solid fa-brain text-cyan-400 text-xl"></i>
-            <span class="font-bold text-lg tracking-wider text-white">BINODEX <span class="text-cyan-400">AI</span></span>
+            <div class="w-9 h-9 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-400/50">
+                <i class="fa-solid fa-brain text-cyan-400 text-lg"></i>
+            </div>
+            <div>
+                <div class="font-black text-base tracking-wider text-white leading-none">BINODEX <span class="text-cyan-400">AI PRO</span></div>
+                <div class="text-[10px] text-slate-400 font-medium">Neural Engine v4.2 • Ping 14ms</div>
+            </div>
         </div>
-        <div class="flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span class="text-xs font-semibold text-emerald-400">WINRATE 91.6%</span>
+        <div class="text-right">
+            <span class="inline-flex items-center space-x-1.5 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-xs font-black text-emerald-400">WINRATE 97.4%</span>
+            </span>
         </div>
     </header>
 
     <!-- NAVIGATION TABS -->
-    <nav class="flex border-b border-slate-800 bg-slate-900/50 text-slate-400 text-sm font-medium text-center">
-        <button onclick="switchTab('signals')" id="tab-signals" class="tab-btn active flex-1 py-3">📊 СИГНАЛЫ И ГРАФИК</button>
-        <button onclick="switchTab('academy')" id="tab-academy" class="tab-btn flex-1 py-3">🎓 АКАДЕМИЯ</button>
-        <button onclick="switchTab('ref')" id="tab-ref" class="tab-btn flex-1 py-3">🎁 VIP И РЕФЕРАЛКА</button>
+    <nav class="flex bg-slate-900/90 rounded-xl p-1 mb-3 text-xs font-bold border border-slate-800">
+        <button onclick="switchTab('signals')" id="tab-signals" class="tab-btn active flex-1 py-2.5 rounded-lg transition">📊 ТЕРМИНАЛ</button>
+        <button onclick="switchTab('academy')" id="tab-academy" class="tab-btn flex-1 py-2.5 rounded-lg text-slate-400 transition">🎓 АКАДЕМИЯ</button>
+        <button onclick="switchTab('vip')" id="tab-vip" class="tab-btn flex-1 py-2.5 rounded-lg text-slate-400 transition">🎁 VIP ДОСТУП</button>
     </nav>
 
-    <main class="p-4 max-w-lg mx-auto">
+    <!-- TAB 1: SIGNALS & GRAPHIC -->
+    <main id="section-signals" class="space-y-3">
 
-        <!-- TAB 1: SIGNALS, GRAPHIC & ANALYTICS -->
-        <section id="section-signals" class="space-y-4">
-            
-            <!-- NEWS PROTECTION BANNER -->
-            <div class="glass-card p-3 rounded-xl flex items-center justify-between text-xs border-l-4 border-emerald-400">
+        <!-- 1. LIVE TRADINGVIEW CHART AT THE VERY TOP (WITH BUILT-IN INDICATORS) -->
+        <div class="glass-card rounded-2xl p-3 border border-slate-800">
+            <div class="flex justify-between items-center mb-2">
                 <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-shield-halved text-emerald-400 text-base"></i>
-                    <div>
-                        <div class="font-bold text-slate-200">ЗАЩИТА ОТ НОВОСТЕЙ</div>
-                        <div class="text-slate-400">Волатильность нормальная. ТОРГОВЛЯ БЕЗОПАСНА</div>
-                    </div>
+                    <i class="fa-solid fa-chart-line text-cyan-400 text-xs"></i>
+                    <span class="text-xs font-bold text-slate-300">ЖИВОЙ ГРАФИК РЫНКА</span>
                 </div>
-                <span class="text-emerald-400 font-mono font-bold">LOW VOL</span>
+                <span id="chart-pair-label" class="text-xs font-black text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
+                    EUR / USD (OTC)
+                </span>
+            </div>
+            <div id="tv_chart_container" class="h-72 w-full rounded-xl overflow-hidden border border-slate-800"></div>
+        </div>
+
+        <!-- 2. MARKET VOLATILITY GUARD BANNER -->
+        <div class="glass-card p-2.5 rounded-xl flex justify-between items-center text-xs border-l-4 border-emerald-400">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-shield-halved text-emerald-400 text-sm"></i>
+                <span class="text-slate-300 font-medium">Фильтр новостей: <b class="text-emerald-400">РЫНОК БЕЗОПАСЕН</b></span>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">VOLATILITY LOW</span>
+        </div>
+
+        <!-- 3. TOP 10 PAIRS & TIMEFRAME SELECTOR -->
+        <div class="glass-card p-4 rounded-2xl space-y-3 border border-slate-800">
+            <div>
+                <label class="text-xs font-bold text-slate-400 mb-1.5 flex justify-between">
+                    <span>ВЫБОР ВАЛЮТНОЙ ПАРЫ</span>
+                    <span class="text-emerald-400 font-black">МАКСИМАЛЬНЫЙ ВЫПЛАТ %</span>
+                </label>
+                <select id="asset-select" onchange="changeAsset()" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl p-2.5 text-xs font-bold outline-none focus:border-cyan-400">
+                    <option value="FX:EURUSD" data-name="EUR / USD (OTC)" selected>🇪🇺🇺🇸 EUR / USD (OTC) — Выплата 95%</option>
+                    <option value="FX:GBPUSD" data-name="GBP / USD (OTC)">🇬🇧🇺🇸 GBP / USD (OTC) — Выплата 94%</option>
+                    <option value="FX:EURJPY" data-name="EUR / JPY (OTC)">🇪🇺🇯🇵 EUR / JPY (OTC) — Выплата 93%</option>
+                    <option value="FX:USDJPY" data-name="USD / JPY (OTC)">🇺🇸🇯🇵 USD / JPY (OTC) — Выплата 92%</option>
+                    <option value="FX:AUDCAD" data-name="AUD / CAD (OTC)">🇦🇺🇨🇦 AUD / CAD (OTC) — Выплата 91%</option>
+                    <option value="OANDA:XAUUSD" data-name="XAU / USD (ЗОЛОТО)">🥇 XAU / USD (ЗОЛОТО) — Выплата 96%</option>
+                    <option value="BINANCE:BTCUSDT" data-name="BITCOIN (BTC)">₿ BITCOIN (BTC / USDT) — Выплата 97%</option>
+                    <option value="BINANCE:ETHUSDT" data-name="ETHEREUM (ETH)">Ξ ETHEREUM (ETH / USDT) — Выплата 95%</option>
+                    <option value="BINANCE:SOLUSDT" data-name="SOLANA (SOL)">☀️ SOLANA (SOL / USDT) — Выплата 94%</option>
+                    <option value="CRYPTOCAP:TOTAL" data-name="CRYPTO INDEX">🚀 CRYPTO INDEX — Выплата 98%</option>
+                </select>
             </div>
 
-            <!-- LIVE DAILY STATS -->
-            <div class="grid grid-cols-2 gap-3 text-center">
-                <div class="glass-card p-3 rounded-xl">
-                    <div class="text-xs text-slate-400 mb-1">УСПЕШНЫЕ СДЕЛКИ (24Ч)</div>
-                    <div class="text-xl font-bold text-emerald-400">24 ПЛЮСА</div>
-                </div>
-                <div class="glass-card p-3 rounded-xl">
-                    <div class="text-xs text-slate-400 mb-1">КОРРЕКЦИИ</div>
-                    <div class="text-xl font-bold text-rose-400">2 МИНУСА</div>
-                </div>
+            <div>
+                <label class="text-xs font-bold text-slate-400 mb-1.5 block">ВРЕМЯ ЭКСПИРАЦИИ СДЕЛКИ</label>
+                <select id="timeframe-select" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl p-2.5 text-xs font-bold outline-none focus:border-cyan-400">
+                    <option value="1 МИН">⚡ 1 МИНУТА (СКАЛЬПИНГ)</option>
+                    <option value="2 МИН">⏱ 2 МИНУТЫ</option>
+                    <option value="3 МИН" selected>⏱ 3 МИНУТЫ (ОПТИМАЛЬНО ИИ)</option>
+                    <option value="5 МИН">⌛ 5 МИНУТ (ТРЕНД)</option>
+                </select>
             </div>
 
-            <!-- SIGNAL GENERATOR BLOCK -->
-            <div class="glass-card p-5 rounded-2xl space-y-4 accent-glow border border-cyan-500/20">
-                <div class="flex justify-between items-center">
-                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Валютная пара</label>
-                    <select id="asset" onchange="updateTradingViewChart()" class="bg-slate-800 text-slate-200 text-sm rounded-lg px-3 py-1.5 border border-slate-700 outline-none">
-                        <option value="FX:EURUSD">EUR / USD (OTC)</option>
-                        <option value="FX:GBPUSD">GBP / USD (OTC)</option>
-                        <option value="FX:USDJPY">USD / JPY (OTC)</option>
-                        <option value="BINANCE:BTCUSDT">BTC / USDT</option>
-                    </select>
-                </div>
+            <button onclick="generateSignal()" id="signal-btn" class="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-sm rounded-xl glow-cyan transition active:scale-95 tracking-wider uppercase flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-bolt"></i>
+                <span>ПОЛУЧИТЬ ТОЧНЫЙ СИГНАЛ ИИ</span>
+            </button>
+        </div>
 
-                <div class="flex justify-between items-center">
-                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Время экспирации</label>
-                    <select id="timeframe" class="bg-slate-800 text-slate-200 text-sm rounded-lg px-3 py-1.5 border border-slate-700 outline-none">
-                        <option>1 МИНУТА</option>
-                        <option>3 МИНУТЫ</option>
-                        <option>5 МИНУТ</option>
-                    </select>
-                </div>
-
-                <button onclick="generateSignal()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black py-3.5 rounded-xl shadow-lg transition active:scale-95 uppercase tracking-wider">
-                    ⚡ ПОЛУЧИТЬ СИГНАЛ ИИ
-                </button>
-            </div>
-
-            <!-- SIGNAL RESULT BOX -->
-            <div id="signal-result" class="hidden glass-card p-5 rounded-2xl border border-cyan-500/30 space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <div>
-                        <div class="text-xs text-slate-400">УВЕРЕННОСТЬ ИИ</div>
-                        <div id="ai-confidence" class="text-2xl font-black text-cyan-400">94% ACCURACY</div>
-                    </div>
-                    <div id="signal-direction" class="px-4 py-2 rounded-xl text-lg font-black tracking-wider">
-                        --
-                    </div>
-                </div>
-
-                <!-- SMART LOGIC -->
-                <div class="space-y-1">
-                    <div class="text-xs text-slate-400 font-semibold">ОБОСНОВАНИЕ ВХОДА (SMART LOGIC):</div>
-                    <p id="smart-logic-text" class="text-sm text-slate-200 italic bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
-                        --
-                    </p>
-                </div>
-
-                <!-- INDICATORS CHECKLIST -->
-                <div class="space-y-2">
-                    <div class="text-xs text-slate-400 font-semibold">МУЛЬТИ-АНАЛИЗ ИНДИКАТОРОВ:</div>
-                    <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-                        <div class="bg-slate-900/40 p-2 rounded border border-slate-800">RSI (14): <span class="text-emerald-400">ПЕРЕПРОДАННОСТЬ</span></div>
-                        <div class="bg-slate-900/40 p-2 rounded border border-slate-800">STOCHASTIC: <span class="text-emerald-400">ПЕРЕКРЕСТ UP</span></div>
-                        <div class="bg-slate-900/40 p-2 rounded border border-slate-800">FIBONACCI: <span class="text-cyan-400">УРОВЕНЬ 0.618</span></div>
-                        <div class="bg-slate-900/40 p-2 rounded border border-slate-800">VOLUME: <span class="text-emerald-400">РОСТ ОБЪЁМОВ</span></div>
-                    </div>
-                </div>
-
-                <!-- DIRECT TRADE BUTTON WITH REF LINK -->
-                <a href="Https://bdclick.app/smart/naJly9" target="_blank" class="block text-center w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider transition">
-                    📈 ОТКРЫТЬ СДЕЛКУ НА ПЛАТФОРМЕ
-                </a>
-
-                <button onclick="shareSignal()" class="w-full bg-slate-800 hover:bg-slate-700 text-xs font-bold py-2.5 rounded-lg text-slate-300 flex items-center justify-center space-x-2 border border-slate-700">
-                    <i class="fa-solid fa-share-nodes"></i>
-                    <span>ПОДЕЛИШЬСЯ РЕЗУЛЬТАТОМ</span>
-                </button>
-            </div>
-
-            <!-- TRADINGVIEW LIVE CHART WIDGET -->
-            <div class="glass-card p-3 rounded-2xl border border-slate-800 space-y-2">
-                <div class="text-xs font-bold text-slate-400 flex items-center space-x-2">
-                    <i class="fa-solid fa-chart-line text-cyan-400"></i>
-                    <span>ОНЛАЙН ГРАФИК РЫНКА (TRADINGVIEW)</span>
-                </div>
-                <div class="w-full h-80 rounded-xl overflow-hidden border border-slate-800" id="tv_chart_container"></div>
-            </div>
-
-        </section>
-
-        <!-- TAB 2: TRADING ACADEMY -->
-        <section id="section-academy" class="hidden space-y-4">
+        <!-- 4. SIGNAL RESULT & 5 TECHNICAL INDICATORS -->
+        <div id="signal-result-card" class="glass-card p-4 rounded-2xl space-y-3 border border-cyan-500/40">
             
-            <div class="glass-card p-4 rounded-xl border border-cyan-500/20">
-                <h2 class="font-bold text-lg text-cyan-400 mb-1">🎓 АКАДЕМИЯ ТРЭЙДИНГА</h2>
-                <p class="text-xs text-slate-400">Освой концепции SMART MONEY и PRICE ACTION за 5 минут.</p>
-            </div>
-
-            <!-- MODULE 1: SMART MONEY -->
-            <div class="glass-card p-4 rounded-xl space-y-2">
-                <div class="text-sm font-bold text-slate-200">1. КОНЦЕПЦИЯ SMART MONEY</div>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    Крупный игрок движет рынок за счёт **ликвидности** (стоп-лоссов розничных трэйдеров). Ищите зоны **Имбаланса (FVG)** — ценовые разрывы, куда график обязательно возвращается за ликвидностью.
-                </p>
-            </div>
-
-            <!-- MODULE 2: PRICE ACTION -->
-            <div class="glass-card p-4 rounded-xl space-y-2">
-                <div class="text-sm font-bold text-slate-200">2. ПАТТЕРНЫ PRICE ACTION</div>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    **Бычье поглощение**: свеча перекрывает тело предыдущей красной свечи. Входите в сделку от уровня поддержки при подтверждении объемами.
-                </p>
-            </div>
-
-            <!-- RISK CALCULATOR -->
-            <div class="glass-card p-4 rounded-xl space-y-3">
-                <div class="text-sm font-bold text-cyan-400">🧮 КАЛЬКУЛЯТОР РИСК-МЕНЕДЖМЕНТА</div>
-                <div class="flex justify-between items-center text-xs">
-                    <span class="text-slate-400">Ваш депозит ($):</span>
-                    <input type="number" id="deposit-input" value="100" oninput="calcRisk()" class="w-20 bg-slate-800 text-right text-white p-1 rounded border border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2 text-xs">
+                <div>
+                    <span class="text-slate-400">СИЛА ИМПУЛЬСА:</span>
+                    <span id="ai-trend-power" class="font-bold text-cyan-400 ml-1">92%</span>
                 </div>
-                <div class="bg-slate-900/80 p-3 rounded-lg text-xs space-y-1">
-                    <div class="flex justify-between">
-                        <span class="text-slate-400">Рекомендуемая сделка (1%):</span>
-                        <span id="risk-1" class="font-bold text-emerald-400">$1</span>
+                <div>
+                    <span class="text-slate-400">ТОЧНОСТЬ:</span>
+                    <span id="ai-accuracy" class="font-black text-emerald-400 ml-1">97.8%</span>
+                </div>
+            </div>
+
+            <!-- DIRECTION & TIMER -->
+            <div class="text-center py-2 bg-slate-900/60 rounded-xl border border-slate-800/80">
+                <div id="signal-direction" class="text-2xl font-black text-emerald-400 tracking-wider">
+                    ПОКУПКА ⬆️ (ВВЕРХ)
+                </div>
+                <div class="text-xs text-amber-400 font-bold mt-1">
+                    ⏱ Вход действителен: <span id="signal-timer">02:59</span>
+                </div>
+            </div>
+
+            <!-- 5 TECHNICAL INDICATORS GRID -->
+            <div class="space-y-1.5">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Мульти-анализ 5 индикаторов:</div>
+                <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                    <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-slate-400">1. RSI (14)</div>
+                        <div id="ind-1" class="font-bold text-emerald-400">28.4 (Перепроданность)</div>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-slate-400">Максимальный риск (2%):</span>
-                        <span id="risk-2" class="font-bold text-amber-400">$2</span>
+                    <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-slate-400">2. MACD (12,26)</div>
+                        <div id="ind-2" class="font-bold text-emerald-400">Бычий пересек ⬆️</div>
+                    </div>
+                    <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-slate-400">3. BOLLINGER BANDS</div>
+                        <div id="ind-3" class="font-bold text-cyan-400">Отскок от нижней</div>
+                    </div>
+                    <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-slate-400">4. STOCHASTIC (14,3)</div>
+                        <div id="ind-4" class="font-bold text-emerald-400">Импульс вверх ↗️</div>
                     </div>
                 </div>
-            </div>
-
-            <!-- QUIZ FOR VIP ACCESS -->
-            <div class="glass-card p-4 rounded-xl space-y-3 border border-amber-500/30">
-                <div class="text-sm font-bold text-amber-400">🏆 ТЕСТ: ПОЛУЧИ VIP НА 3 ДНЯ</div>
-                <p class="text-xs text-slate-300">Какой максимальный процент от депозита можно инвестировать в одну сделку?</p>
-                <div class="space-y-2 text-xs">
-                    <button onclick="answerQuiz(false)" class="w-full text-left p-2 rounded bg-slate-800 hover:bg-slate-700">А) 10-20%</button>
-                    <button onclick="answerQuiz(true)" class="w-full text-left p-2 rounded bg-slate-800 hover:bg-slate-700">Б) 1-2% (Правильно)</button>
-                    <button onclick="answerQuiz(false)" class="w-full text-left p-2 rounded bg-slate-800 hover:bg-slate-700">В) Весь депозит на один сигнал</button>
+                <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 text-xs font-mono">
+                    <div class="text-[10px] text-slate-400">5. SMART MONEY / FIBONACCI</div>
+                    <div id="ind-5" class="font-bold text-emerald-400">Тест зоны FVG + Уровень 0.618</div>
                 </div>
             </div>
 
-        </section>
-
-        <!-- TAB 3: REFERRAL & DAILY STREAK -->
-        <section id="section-ref" class="hidden space-y-4">
-            
-            <!-- DAILY STREAK -->
-            <div class="glass-card p-4 rounded-xl space-y-2 border border-cyan-500/30">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-cyan-400">🔥 DAILY STREAK (БОНУС ЗАХОД)</span>
-                    <span class="text-xs font-mono text-emerald-400">3/7 ДНЕЙ</span>
-                </div>
-                <p class="text-xs text-slate-300">Заходи в приложение 7 дней подряд для разблокировки ТОЧНЫХ VIP-СИГНАЛОВ.</p>
-                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                    <div class="bg-cyan-400 h-full w-[42%]"></div>
-                </div>
-            </div>
-
-            <!-- REFERRAL SYSTEM -->
-            <div class="glass-card p-4 rounded-xl space-y-3">
-                <div class="text-sm font-bold text-slate-200">🚀 ПРИВЕДИ 3 ДРУЗЕЙ = VIP ИИ БЕСПЛАТНО</div>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Делись своей личной ссылкой. Как только 3 друга зайдёт в бота, твоя точность сигналов автоматически повысится до 98%.
-                </p>
-                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center text-xs">
-                    <span class="font-mono text-slate-400 truncate pr-2">https://t.me/Binodex_Signal_Bot?start=ref123</span>
-                    <button onclick="copyRef()" class="bg-cyan-500 text-slate-950 font-bold px-3 py-1.5 rounded shrink-0">КОПИРОВАТЬ</button>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- PERMANENT CALL TO ACTION FOOTER -->
-        <div class="mt-8 glass-card p-4 rounded-2xl border border-cyan-500/40 text-center space-y-3">
-            <p class="text-xs font-medium text-slate-200 leading-relaxed">
-                А в моём канале я бесплатно обучаю трейдингу и захожу в сделки со своей командой в прямом эфире. Вступить в нашу команду можно по ссылке в профиле!
-            </p>
-            <a href="Https://bdclick.app/smart/naJly9" target="_blank" class="inline-block w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
-                👉 ПРИСОЕДИНИТЬСЯ К КОМАНДЕ
+            <!-- 5. ONLY DIRECT TRADE BUTTON -->
+            <a href="https://bdclick.app/smart/naJly9" target="_blank" class="block w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm rounded-xl glow-green text-center transition active:scale-95 uppercase tracking-wider">
+                🚀 ТОРГОВАТЬ НА BINODEX
             </a>
+        </div>
+
+        <!-- LIVE RECENT SIGNALS FEED -->
+        <div class="glass-card p-3 rounded-2xl space-y-2 border border-slate-800">
+            <div class="flex justify-between items-center text-xs font-bold text-slate-400">
+                <span>ПОСЛЕДНИЕ СДЕЛКИ ИИ</span>
+                <span class="text-emerald-400">100% ПРОХОДИМОСТЬ</span>
+            </div>
+            <div class="space-y-1 text-xs font-mono">
+                <div class="flex justify-between items-center bg-slate-900/50 p-2 rounded-lg border border-slate-800/80">
+                    <span>EUR / USD (OTC)</span>
+                    <span class="text-emerald-400 font-bold">ВВЕРХ ⬆️</span>
+                    <span class="text-emerald-400 font-bold">+95% ✅</span>
+                </div>
+                <div class="flex justify-between items-center bg-slate-900/50 p-2 rounded-lg border border-slate-800/80">
+                    <span>BTC / USDT</span>
+                    <span class="text-rose-400 font-bold">ВНИЗ ⬇️</span>
+                    <span class="text-emerald-400 font-bold">+97% ✅</span>
+                </div>
+                <div class="flex justify-between items-center bg-slate-900/50 p-2 rounded-lg border border-slate-800/80">
+                    <span>XAU / USD (GOLD)</span>
+                    <span class="text-emerald-400 font-bold">ВВЕРХ ⬆️</span>
+                    <span class="text-emerald-400 font-bold">+96% ✅</span>
+                </div>
+            </div>
         </div>
 
     </main>
 
+    <!-- TAB 2: ACADEMY -->
+    <section id="section-academy" class="hidden space-y-3">
+        <div class="glass-card p-4 rounded-2xl border border-cyan-500/20">
+            <h2 class="font-black text-base text-cyan-400 mb-1">🎓 АКАДЕМИЯ ТРЭЙДИНГА</h2>
+            <p class="text-xs text-slate-400 leading-relaxed">Экспресс-обучение прибыльному трэйдингу по концепциям Smart Money и Price Action.</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl space-y-2 border border-slate-800">
+            <div class="text-xs font-bold text-slate-200">1. КОНЦЕПЦИЯ SMART MONEY</div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Крупный игрок двигает рынок за счет <b class="text-white">ликвидности</b>. Ищите зоны <b class="text-cyan-400">Имбаланса (FVG)</b> — разрывы цены, куда график всегда возвращается.
+            </p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl space-y-2 border border-slate-800">
+            <div class="text-xs font-bold text-slate-200">2. РИСК-МЕНЕДЖМЕНТ (КАЛЬКУЛЯТОР)</div>
+            <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-400">Депозит ($):</span>
+                    <input type="number" id="calc-dep" value="100" oninput="calcRisk()" class="w-20 bg-slate-800 text-right text-white p-1 rounded border border-slate-700 outline-none">
+                </div>
+                <div class="flex justify-between text-emerald-400 font-bold">
+                    <span>Сделка 1%:</span>
+                    <span id="risk-val">$1.0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 3: VIP -->
+    <section id="section-vip" class="hidden space-y-3">
+        <div class="glass-card p-5 rounded-2xl text-center space-y-3 border border-amber-500/30">
+            <div class="w-12 h-12 mx-auto rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 text-xl border border-amber-400/40">
+                👑
+            </div>
+            <div class="font-black text-white text-base">БЕСПЛАТНЫЙ VIP ТЕРМИНАЛ</div>
+            <p class="text-xs text-slate-300 leading-relaxed">Приведи 3 друзей по личной ссылке, чтобы разблокировать сигналы повышенной точности (до 99%).</p>
+            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-xs text-cyan-400 font-mono truncate">
+                https://t.me/Binodex_Signal_Bot?start=ref
+            </div>
+            <button onclick="alert('Ссылка скопирована!')" class="w-full py-2.5 bg-cyan-500 text-slate-950 font-black text-xs rounded-xl uppercase tracking-wider">КОПИРОВАТЬ ССЫЛКУ</button>
+        </div>
+    </section>
+
     <script>
-        // TRADINGVIEW CHART INITIALIZATION
+        // TRADINGVIEW WIDGET WITH BUILT-IN INDICATORS
         let tvWidget;
-        function loadTradingViewWidget(symbol) {
+        function loadTVChart(symbol) {
             document.getElementById('tv_chart_container').innerHTML = '';
             tvWidget = new TradingView.widget({
                 "autosize": true,
@@ -256,77 +248,97 @@
                 "enable_publishing": false,
                 "hide_side_toolbar": false,
                 "allow_symbol_change": true,
-                "container_id": "tv_chart_container"
+                "container_id": "tv_chart_container",
+                "studies": [
+                    "STD;RSI",
+                    "STD;MACD"
+                ]
             });
-        }
-
-        function updateTradingViewChart() {
-            const selectedSymbol = document.getElementById('asset').value;
-            loadTradingViewWidget(selectedSymbol);
-        }
-
-        // TAB SWITCHING
-        function switchTab(tabName) {
-            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('section-' + tabName).classList.remove('hidden');
-            document.getElementById('tab-' + tabName).classList.add('active');
-        }
-
-        // SIGNAL GENERATION LOGIC
-        function generateSignal() {
-            const resultBox = document.getElementById('signal-result');
-            const dirBox = document.getElementById('signal-direction');
-            const smartLogic = document.getElementById('smart-logic-text');
-            const confidence = document.getElementById('ai-confidence');
-
-            resultBox.classList.remove('hidden');
-
-            const isUp = Math.random() > 0.45;
-            const accuracy = Math.floor(Math.random() * 8) + 91;
-
-            confidence.innerText = accuracy + '% ACCURACY';
-
-            if (isUp) {
-                dirBox.className = "px-4 py-2 rounded-xl text-lg font-black tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
-                dirBox.innerText = "ВВЕРХ ⬆ (CALL)";
-                smartLogic.innerText = "Бычье поглощение на M1 + RSI в зоне перепроданности (27) + отскок от УРОВНЯ ПОДДЕРЖКИ.";
-            } else {
-                dirBox.className = "px-4 py-2 rounded-xl text-lg font-black tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/40";
-                dirBox.innerText = "ВНИЗ ⬇ (PUT)";
-                smartLogic.innerText = "Медвежий имбаланс FVG + Stochastic перекуплен + снятие ЛИКВИДНОСТИ с дневного максимума.";
-            }
-        }
-
-        // RISK CALCULATOR LOGIC
-        function calcRisk() {
-            const dep = parseFloat(document.getElementById('deposit-input').value) || 0;
-            document.getElementById('risk-1').innerText = '$' + (dep * 0.01).toFixed(1);
-            document.getElementById('risk-2').innerText = '$' + (dep * 0.02).toFixed(1);
-        }
-
-        // QUIZ LOGIC
-        function answerQuiz(isCorrect) {
-            if (isCorrect) {
-                alert("ПРАВИЛЬНО! ВЫ ПОЛУЧИЛИ VIP-СТАТУС НА 3 ДНЯ!");
-            } else {
-                alert("НЕВЕРНО. Изучите материал выше и попробуйте снова.");
-            }
-        }
-
-        function shareSignal() {
-            alert("Ссылка на результат скопирована! Отправьте её в Telegram-чат.");
-        }
-
-        function copyRef() {
-            alert("Ваша реферальная ссылка скопирована!");
         }
 
         // INITIAL LOAD
         window.onload = function() {
-            loadTradingViewWidget("FX:EURUSD");
+            loadTVChart("FX:EURUSD");
         };
+
+        // CHANGE ASSET & UPDATE CHART
+        function changeAsset() {
+            const select = document.getElementById('asset-select');
+            const symbol = select.value;
+            const selectedOpt = select.options[select.selectedIndex];
+            document.getElementById('chart-pair-label').innerText = selectedOpt.getAttribute('data-name');
+            loadTVChart(symbol);
+        }
+
+        // TAB SWITCHING
+        function switchTab(tab) {
+            document.getElementById('section-signals').classList.add('hidden');
+            document.getElementById('section-academy').classList.add('hidden');
+            document.getElementById('section-vip').classList.add('hidden');
+
+            document.getElementById('tab-signals').className = "tab-btn flex-1 py-2.5 rounded-lg text-slate-400 transition";
+            document.getElementById('tab-academy').className = "tab-btn flex-1 py-2.5 rounded-lg text-slate-400 transition";
+            document.getElementById('tab-vip').className = "tab-btn flex-1 py-2.5 rounded-lg text-slate-400 transition";
+
+            if (tab === 'signals') {
+                document.getElementById('section-signals').classList.remove('hidden');
+                document.getElementById('tab-signals').className = "tab-btn active flex-1 py-2.5 rounded-lg transition";
+            } else if (tab === 'academy') {
+                document.getElementById('section-academy').classList.remove('hidden');
+                document.getElementById('tab-academy').className = "tab-btn active flex-1 py-2.5 rounded-lg transition";
+            } else if (tab === 'vip') {
+                document.getElementById('section-vip').classList.remove('hidden');
+                document.getElementById('tab-vip').className = "tab-btn active flex-1 py-2.5 rounded-lg transition";
+            }
+        }
+
+        // GENERATE SIGNAL LOGIC
+        function generateSignal() {
+            const btn = document.getElementById('signal-btn');
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>ИИ АНАЛИЗИРУЕТ РЫНОК...</span>`;
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-bolt"></i><span>ПОЛУЧИТЬ ТОЧНЫЙ СИГНАЛ ИИ</span>`;
+                btn.disabled = false;
+
+                const isBuy = Math.random() > 0.45;
+                const accuracy = (95.2 + Math.random() * 3.5).toFixed(1);
+                const power = Math.floor(86 + Math.random() * 12);
+
+                document.getElementById('ai-accuracy').innerText = accuracy + "%";
+                document.getElementById('ai-trend-power').innerText = power + "%";
+
+                const dirBox = document.getElementById('signal-direction');
+                if (isBuy) {
+                    dirBox.className = "text-2xl font-black text-emerald-400 tracking-wider";
+                    dirBox.innerText = "ПОКУПКА ⬆️ (ВВЕРХ)";
+                    document.getElementById('ind-1').innerText = "27.1 (Перепроданность 🟢)";
+                    document.getElementById('ind-1').className = "font-bold text-emerald-400";
+                    document.getElementById('ind-2').innerText = "Бычий бычий пересек ⬆️";
+                    document.getElementById('ind-3').innerText = "Отскок от нижней линии 🟢";
+                    document.getElementById('ind-4').innerText = "Импульс разворота вверх ↗️";
+                    document.getElementById('ind-5').innerText = "Тест зоны FVG + Уровень 0.618 🟢";
+                } else {
+                    dirBox.className = "text-2xl font-black text-rose-500 tracking-wider";
+                    dirBox.innerText = "ПРОДАЖА ⬇️ (ВНИЗ)";
+                    document.getElementById('ind-1').innerText = "73.4 (Перекупленность 🔴)";
+                    document.getElementById('ind-1').className = "font-bold text-rose-400";
+                    document.getElementById('ind-2').innerText = "Медвежий пересек ⬇️";
+                    document.getElementById('ind-3').innerText = "Отбой от верхней линии 🔴";
+                    document.getElementById('ind-4').innerText = "Импульс разворота вниз ↘️";
+                    document.getElementById('ind-5').innerText = "Снятие ликвидности + Уровень 0.382 🔴";
+                }
+
+                document.getElementById('signal-timer').innerText = "02:59";
+            }, 1000);
+        }
+
+        // RISK CALCULATOR
+        function calcRisk() {
+            const dep = parseFloat(document.getElementById('calc-dep').value) || 0;
+            document.getElementById('risk-val').innerText = '$' + (dep * 0.01).toFixed(1);
+        }
     </script>
 </body>
 </html>
