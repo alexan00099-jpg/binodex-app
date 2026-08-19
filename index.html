@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex AI Mobile v30</title>
+    <title>Binodex AI Pro</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg-color: #0b0f19;
             --card-bg: #131b2e;
             --accent-green: #00c853;
             --accent-red: #ff3d00;
-            --accent-blue: #2979ff;
-            --accent-gold: #ffab00;
+            --accent-blue: #00bcd4;
             --text-main: #ffffff;
             --text-secondary: #8a9ba8;
             --border-color: #1e293b;
@@ -20,287 +20,266 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        html, body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            width: 100%;
-            min-height: 100vh;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
             padding: 10px;
-            padding-bottom: 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            padding-bottom: 50px;
         }
-
-        /* ШАПКА КАК НА СКРИНШОТЕ */
-        .header {
+        .top-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--card-bg);
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
         }
-        .logo {
-            font-size: 14px;
-            font-weight: 900;
+        .brand-title {
+            font-size: 15px;
+            font-weight: 800;
             letter-spacing: 0.5px;
         }
-        .logo span {
+        .brand-title span {
             color: var(--accent-blue);
         }
-        .badge-live {
+        .winrate-badge {
             background: rgba(0, 200, 83, 0.15);
             color: var(--accent-green);
-            border: 1px solid rgba(0, 200, 83, 0.3);
-            padding: 4px 10px;
-            border-radius: 20px;
+            padding: 5px 10px;
+            border-radius: 8px;
             font-size: 11px;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
-        .pulse-dot {
-            width: 7px;
-            height: 7px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
         }
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 200, 83, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
+        .nav-tab {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 4px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: 0.2s;
         }
-
-        /* КАРТОЧКИ */
+        .nav-tab.active {
+            background: var(--accent-blue);
+            color: #fff;
+            border-color: var(--accent-blue);
+        }
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 14px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .card.active-section {
+            display: block;
         }
         .section-title {
             font-size: 11px;
             color: var(--text-secondary);
-            font-weight: 800;
+            margin-bottom: 8px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        .dropdown, .input-field {
-            background: #1a243b;
-            border: 1px solid var(--border-color);
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
+        .tradingview-container {
             width: 100%;
-            font-size: 13px;
-            font-weight: 600;
-            outline: none;
-        }
-        
-        /* БЛОК ГРАФИКА TRADINGVIEW */
-        .tv-header-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .tv-price-row {
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 900;
-            margin-bottom: 6px;
-        }
-        .tv-price-green {
-            color: var(--accent-green);
-            font-size: 12px;
-            font-weight: 700;
-        }
-        .tv-subinfo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
-        .tv-logo-badge {
-            background: #131722;
-            color: #d1d4dc;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 900;
-            border: 1px solid #2a2e39;
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-        }
-        .chart-box {
-            width: 100%;
-            height: 180px;
+            height: 340px;
             border-radius: 8px;
             overflow: hidden;
-            border: 1px solid var(--border-color);
-            background: #0d111a;
-            position: relative;
+            background: #131722;
         }
-        canvas {
-            display: block;
+        .news-filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 200, 83, 0.08);
+            border: 1px solid rgba(0, 200, 83, 0.3);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-bottom: 10px;
+        }
+        .btn {
             width: 100%;
-            height: 100%;
-        }
-
-        .primary-btn {
             background: linear-gradient(135deg, #00c853, #009624);
-            color: white;
+            color: #fff;
             border: none;
-            width: 100%;
-            padding: 14px;
             border-radius: 10px;
-            font-size: 13px;
-            font-weight: 900;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 800;
             cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
-            letter-spacing: 0.5px;
-            text-align: center;
-            transition: transform 0.1s;
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+            margin-top: 8px;
         }
-        .primary-btn:active {
+        .btn:active {
             transform: scale(0.98);
         }
-        .primary-btn:disabled {
-            background: #2a3b4c;
-            color: #8a9ba8;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        /* Кнопка ТОРГОВАТЬ СРАЗУ ПОД СИГНАЛАМИ */
-        .referral-trade-btn {
-            display: block;
-            background: linear-gradient(135deg, #2979ff, #1565c0);
-            color: white;
-            text-align: center;
-            padding: 14px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 900;
-            font-size: 13px;
-            text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(41, 121, 255, 0.4);
-            cursor: pointer;
-            border: none;
-            width: 100%;
-            margin-top: 4px;
-            letter-spacing: 0.5px;
-        }
-
-        .analysis-loader {
-            background: #172236;
-            border: 1px solid #283854;
-            border-radius: 10px;
-            padding: 14px;
-            text-align: center;
-            display: none;
-        }
-        .spinner {
-            width: 26px;
-            height: 26px;
-            border: 3px solid rgba(41, 121, 255, 0.2);
-            border-top-color: var(--accent-blue);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 8px auto;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .loader-text {
-            font-size: 11px;
-            color: #b0bec5;
-            font-weight: 600;
-        }
-
         .signal-result {
-            background: #172236;
-            border: 1px solid #283854;
-            border-radius: 10px;
+            margin-top: 8px;
             padding: 12px;
+            border-radius: 8px;
+            background: rgba(0, 200, 83, 0.1);
+            border: 1px solid var(--accent-green);
+            text-align: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--accent-green);
             display: none;
         }
-        .signal-action {
-            font-size: 15px;
-            font-weight: 900;
-            color: var(--accent-green);
+        .academy-item {
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
+            border-radius: 8px;
             margin-bottom: 8px;
+            border-left: 3px solid var(--accent-blue);
+            color: var(--text-main);
+            font-size: 13px;
+        }
+        .footer-cta {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 14px;
             text-align: center;
-            background: rgba(0, 200, 83, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 200, 83, 0.3);
+            margin-top: 15px;
         }
-        .indicators-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 11px;
-            color: #cbd5e1;
-            border-top: 1px solid var(--border-color);
-            padding-top: 8px;
+        .footer-cta p {
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--text-main);
+            margin-bottom: 10px;
         }
-        .indicator-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .match-tag {
-            color: var(--accent-green);
-            font-weight: 800;
-        }
-
-        .action-link-btn {
+        .footer-btn {
             display: block;
-            background: #1a243b;
-            border: 1px solid var(--border-color);
-            color: white;
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
+            background: var(--accent-blue);
+            color: #fff;
             text-decoration: none;
-            font-weight: 800;
-            font-size: 11px;
-            cursor: pointer;
-            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+    </script>
+
+    <div class="top-panel">
+        <div class="brand-title">BINODEX <span>AI PRO</span></div>
+        <div class="winrate-badge">🟢 WINRATE 97.4%</div>
+    </div>
+
+    <div class="nav-tabs">
+        <div class="nav-tab active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</div>
+        <div class="nav-tab" onclick="switchTab('academy', this)">🎓 АКАДЕМИЯ</div>
+        <div class="nav-tab" onclick="switchTab('vip', this)">🎁 VIP ДОСТУП</div>
+    </div>
+
+    <div id="terminal" class="card active-section">
+        <div class="news-filter">
+            <span>🛡️ Новостной фильтр: РЫНОК БЕЗОПАСЕН</span>
+            <span style="font-size: 10px; background: rgba(255,255,255,0.1); padding: 3px 6px; border-radius: 4px;">LOW</span>
+        </div>
+
+        <div class="section-title">
+            <span>📊 Живой график рынка</span>
+            <span style="color: var(--accent-blue);">GBP/USD</span>
+        </div>
+        <div class="tradingview-container">
+            <div class="tradingview-widget-container" style="height:100%;width:100%">
+              <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+              {
+                "autosize": true,
+                "symbol": "FX:GBPUSD",
+                "interval": "1",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "ru",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "support_host": "https://www.tradingview.com"
+              }
+              </script>
+            </div>
+            </div>
+
+        <div style="margin-top: 12px;">
+            <div class="section-title">⚡ Квантовый сканер сигналов</div>
+            <button class="btn" onclick="runAnalysis()">ПОЛУЧИТЬ СИГНАЛ ИИ</button>
+            <div id="signalResult" class="signal-result">📈 СИГНАЛ: ПОКУПКА ↑ (ВВЕРХ)</div>
+        </div>
+    </div>
+
+    <div id="academy" class="card">
+        <div class="section-title">🎓 ОБУЧЕНИЕ ТРЭЙДИНГУ</div>
+        <div class="academy-item">
+            <strong>1. Основы анализа рынка</strong><br>Как читать графики и использовать индикаторы для точных входов.
+        </div>
+        <div class="academy-item">
+            <strong>2. Управление рисками</strong><br>Правильный манименеджмент для каждого успешного трэйдера.
+        </div>
+    </div>
+
+    <div id="vip" class="card">
+        <div class="section-title">🎁 ЭКСКЛЮЗИВНЫЕ БОНУСЫ</div>
+        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+            Получи полный доступ к закрытой экосистеме и прямым трансляциям.
+        </div>
+        <a href="https://t.me/" class="footer-btn" style="text-align: center;" target="_blank">ПОЛУЧИТЬ VIP СТАТУС</a>
+    </div>
+
+    <div class="footer-cta">
+        <p>А в моём канале я бесплатно обучаю трэйдингу и захожу в сделки со своей командой в прямом эфире. Вступить в нашу команду можно по ссылке в профиле!</p>
+        <a href="https://t.me/" class="footer-btn" target="_blank">ВСТУПИТЬ В НАШУ КОМАНДУ</a>
+    </div>
+
+    <script>
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active-section');
+            element.classList.add('active');
         }
 
-        .news-badge {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #1a243b;
-            border: 1px solid var(--border-color);
-            padding: 10px 12
+        function runAnalysis() {
+            const res = document.getElementById('signalResult');
+            res.style.display = 'block';
+            res.innerHTML = '⏳ Сканирование рынков ИИ...';
+            setTimeout(() => {
+                const isUp = Math.random() > 0.3;
+                res.style.color = isUp ? 'var(--accent-green)' : 'var(--accent-red)';
+                res.style.borderColor = isUp ? 'var(--accent-green)' : 'var(--accent-red)';
+                res.style.background = isUp ? 'rgba(0, 200, 83, 0.1)' : 'rgba(255, 61, 0, 0.1)';
+                res.innerHTML = isUp ? '📈 СИГНАЛ: ПОКУПКА ↑ (ВВЕРХ)' : '📉 СИГНАЛ: ПРОДАЖА ↓ (ВНИЗ)';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
