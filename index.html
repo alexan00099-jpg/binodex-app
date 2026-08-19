@@ -73,7 +73,14 @@
         .academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
         .academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }
         .academy-module p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
+        .academy-module ul { padding-left: 15px; margin-top: 6px; margin-bottom: 8px; }
+        .academy-module li { font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px; }
         
+        .platform-perks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        .perk-mini-card { background: rgba(41, 121, 255, 0.05); border: 1px solid rgba(41, 121, 255, 0.2); border-radius: 10px; padding: 10px; text-align: center; }
+        .perk-mini-card b { display: block; color: var(--accent-green); font-size: 14px; margin-bottom: 2px; }
+        .perk-mini-card span { font-size: 11px; color: var(--text-secondary); }
+
         .vip-list { list-style: none; padding: 0; }
         .vip-list li { margin-bottom: 12px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; }
         .vip-list li b { color: var(--text-main); }
@@ -97,7 +104,7 @@
 
     <div class="nav-tabs">
         <div class="nav-tab active" onclick="switchTab('terminal', this)" data-i18n="tab_terminal">📊 ТЕРМИНАЛ</div>
-        <div class="nav-tab" onclick="switchTab('academy', this)" data-i18n="tab_academy">🎓 АКАДЕМИЯ</div>
+        <div class="nav-tab" onclick="switchTab('academy', this)" data-i18n="tab_academy">📚 ОБУЧЕНИЕ</div>
         <div class="nav-tab" onclick="switchTab('vip', this)" data-i18n="tab_vip">🎁 VIP</div>
     </div>
 
@@ -224,16 +231,77 @@
         <div id="pool" class="analysis-tool-box"><div style="font-size:11px; color:var(--text-secondary);" data-i18n="t_pool_desc">Мониторинг китовых ордеров и пулов ликвидности...</div></div>
     </div>
 
-    <!-- АКАДЕМИЯ -->
+    <!-- ОБУЧЕНИЕ -->
     <div id="academy" class="card">
-        <div style="font-size:14px; font-weight:900; color:var(--accent-blue); margin-bottom:12px;" data-i18n="acad_main_title">🎓 АКАДЕМИЯ ЭЛИТНОГО ТРЭЙДЕРА</div>
-        <div class="academy-module">
-            <h4 data-i18n="acad_h1">Передовые алгоритмы и синергия индикаторов</h4>
-            <p data-i18n="acad_p1">Наш терминал использует уникальные нейросетевые модели, объединяющие в себе десятки передовых математических инструментов. Главный трендовый индикатор Parabolic SAR выстраивается прямо на свечах, указывая безупречные точки разворота...</p>
+        <div style="font-size:15px; font-weight:900; color:var(--accent-blue); margin-bottom:10px;" data-i18n="acad_main_title">📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ</div>
+        
+        <!-- ПРЕИМУЩЕСТВА В САМОМ ВЕРХУ -->
+        <div class="academy-module" style="background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border-color: rgba(41,121,255,0.3);">
+            <h4 style="color:var(--accent-green); font-size:15px;" data-i18n="acad_perks_head">⚡ ПОЧЕМУ ТРЕЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:</h4>
+            <div class="platform-perks-grid" style="margin-top:10px;">
+                <div class="perk-mini-card">
+                    <b>ОТ $5</b>
+                    <span data-i18n="perk_min">МИНЕМАЛЬНЫЙ ДЕПОЗИТ</span>
+                </div>
+                <div class="perk-mini-card">
+                    <b>ДО 96%</b>
+                    <span data-i18n="perk_payout">ДОХОДНОСТЬ СДЕЛОК</span>
+                </div>
+                <div class="perk-mini-card">
+                    <b>МОМЕНТАЛЬНО</b>
+                    <span data-i18n="perk_withdraw">ВЫВОД СРЕДСТВ</span>
+                </div>
+                <div class="perk-mini-card">
+                    <b>50+ ПАР</b>
+                    <span data-i18n="perk_assets">АКТИВОВ ДЛЯ ТОРГОВЛИ</span>
+                </div>
+            </div>
+            <p style="margin-top:8px; font-size:12px;" data-i18n="acad_perks_sub">Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.</p>
         </div>
+
+        <div class="academy-module">
+            <h4 data-i18n="acad_h0">1. С чего начать новичку: от регистрации до первой прибыли</h4>
+            <p data-i18n="acad_p0">Если вы никогда раньше не занимались трэйдингом, путь к успешной торговле состоит из 4 простых шагов:</p>
+            <ul>
+                <li data-i18n="acad_li_step1"><b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.</li>
+                <li data-i18n="acad_li_step2"><b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 часа).</li>
+                <li data-i18n="acad_li_step3"><b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.</li>
+                <li data-i18n="acad_li_step4"><b>Шаг 4. Открытие сделки:</b> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления (ВВЕРХ или ВНИЗ). При верном прогнозе чистая прибыль зачисляется мгновенно!</li>
+            </ul>
+        </div>
+
+        <div class="academy-module">
+            <h4 data-i18n="acad_h1">2. Как работает ИИ-терминал и Parabolic SAR</h4>
+            <p data-i18n="acad_p1">Главный трендовый индикатор нашего терминала — <b>Parabolic SAR</b> — отображается прямо на ценовых свечах в виде точек:</p>
+            <ul>
+                <li data-i18n="acad_li1"><b>Точки под свечами (зеленые):</b> Сигнализируют о сильном бычьем тренде и росте цены. Время открывать сделки ВВЕРХ.</li>
+                <li data-i18n="acad_li2"><b>Точки над свечами (красные):</b> Указывают на медвежий тренд и давление продавцов. Идеально для входа ВНИЗ.</li>
+                <li data-i18n="acad_li3"><b>Смена точек:</b> Пересечение графика через точки SAR дает мощный сигнал разворота тренда с высокой точностью.</li>
+            </ul>
+        </div>
+
+        <div class="academy-module">
+            <h4 data-i18n="acad_h2">3. Торговля по стратегии RSI и сигналам</h4>
+            <p data-i18n="acad_p2">Индикатор RSI (Индекс относительной силы) помогает находить точные точки разворота цены на экстремумах:</p>
+            <ul>
+                <li data-i18n="acad_li4"><b>Зона выше 70%:</b> Актив перекуплен покупателями, ожидается коррекция или падение цен.</li>
+                <li data-i18n="acad_li5"><b>Зона ниже 30%:</b> Актив перепродан продавцами, рынок готов к резкому отскоку вверх.</li>
+                <li data-i18n="acad_li6"><b>Торговля по сигналам:</b> Используя готовые квантовые сигналы ИИ и командные сессии, вы можете совершать сделки с вероятностью победы до 96%!</li>
+            </ul>
+        </div>
+
+        <div class="academy-module">
+            <h4 data-i18n="acad_h3">4. Золотые правила мани-менеджмента</h4>
+            <p data-i18n="acad_p3">Соблюдение правил риска — главный секрет стабильного заработка:</p>
+            <ul>
+                <li data-i18n="acad_li7"><b>Риск на сделку:</b> Выделяйте не более 2-5% от депозита на одну позицию.</li>
+                <li data-i18n="acad_li8"><b>Дисциплина:</b> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.</li>
+            </ul>
+        </div>
+
         <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">
-            <h4 style="color:var(--accent-green);" data-i18n="acad_h2">Время зарабатывать профессионально!</h4>
-            <p data-i18n="acad_p2">Используйте всю мощь передовых алгоритмов прямо сейчас и выводите свой трэйдинг на принципиально новый уровень.</p>
+            <h4 style="color:var(--accent-green);" data-i18n="acad_h5">Время зарабатывать профессионально!</h4>
+            <p data-i18n="acad_p5">Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трэйдинг на новый уровень прибыльности.</p>
             <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трэйдинг</a>
         </div>
     </div>
@@ -271,7 +339,7 @@
             ru: {
                 ai_active: "🟢 AI СТАТУС: АКТИВЕН",
                 tab_terminal: "📊 ТЕРМИНАЛ",
-                tab_academy: "🎓 АКАДЕМИЯ",
+                tab_academy: "📚 ОБУЧЕНИЕ",
                 tab_vip: "🎁 VIP",
                 btn_scan: "ЗАПУСТИТЬ КВАНТОВЫЙ ИИ-АНАЛИЗ",
                 btn_trade: "Начать трэйдинг",
@@ -313,11 +381,35 @@
                 t_calc_desc: "Калькулятор сложного процента (разгон депозита)...",
                 t_hist_desc: "Последние закрытые сессионные сделки ИИ...",
                 t_pool_desc: "Мониторинг китовых ордеров и пулов ликвидности...",
-                acad_main_title: "🎓 АКАДЕМИЯ ЭЛИТНОГО ТРЭЙДЕРА",
-                acad_h1: "Передовые алгоритмы и синергия индикаторов",
-                acad_p1: "Наш терминал использует уникальные нейросетевые модели, объединяющие в себе десятки передовых математических инструментов. Главный трендовый индикатор Parabolic SAR выстраивается прямо на свечах, указывая безупречные точки разворота.",
-                acad_h2: "Время зарабатывать профессионально!",
-                acad_p2: "Используйте всю мощь передовых алгоритмов прямо сейчас и выводите свой трэйдинг на принципиально новый уровень.",
+                acad_main_title: "📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ",
+                acad_perks_head: "⚡ ПОЧЕМУ ТРЕЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:",
+                perk_min: "МИНЕМАЛЬНЫЙ ДЕПОЗИТ",
+                perk_payout: "ДОХОДНОСТЬ СДЕЛОК",
+                perk_withdraw: "ВЫВОД СРЕДСТВ",
+                perk_assets: "АКТИВОВ ДЛЯ ТОРГОВЛИ",
+                acad_perks_sub: "Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.",
+                acad_h0: "1. С чего начать новичку: от регистрации до первой прибыли",
+                acad_p0: "Если вы никогда раньше не занимались трэйдингом, путь к успешной торговле состоит из 4 простых шагов:",
+                acad_li_step1: "<b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.",
+                acad_li_step2: "<b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 часа).",
+                acad_li_step3: "<b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.",
+                acad_li_step4: "<b>Шаг 4. Открытие сделки:</b> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления (ВВЕРХ или ВНИЗ). При верном прогнозе чистая прибыль зачисляется мгновенно!",
+                acad_h1: "2. Как работает ИИ-терминал и Parabolic SAR",
+                acad_p1: "Главный трендовый индикатор нашего терминала — <b>Parabolic SAR</b> — отображается прямо на ценовых свечах в виде точек:",
+                acad_li1: "<b>Точки под свечами (зеленые):</b> Сигнализируют о сильном бычьем тренде и росте цены. Время открывать сделки ВВЕРХ.",
+                acad_li2: "<b>Точки над свечами (красные):</b> Указывают на медвежий тренд и давление продавцов. Идеально для входа ВНИЗ.",
+                acad_li3: "<b>Смена точек:</b> Пересечение графика через точки SAR дает мощный сигнал разворота тренда с высокой точностью.",
+                acad_h2: "3. Торговля по стратегии RSI и сигналам",
+                acad_p2: "Индикатор RSI (Индекс относительной силы) помогает находить точные точки разворота цены на экстремумах:",
+                acad_li4: "<b>Зона выше 70%:</b> Актив перекуплен покупателями, ожидается коррекция или падение цен.",
+                acad_li5: "<b>Зона ниже 30%:</b> Актив перепродан продавцами, рынок готов к резкому отскоку вверх.",
+                acad_li6: "<b>Торговля по сигналам:</b> Используя готовые квантовые сигналы ИИ и командные сессии, вы можете совершать сделки с вероятностью победы до 96%!",
+                acad_h3: "4. Золотые правила мани-менеджмента",
+                acad_p3: "Соблюдение правил риска — главный секрет стабильного заработка:",
+                acad_li7: "<b>Риск на сделку:</b> Выделяйте не более 2-5% от депозита на одну позицию.",
+                acad_li8: "<b>Дисциплина:</b> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.",
+                acad_h5: "Время зарабатывать профессионально!",
+                acad_p5: "Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трэйдинг на новый уровень прибыльности.",
                 vip_main_title: "🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА",
                 vip_how_title: "📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:",
                 vip_how_text: "• Вариант 1 (VIP на 30 дней): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите одну сделку на реальном счёте на любой паре на любую сумму.<br>• Вариант 2 (VIP НАВСЕГДА): Пригласите всего 3 друзей по вашей реферальной ссылке в нашу команду.",
@@ -344,7 +436,7 @@
             en: {
                 ai_active: "🟢 AI STATUS: ACTIVE",
                 tab_terminal: "📊 TERMINAL",
-                tab_academy: "🎓 ACADEMY",
+                tab_academy: "📚 LEARNING",
                 tab_vip: "🎁 VIP",
                 btn_scan: "RUN QUANTUM AI ANALYSIS",
                 btn_trade: "Start Trading",
@@ -386,11 +478,35 @@
                 t_calc_desc: "Compound interest calculator (deposit growth)...",
                 t_hist_desc: "Latest closed AI session trades...",
                 t_pool_desc: "Whale orders and liquidity pools monitoring...",
-                acad_main_title: "🎓 ELITE TRADER ACADEMY",
-                acad_h1: "Advanced Algorithms & Indicator Synergy",
-                acad_p1: "Our terminal uses unique neural network models combining dozens of advanced mathematical tools. The main trend indicator Parabolic SAR plots directly on candles, signaling flawless reversal points.",
-                acad_h2: "Time to Trade Professionally!",
-                acad_p2: "Harness the power of cutting-edge algorithms right now and take your trading to an entirely new level.",
+                acad_main_title: "📚 ACADEMY & PLATFORM PERKS",
+                acad_perks_head: "⚡ WHY TRADERS CHOOSE OUR PLATFORM:",
+                perk_min: "MINIMUM DEPOSIT",
+                perk_payout: "PAYOUT UP TO 96%",
+                perk_withdraw: "INSTANT WITHDRAWAL",
+                perk_assets: "TRADING ASSETS",
+                acad_perks_sub: "Reliable terminal, high liquidity, and instant order execution without slippage allow both beginners and pros to trade comfortably.",
+                acad_h0: "1. Beginner's Guide: From Registration to First Profit",
+                acad_p0: "If you have never traded before, your path to success consists of 4 simple steps:",
+                acad_li_step1: "<b>Step 1. Registration & Demo Account:</b> Create an account and practice on a free virtual balance to master the interface without risk.",
+                acad_li_step2: "<b>Step 2. Asset & Timeframe:</b> Choose a currency pair (e.g. EUR/USD or BTC/USDT) and candle timeframe (1 min to 1 hour).",
+                acad_li_step3: "<b>Step 3. Analysis & Signals:</b> Use our quantum AI scanner or live team trading sessions.",
+                acad_li_step4: "<b>Step 4. Open a Trade:</b> Enter investment amount, expiry time, and click UP or DOWN. Profits are credited instantly upon a correct forecast!",
+                acad_h1: "2. How AI Terminal & Parabolic SAR Work",
+                acad_p1: "The main trend indicator — <b>Parabolic SAR</b> — is displayed right on price candles as dots:",
+                acad_li1: "<b>Dots below candles (green):</b> Strong uptrend signal. Time to open UP trades.",
+                acad_li2: "<b>Dots above candles (red):</b> Downtrend signal. Perfect for DOWN trades.",
+                acad_li3: "<b>Dot Switch:</b> Price crossing SAR dots provides a high-accuracy reversal signal.",
+                acad_h2: "3. RSI Strategy & Signal Trading",
+                acad_p2: "The RSI indicator helps find exact reversal points at extremes:",
+                acad_li4: "<b>Above 70%:</b> Asset is overbought, correction or downward drop is expected.",
+                acad_li5: "<b>Below 30%:</b> Asset is oversold, market is ready for a sharp upward bounce.",
+                acad_li6: "<b>Signal Trading:</b> Using AI quantum signals and team sessions, you can execute trades with up to 96% winrate!",
+                acad_h3: "4. Golden Money Management Rules",
+                acad_p3: "Risk management is the main secret of stable income:",
+                acad_li7: "<b>Risk per trade:</b> Allocate no more than 2-5% of your balance per position.",
+                acad_li8: "<b>Discipline:</b> Trade with the trend and never try to win back losses impulsively.",
+                acad_h5: "Time to Earn Professionally!",
+                acad_p5: "Harness our terminal power, deposit from 5 dollars, and take your trading to new levels of profitability.",
                 vip_main_title: "🎁 VIP: CONDITIONS & EXCLUSIVE PERKS",
                 vip_how_title: "📌 HOW TO GET FREE VIP ACCESS:",
                 vip_how_text: "• Option 1 (VIP for 30 days): Register via the link below, fund your account with a comfortable amount, and execute one trade on a real account on any pair with any amount.<br>• Option 2 (FOREVER VIP): Invite just 3 friends via your referral link to our team.",
@@ -408,9 +524,9 @@
                 v5_desc: "Participate in exclusive prize and deposit giveaways among VIP team members.",
                 v6_title: "PERSONAL MONEY MANAGEMENT PLAN:",
                 v6_desc: "Custom deposit growth strategy from professional traders with personal error analysis.",
-                v7_title: "ANTI-CRISIS NEWS FILTER:",
+                v7_title: "АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:",
                 v7_desc: "Automatic warnings and deposit protection during major macroeconomic news releases.",
-                v8_title: "ENHANCED CASHBACK (REBATE):",
+                v8_title: "ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):",
                 v8_desc: "Get a portion of fees refunded directly to your real balance on every executed trade.",
                 vip_btn_bot: "Get VIP Access Right Now"
             }
