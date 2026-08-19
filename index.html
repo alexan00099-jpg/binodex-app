@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex AI Ultimate Mobile</title>
+    <title>Binodex AI Ultimate Pro</title>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -64,6 +64,21 @@
             border-radius: 20px;
             font-size: 10px;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 200, 83, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
         }
 
         /* КАРТОЧКИ */
@@ -123,12 +138,36 @@
             box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
             letter-spacing: 0.5px;
             text-align: center;
+            transition: transform 0.1s;
+        }
+        .primary-btn:active {
+            transform: scale(0.98);
         }
         .primary-btn:disabled {
             background: #2a3b4c;
             color: #8a9ba8;
             cursor: not-allowed;
             box-shadow: none;
+        }
+
+        /* Кнопка НАЧАТЬ ТОРГОВАТЬ (реферальная) */
+        .referral-trade-btn {
+            display: block;
+            background: linear-gradient(135deg, #2979ff, #1565c0);
+            color: white;
+            text-align: center;
+            padding: 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 13px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(41, 121, 255, 0.4);
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
         }
 
         .analysis-loader {
@@ -146,424 +185,4 @@
             border-top-color: var(--accent-blue);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto 8px auto;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .loader-text {
-            font-size: 11px;
-            color: #b0bec5;
-            font-weight: 600;
-        }
-
-        .signal-result {
-            background: #172236;
-            border: 1px solid #283854;
-            border-radius: 10px;
-            padding: 12px;
-            display: none;
-        }
-        .signal-action {
-            font-size: 16px;
-            font-weight: 900;
-            color: var(--accent-green);
-            margin-bottom: 8px;
-            text-align: center;
-            background: rgba(0, 200, 83, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 200, 83, 0.3);
-        }
-        .indicators-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 11px;
-            color: #cbd5e1;
-            border-top: 1px solid var(--border-color);
-            padding-top: 8px;
-        }
-        .indicator-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .match-tag {
-            color: var(--accent-green);
-            font-weight: 800;
-        }
-
-        .action-link-btn {
-            display: block;
-            background: var(--accent-blue);
-            color: white;
-            text-align: center;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 12px;
-            box-shadow: 0 4px 12px rgba(41, 121, 255, 0.3);
-            cursor: pointer;
-            border: none;
-            width: 100%;
-        }
-
-        /* Кнопка рефералки под сигналы */
-        .referral-trade-btn {
-            display: block;
-            background: linear-gradient(135deg, #2979ff, #1565c0);
-            color: white;
-            text-align: center;
-            padding: 14px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 900;
-            font-size: 13px;
-            text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(41, 121, 255, 0.4);
-            cursor: pointer;
-            border: none;
-            width: 100%;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-        }
-
-        .news-badge {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #1a243b;
-            border: 1px solid var(--border-color);
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .balance-box {
-            display: flex;
-            justify-content: space-between;
-            background: #1a243b;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            font-weight: 800;
-            font-size: 13px;
-        }
-
-        .risk-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            padding: 6px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .list-item, .top-trader-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #1a243b;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            border: 1px solid var(--border-color);
-            font-weight: 600;
-        }
-        .win-tag {
-            color: var(--accent-green);
-            font-weight: 900;
-        }
-
-        .server-log {
-            background: #000;
-            color: #00ff66;
-            font-family: monospace;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 10px;
-            height: 100px;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-        }
-
-        .faq-question {
-            font-size: 12px;
-            font-weight: 800;
-            color: var(--accent-gold);
-            margin-top: 4px;
-        }
-        .faq-answer {
-            font-size: 11px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- 1. ШАПКА БОТА -->
-    <div class="header">
-        <div class="logo">BINODEX <span>AI MOBILE v30</span></div>
-        <div class="badge-live">🟢 AI 99.7%</div>
-    </div>
-
-    <!-- 2. НОВОСТНОЙ ФИЛЬТР SAFE ZONE -->
-    <div class="card" style="padding: 10px 14px;">
-        <div class="news-badge">
-            <span>🛡 НОВОСТНОЙ ФИЛЬТР: SAFE ZONE</span>
-            <span style="color:var(--accent-green)">АКТИВЕН</span>
-        </div>
-    </div>
-
-    <!-- 3. ГРАФИК TRADINGVIEW -->
-    <div class="card">
-        <div class="section-title">📊 ЖИВОЙ ГРАФИК КОТИРОВОК</div>
-        <div class="chart-box">
-            <div class="tradingview-widget-container" style="height:100%;width:100%;">
-                <div id="tradingview_chart" style="height:100%;width:100%;"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                <script type="text/javascript">
-                new TradingView.widget({
-                    "width": "100%", "height": "180", "symbol": "FX:EURUSD", "interval": "1",
-                    "timezone": "Etc/UTC", "theme": "dark", "style": "1", "locale": "ru",
-                    "toolbar_bg": "#131b2e", "enable_publishing": false, "hide_top_toolbar": true, "container_id": "tradingview_chart"
-                });
-                </script>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. ТЕРМИНАЛ И КВАНТОВЫЙ АНАЛИЗ С РЕФЕРАЛЬНОЙ КНОПКОЙ -->
-    <div class="card">
-        <div class="section-title">⚡ КВАНТОВЫЙ СКАНЕР СИГНАЛОВ</div>
-        
-        <div class="section-title" style="margin-top: 4px;">АКТИВ ДЛЯ ТРЭЙДИНГА (15 ПАР)</div>
-        <select id="pairSelect" class="dropdown">
-            <optgroup label="Валютные пары">
-                <option value="EUR/USD">🇪🇺 EUR / USD (Основной) — 97%</option>
-                <option value="GBP/USD">🇬🇧 GBP / USD — 96%</option>
-                <option value="USD/JPY">🇯🇵 USD / JPY — 95%</option>
-                <option value="AUD/USD">🇦🇺 AUD / USD — 94%</option>
-                <option value="USD/CAD">🇨🇦 USD / CAD — 95%</option>
-            </optgroup>
-            <optgroup label="Крипта и Металлы">
-                <option value="XAU/USD">🥇 XAU / USD (ЗОЛОТО) — 99%</option>
-                <option value="BTC/USD">₿ BITCOIN (BTC) — 98%</option>
-            </optgroup>
-        </select>
-
-        <div class="section-title" style="margin-top: 4px;">ТАЙМФРЕЙМ ЭКСПИРАЦИИ</div>
-        <select id="timeSelect" class="dropdown">
-            <option value="30 сек">⚡ 30 СЕКУНД (ТУРБО)</option>
-            <option value="1 минута">⏱ 1 МИНУТА (СКАЛЬПИНГ)</option>
-            <option value="3 минуты" selected>🎯 3 МИНУТЫ (РЕКОМЕНДАЦИЯ ИИ)</option>
-            <option value="5 минут">⏳ 5 МИНУТ (КЛАССИК)</option>
-        </select>
-
-        <button id="signalBtn" class="primary-btn" onclick="startAnalysis()">⚡ ПОЛУЧИТЬ СИГНАЛ ИИ</button>
-
-        <div id="analysisLoader" class="analysis-loader">
-            <div class="spinner"></div>
-            <div id="loaderText" class="loader-text">Сканирование 7 индикаторов рынка...</div>
-        </div>
-
-        <div id="signalResult" class="signal-result">
-            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); margin-bottom:6px; font-weight:700;">
-                <span>СОВПАДЕНИЕ: 6 ИЗ 7</span>
-                <span>ТОЧНОСТЬ: 99.8%</span>
-            </div>
-            <div class="signal-action" id="resAction">ПОКУПКА ⬆ (ВВЕРХ)</div>
-            
-            <div class="indicators-grid">
-                <div class="indicator-row"><span>1. RSI (14) Перепроданность</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
-                <div class="indicator-row"><span>2. MACD (Импульсный пробой)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
-                <div class="indicator-row"><span>3. Bollinger Bands (Отскок)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
-                <div class="indicator-row"><span>4. EMA 200 (Тренд вверх)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
-                <div class="indicator-row"><span>5. Volume Profile (Объемы)</span><span class="match-tag">СОВПАДЕНИЕ ✅</span></div>
-            </div>
-
-            <button class="action-link-btn" onclick="copySignalParams()" style="margin-top: 10px;">📋 СКОПИРОВАТЬ ПАРАМЕТРЫ СДЕЛКИ</button>
-        </div>
-
-        <!-- Кнопка торговли на Binodex с реферальной ссылкой -->
-        <a href="ВАША_РЕФЕРАЛЬНАЯ_ССЫЛКА_СДЕСЬ" target="_blank" class="referral-trade-btn">
-            🚀 ТОРГОВАТЬ НА BINODEX (ПО МОЕЙ ССЫЛКЕ)
-        </a>
-    </div>
-
-    <!-- 5. СИМУЛЯТОР СДЕЛОК -->
-    <div class="card">
-        <div class="section-title">🎮 СИМУЛЯТОР СДЕЛОК (ТРЕНИРОВКА)</div>
-        <div class="balance-box">
-            <span>Виртуальный баланс:</span>
-            <span id="demoBalance" style="color:var(--accent-green);">$1,000.00</span>
-        </div>
-        <div class="section-title">СУММА ИМИТАЦИИ ($)</div>
-        <input type="number" id="simAmount" class="input-field" value="50">
-        <div style="display:flex; gap:8px;">
-            <button class="primary-btn" style="background:var(--accent-green);" onclick="simulateTrade('UP')">📈 ВВЕРХ</button>
-            <button class="primary-btn" style="background:var(--accent-red);" onclick="simulateTrade('DOWN')">📉 ВНИЗ</button>
-        </div>
-        <div id="simResultLog" style="font-size:11px; color:#cbd5e1; text-align:center; font-weight:700; min-height: 16px;"></div>
-    </div>
-
-    <!-- 6. КАЛЬКУЛЯТОРЫ РИСКОВ -->
-    <div class="card">
-        <div class="section-title">📉 КАЛЬКУЛЯТОР РИСКОВ ТРЭЙДЕРА</div>
-        <input type="number" id="depositInput" class="input-field" value="500" oninput="calculateRisk()">
-        <div class="risk-row">
-            <span style="color:var(--text-secondary)">🟢 Безопасный вход (2%):</span>
-            <span id="risk2" style="font-weight:900; color:var(--accent-green)">$10.00</span>
-        </div>
-        <div class="risk-row">
-            <span style="color:var(--text-secondary)">🟡 Рекомендованный (5%):</span>
-            <span id="risk5" style="font-weight:900; color:var(--accent-gold)">$25.00</span>
-        </div>
-        <div class="risk-row" style="border:none;">
-            <span style="color:var(--text-secondary)">📊 Ожидаемый профит (+96%):</span>
-            <span id="profitVal" style="font-weight:900; color:var(--accent-blue)">+$24.00</span>
-        </div>
-    </div>
-
-    <!-- 7. АРХИВ СИГНАЛОВ -->
-    <div class="card">
-        <div class="section-title">📜 ПРОЗРАЧНЫЙ АРХИВ СИГНАЛОВ</div>
-        <div class="list-item"><span>🇪🇺 EUR/USD • 3 мин (ВВЕРХ)</span><span class="win-tag">+96% ✔</span></div>
-        <div class="list-item"><span>₿ BITCOIN • 3 мин (ВВЕРХ)</span><span class="win-tag">+98% ✔</span></div>
-        <div class="list-item" style="margin-bottom:0;"><span>🥇 XAU/USD • 5 мин (ВНИЗ)</span><span class="win-tag">+97% ✔</span></div>
-    </div>
-
-    <!-- 8. ПРОМОКОДЫ СО СТРИМА -->
-    <div class="card">
-        <div class="section-title">🎁 АКТИВАЦИЯ ПРОМОКОДА СО СТРИМА</div>
-        <input type="text" id="promoInput" class="input-field" placeholder="Введите код с трансляции">
-        <button class="action-link-btn" onclick="activatePromo()">АКТИВИРОВАТЬ БОНУС</button>
-    </div>
-
-    <!-- 9. ТОП ТРЭЙДЕРОВ И VIP -->
-    <div class="card">
-        <div class="section-title">👑 ТОП ТРЭЙДЕРОВ НЕДЕЛИ</div>
-        <div class="top-trader-item"><span>1. @alex_trader***</span><span style="color:var(--accent-green); font-weight:900;">+$8,450</span></div>
-        <div class="top-trader-item"><span>2. @mikhail_vip***</span><span style="color:var(--accent-green); font-weight:900;">+$6,120</span></div>
-        
-        <div class="section-title" style="margin-top: 6px;">💎 VIP-РЕФЕРАЛЬНАЯ СИСТЕМА</div>
-        <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">
-            Пригласите 3 друзей, чтобы открыть элитный закрытый канал.
-        </div>
-        <button class="primary-btn" style="background:var(--accent-blue);" onclick="alert('Реферальная ссылка скопирована!')">СКОПИРОВАТЬ VIP-ССЫЛКУ</button>
-    </div>
-
-    <!-- 10. СЕРВЕР И FAQ -->
-    <div class="card">
-        <div class="section-title">⚙️ СТАТУС СЕРВЕРА И ЛОГИ</div>
-        <div class="risk-row"><span>Кластер нейросети:</span><span style="color:var(--accent-green); font-weight:800;">ONLINE</span></div>
-        <div class="risk-row" style="border:none;"><span>Пинг:</span><span style="color:var(--accent-blue); font-weight:800;">0.7 мс</span></div>
-        <div class="server-log">
-            [20:12:00] Neural weights v8.4 loaded.<br>
-            [20:12:15] Orderbook sync across 15 pairs OK.<br>
-            [20:12:30] Safe Zone filter: No high-impact news.<br>
-            [20:12:45] Quantum matrix active and ready.
-        </div>
-
-        <div class="section-title" style="margin-top: 8px;">❓ ПОМОЩЬ И НАСТАВНИК</div>
-        <div class="faq-question">Как торговать с ботом?</div>
-        <div class="faq-answer">Запускайте квантовый анализ, выбирайте актив и повторяйте сделки на стримах.</div>
-        <button class="action-link-btn" onclick="alert('Связь с наставником открыта!')" style="background:var(--accent-gold); color:#000; margin-top:4px;">НАПИСАТЬ НАСТАВНИКУ В TELEGRAM</button>
-    </div>
-
-    <script>
-        // Анимация сканирования сигнала
-        const loaderTexts = [
-            "Сканирование 7 индикаторов рынка...",
-            "Анализ объемов и ордербука...",
-            "Проверка уровней поддержки...",
-            "Формирование точного сигнала..."
-        ];
-
-        function startAnalysis() {
-            const btn = document.getElementById('signalBtn');
-            const loader = document.getElementById('analysisLoader');
-            const resBox = document.getElementById('signalResult');
-            const loaderTextEl = document.getElementById('loaderText');
-
-            btn.disabled = true;
-            resBox.style.display = 'none';
-            loader.style.display = 'block';
-
-            let step = 0;
-            let interval = setInterval(() => {
-                step++;
-                if(step < loaderTexts.length) {
-                    loaderTextEl.innerText = loaderTexts[step];
-                }
-            }, 600);
-
-            setTimeout(() => {
-                clearInterval(interval);
-                loader.style.display = 'none';
-                btn.disabled = false;
-                resBox.style.display = 'block';
-                
-                const actions = ["ПОКУПКА ⬆ (ВВЕРХ)", "ПРОДАЖА ⬇ (ВНИЗ)"];
-                const colors = ["#00c853", "#ff3d00"];
-                const rand = Math.random() > 0.5 ? 0 : 1;
-                
-                const actionEl = document.getElementById('resAction');
-                actionEl.innerText = actions[rand];
-                actionEl.style.color = colors[rand];
-                actionEl.style.borderColor = colors[rand] === '#00c853' ? 'rgba(0, 200, 83, 0.3)' : 'rgba(255, 61, 0, 0.3)';
-                actionEl.style.background = colors[rand] === '#00c853' ? 'rgba(0, 200, 83, 0.1)' : 'rgba(255, 61, 0, 0.1)';
-            }, 2500);
-        }
-
-        // Калькулятор рисков
-        function calculateRisk() {
-            let dep = parseFloat(document.getElementById('depositInput').value) || 0;
-            document.getElementById('risk2').innerText = '$' + (dep * 0.02).toFixed(2);
-            document.getElementById('risk5').innerText = '$' + (dep * 0.05).toFixed(2);
-            document.getElementById('profitVal').innerText = '+$' + (dep * 0.05 * 0.96).toFixed(2);
-        }
-
-        // Симулятор сделок
-        let demoBalanceVal = 1000.00;
-        function simulateTrade(direction) {
-            let amount = parseFloat(document.getElementById('simAmount').value) || 10;
-            if (amount > demoBalanceVal) {
-                alert('Недостаточно средств на балансе!');
-                return;
-            }
-            let isWin = Math.random() > 0.2; 
-            let profit = amount * 0.96;
-            const logEl = document.getElementById('simResultLog');
-            
-            if(isWin) {
-                demoBalanceVal += profit;
-                logEl.innerHTML = `<span style="color:var(--accent-green)">УСПЕХ! Плюс +$${profit.toFixed(2)} ✔</span>`;
-            } else {
-                demoBalanceVal -= amount;
-                logEl.innerHTML = `<span style="color:var(--accent-red)">УПС! Минус -$${amount.toFixed(2)} ❌</span>`;
-            }
-            document.getElementById('demoBalance').innerText = '$' + demoBalanceVal.toFixed(2);
-        }
-
-        // Промокоды
-        function activatePromo() {
-            let code = document.getElementById('promoInput').value.trim();
-            if(code.length > 0) {
-                alert('Промокод успешно активирован! Начислено +$50.');
-                document.getElementById('promoInput').value = '';
-            } else {
-                alert('Введите промокод!');
-            }
-        }
-
-        // Копирование параметров
-        function copySignalParams() {
-            alert('Параметры сделки скопированы в буфер обмена!');
-        }
-    </script>
-</body>
-</html>
+            margin:
