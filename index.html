@@ -2,297 +2,393 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>BINODEX AI PRO TERMINAL v6.1</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binodex AI Pro Ultimate</title>
     <style>
-        body { background-color: #070a11; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow-x: hidden; }
-        .glass-card { background: rgba(15, 22, 36, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glow-cyan { box-shadow: 0 0 25px rgba(6, 182, 212, 0.35); }
-        .glow-green { box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); }
-        .tab-btn.active { background: #06b6d4; color: #070a11; font-weight: 900; }
-        
-        #live-toast {
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            transform: translateY(150%);
-            opacity: 0;
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: #131823;
+            --accent-green: #00c853;
+            --accent-red: #ff3d00;
+            --accent-blue: #2979ff;
+            --accent-purple: #9c27b0;
+            --text-main: #ffffff;
+            --text-secondary: #8a9ba8;
+            --border-color: #222b38;
         }
-        #live-toast.show {
-            transform: translateY(0);
-            opacity: 1;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 10px;
+            padding-bottom: 75px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .logo {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        .logo span {
+            color: var(--accent-blue);
+        }
+        .badges-header {
+            display: flex;
+            gap: 6px;
+        }
+        .badge {
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .winrate-badge {
+            background: rgba(0, 200, 83, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 200, 83, 0.3);
+        }
+        .ping-badge {
+            background: rgba(41, 121, 255, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(41, 121, 255, 0.3);
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+            padding-bottom: 2px;
+        }
+        .tab-btn {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 4px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .news-filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(41, 121, 255, 0.08);
+            border: 1px solid rgba(41, 121, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .news-status {
+            color: var(--accent-green);
+            background: rgba(0, 200, 83, 0.15);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 10px;
+        }
+        .select-group {
+            margin-bottom: 8px;
+        }
+        .select-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+            display: block;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .dropdown {
+            background: #1a2230;
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 9px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .signal-btn {
+            background: linear-gradient(135deg, #00c853, #009624);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+            margin-top: 4px;
+            transition: opacity 0.2s;
+        }
+        .signal-btn:disabled {
+            background: #2a3b4c;
+            color: #8a9ba8;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        /* Блок анализа в реальном времени */
+        .analysis-loader {
+            background: #17212f;
+            border: 1px solid #283850;
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+        }
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(41, 121, 255, 0.2);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 10px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loader-text {
+            font-size: 12px;
+            color: #b0bec5;
+            font-weight: 600;
+        }
+        .signal-result {
+            background: #17212f;
+            border: 1px solid #283850;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 10px;
+            display: none;
+        }
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        .signal-action {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--accent-green);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .analysis-list {
+            font-size: 11px;
+            color: #b0bec5;
+            line-height: 1.4;
+            border-top: 1px solid var(--border-color);
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+        .order-book {
+            margin-top: 10px;
+            background: #0f1520;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+        .order-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .progress-line {
+            height: 4px;
+            border-radius: 2px;
+            background: #222b38;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            width: 78%;
+        }
+        .trade-link-btn {
+            display: block;
+            background: var(--accent-blue);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        /* Всплывающие уведомления */
+        #toast-container {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .toast {
+            background: rgba(19, 24, 35, 0.96);
+            border: 1px solid rgba(0, 200, 83, 0.4);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 11px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideUp 0.3s ease, fadeOut 0.3s ease 3.7s;
+            pointer-events: auto;
+            margin-bottom: 6px;
+        }
+        .toast-icon {
+            background: rgba(0, 200, 83, 0.2);
+            color: var(--accent-green);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 12px;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .calc-input {
+            width: 100%;
+            background: #1a2230;
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 11px;
         }
     </style>
 </head>
-<body class="p-3 max-w-md mx-auto pb-20">
+<body>
 
-    <header class="glass-card p-3 rounded-2xl flex justify-between items-center mb-3">
-        <div class="flex items-center space-x-2">
-            <div class="w-9 h-9 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-400/50">
-                <i class="fa-solid fa-brain text-cyan-400 text-lg"></i>
-            </div>
-            <div>
-                <div class="font-black text-base tracking-wider text-white leading-none">BINODEX <span class="text-cyan-400">AI PRO v6.1</span></div>
-                <div class="text-[10px] text-slate-400 font-medium">Stable Chart & News Filter Active</div>
-            </div>
-        </div>
-        <div class="text-right">
-            <span class="inline-flex items-center space-x-1.5 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-full">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-xs font-black text-emerald-400">WIN 98.2%</span>
-            </span>
-        </div>
-    </header>
-
-    <nav class="flex bg-slate-900/90 rounded-xl p-1 mb-3 text-xs font-bold border border-slate-800">
-        <button onclick="switchTab('signals')" id="tab-signals" class="tab-btn active flex-1 py-2.5 rounded-lg transition">📊 ТЕРМИНАЛ</button>
-        <button onclick="switchTab('calc')" id="tab-calc" class="tab-btn flex-1 py-2.5 rounded-lg text-slate-400 transition">🧮 РИСК-КАЛЬК</button>
-        <button onclick="switchTab('vip')" id="tab-vip" class="tab-btn flex-1 py-2.5 rounded-lg text-slate-400 transition">👑 VIP & ТОП</button>
-    </nav>
-
-    <main id="section-signals" class="space-y-3">
-
-        <div class="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl flex items-center justify-between text-xs">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-shield-halved text-amber-400 text-sm"></i>
-                <span class="text-slate-300 font-medium text-[11px]">НОВОСТНОЙ ФИЛЬТР: <span class="text-emerald-400 font-bold">РЫНОК СТАБИЛЕН</span></span>
-            </div>
-            <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono">NO NEWS</span>
-        </div>
-
-        <div class="glass-card rounded-2xl p-3 border border-slate-800">
-            <div class="flex justify-between items-center mb-2">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-chart-line text-cyan-400 text-xs"></i>
-                    <span class="text-xs font-bold text-slate-300">ЖИВОЙ ГРАФИК РЫНКА</span>
-                </div>
-                <span id="chart-pair-label" class="text-xs font-black text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
-                    EUR / USD (OTC)
-                </span>
-            </div>
-            <div class="h-64 w-full rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
-                <iframe id="tv-iframe" src="https://s.tradingview.com/widgetembed/?symbol=FX%3AEURUSD&interval=1&hidesidetoolbar=1&hidetoptoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&locale=ru" width="100%" height="100%" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-            </div>
-        </div>
-
-        <div class="glass-card p-4 rounded-2xl space-y-3 border border-slate-800">
-            <div>
-                <label class="text-[11px] font-bold text-slate-400 mb-1.5 flex justify-between">
-                    <span>ВАЛЮТНАЯ ПАРА</span>
-                    <span class="text-emerald-400 font-black">ВЫПЛАТА ДО 98%</span>
-                </label>
-                <select id="asset-select" onchange="changeAsset()" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl p-2.5 text-xs font-bold outline-none focus:border-cyan-400">
-                    <option value="FX:EURUSD" data-name="EUR / USD (OTC)" selected>🇪🇺🇺🇸 EUR / USD (OTC) — Выплата 95%</option>
-                    <option value="FX:GBPUSD" data-name="GBP / USD (OTC)">🇬🇧🇺🇸 GBP / USD (OTC) — Выплата 94%</option>
-                    <option value="OANDA:XAUUSD" data-name="XAU / USD (ЗОЛОТО)">🥇 XAU / USD (ЗОЛОТО) — Выплата 96%</option>
-                    <option value="BINANCE:BTCUSDT" data-name="BITCOIN (BTC)">₿ BITCOIN (BTC / USDT) — Выплата 97%</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase">ВРЕМЯ ЭКСПИРАЦИИ</label>
-                <select id="timeframe-select" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl p-2.5 text-xs font-bold outline-none focus:border-cyan-400">
-                    <option value="1 МИН">⚡ 1 МИНУТА (СКАЛЬПИНГ)</option>
-                    <option value="3 МИН" selected>⏱ 3 МИНУТЫ (ОПТИМАЛЬНО ИИ)</option>
-                    <option value="5 МИН">⌛ 5 МИНУТ (ТРЕНД)</option>
-                </select>
-            </div>
-
-            <button onclick="generateSignal()" id="signal-btn" class="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-sm rounded-xl glow-cyan transition active:scale-95 uppercase tracking-wider flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-bolt"></i>
-                <span>ПОЛУЧИТЬ ТОЧНЫЙ СИГНАЛ ИИ</span>
-            </button>
-        </div>
-
-        <div id="signal-result-card" class="glass-card p-4 rounded-2xl space-y-3 border border-cyan-500/40">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2 text-xs">
-                <div>
-                    <span class="text-slate-400">ОБЪЕМ СТАКАНА:</span>
-                    <span id="orderbook-vol" class="font-bold text-cyan-400 ml-1">$1.4M (BUY)</span>
-                </div>
-                <div>
-                    <span class="text-slate-400">ТОЧНОСТЬ:</span>
-                    <span id="ai-accuracy" class="font-black text-emerald-400 ml-1">98.4%</span>
-                </div>
-            </div>
-
-            <div class="text-center py-2 bg-slate-900/80 rounded-xl border border-slate-800">
-                <div id="signal-direction" class="text-2xl font-black text-emerald-400 tracking-wider">
-                    ПОКУПКА ⬆️ (ВВЕРХ)
-                </div>
-                <div class="text-xs font-mono text-slate-300 mt-1">
-                    ТОЧКА ВХОДА: <span id="entry-price" class="text-cyan-400 font-bold">1.08542</span> | ЦЕЛЬ: <span id="target-price" class="text-emerald-400 font-bold">1.08590</span>
-                </div>
-            </div>
-
-            <div class="space-y-1 text-[11px] font-mono">
-                <div class="flex justify-between bg-slate-900/60 p-1.5 rounded border border-slate-800">
-                    <span class="text-slate-400">RSI (14):</span>
-                    <span class="text-emerald-400 font-bold">27.1 (Перепроданность)</span>
-                </div>
-                <div class="flex justify-between bg-slate-900/60 p-1.5 rounded border border-slate-800">
-                    <span class="text-slate-400">MACD / VOLUME:</span>
-                    <span class="text-emerald-400 font-bold">Бычий импульс + Крупный объем</span>
-                </div>
-                <div class="flex justify-between bg-slate-900/60 p-1.5 rounded border border-slate-800">
-                    <span class="text-slate-400">SMART MONEY FVG:</span>
-                    <span class="text-cyan-400 font-bold">Забор ликвидности снизу</span>
-                </div>
-            </div>
-
-            <a href="https://bdclick.app/smart/naJly9" target="_blank" onclick="triggerHaptic()" class="block w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm rounded-xl glow-green text-center transition active:scale-95 uppercase tracking-wider">
-                🚀 ТОРГОВАТЬ НА BINODEX
-            </a>
-        </div>
-
-    </main>
-
-    <section id="section-calc" class="hidden space-y-3">
-        <div class="glass-card p-4 rounded-2xl border border-slate-800 space-y-3">
-            <h2 class="font-black text-sm text-cyan-400 flex items-center space-x-2">
-                <i class="fa-solid fa-calculator"></i>
-                <span>КАЛЬКУЛЯТОР РИСКА (МАНИ-МЕНЕДЖМЕНТ)</span>
-            </h2>
-            <p class="text-xs text-slate-400">Введите ваш депозит, чтобы ИИ рассчитал безопасный размер сделки без риска слива.</p>
-            
-            <div>
-                <label class="text-[11px] font-bold text-slate-400 mb-1 block">ВАШ БАЛАНС ($)</label>
-                <input type="number" id="user-deposit" value="100" oninput="calculateRisk()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white font-bold outline-none focus:border-cyan-400">
-            </div>
-
-            <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2 text-xs font-mono">
-                <div class="flex justify-between">
-                    <span class="text-slate-400">Безопасный вход (3%):</span>
-                    <span id="safe-trade" class="text-emerald-400 font-bold">$3.00</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-400">Макс. сделка (5%):</span>
-                    <span id="max-trade" class="text-amber-400 font-bold">$5.00</span>
-                </div>
-                <div class="flex justify-between border-t border-slate-800 pt-1.5">
-                    <span class="text-slate-400">Профит с 1 сделки (+95%):</span>
-                    <span id="expected-profit" class="text-cyan-400 font-bold">+$2.85</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="section-vip" class="hidden space-y-3">
-        <div class="glass-card p-4 rounded-2xl border border-amber-500/30 text-center space-y-2">
-            <div class="text-2xl">👑</div>
-            <div class="font-black text-white text-sm">ТОП ТРЕЙДЕРОВ НЕДЕЛИ</div>
-            <div class="space-y-1.5 text-xs text-left font-mono">
-                <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-800">
-                    <span>🥇 @vlad_pro***</span>
-                    <span class="text-emerald-400 font-bold">+$4,210 (96%)</span>
-                </div>
-                <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-800">
-                    <span>🥈 @mikhail_tr***</span>
-                    <span class="text-emerald-400 font-bold">+$3,150 (94%)</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div id="live-toast" class="fixed bottom-4 left-4 right-4 glass-card p-3 rounded-xl border border-emerald-500/40 z-50 flex items-center space-x-3 pointer-events-none">
-        <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 text-xs">
-            <i class="fa-solid fa-dollar-sign"></i>
-        </div>
-        <div class="text-xs">
-            <div id="toast-user" class="font-bold text-white">@alex_tr*** только что заработал</div>
-            <div id="toast-details" class="text-emerald-400 font-mono font-bold">+$145 на EUR/USD (ВВЕРХ ⬆️)</div>
+    <div class="header">
+        <div class="logo">BINODEX <span>AI PRO</span></div>
+        <div class="badges-header">
+            <div class="badge winrate-badge">99.1% WIN</div>
+            <div class="badge ping-badge">ONLINE</div>
         </div>
     </div>
 
-    <script>
-        const tg = window.Telegram?.WebApp;
-        if(tg) tg.expand();
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</button>
+        <button class="tab-btn" onclick="switchTab('history', this)">📜 ИСТОРИЯ СИГНАЛОВ</button>
+        <button class="tab-btn" onclick="switchTab('calc', this)">🧮 РИСК-МЕНЕДЖЕР</button>
+        <button class="tab-btn" onclick="switchTab('vip', this)">👑 ТОП ТРЭЙДЕРОВ</button>
+    </div>
 
-        function triggerHaptic() {
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-        }
+    <div id="terminal" class="tab-content active">
+        <div class="news-filter">
+            <span>🛡 НОВОСТНОЙ ФИЛЬТР: РЫНОК БЕЗОПАСЕН</span>
+            <span class="news-status">STABLE</span>
+        </div>
 
-        window.onload = function() {
-            startLiveToasts();
-            calculateRisk();
-        };
+        <div class="card">
+            <div class="select-group">
+                <span class="select-label">ВЫБОР АКТИВА ДЛЯ ТРЭЙДИНГА</span>
+                <select id="pairSelect" class="dropdown">
+                    <option value="EUR/USD (OTC)">🇪🇺 EUR / USD (OTC) — Выплата 96%</option>
+                    <option value="GBP/USD (OTC)">🇬🇧 GBP / USD (OTC) — Выплата 95%</option>
+                    <option value="XAU/USD (ЗОЛОТО)">🥇 XAU / USD (ЗОЛОТО) — Выплата 97%</option>
+                    <option value="BITCOIN (BTC/USDT)">₿ BITCOIN (BTC / USDT) — Выплата 98%</option>
+                </select>
+            </div>
 
-        function changeAsset() {
-            triggerHaptic();
-            const select = document.getElementById('asset-select');
-            const symbol = select.value;
-            document.getElementById('chart-pair-label').innerText = select.options[select.selectedIndex].getAttribute('data-name');
-            
-            const iframe = document.getElementById('tv-iframe');
-            iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(symbol)}&interval=1&hidesidetoolbar=1&hidetoptoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&locale=ru`;
-        }
+            <div class="select-group">
+                <span class="select-label">ЭКСПИРАЦИЯ СДЕЛИ</span>
+                <select id="timeSelect" class="dropdown">
+                    <option value="1 минута">⚡ 1 МИНУТА (СКАЛЬПИНГ)</option>
+                    <option value="3 минуты" selected>⏱ 3 МИНУТЫ (ОПТИМАЛЬНО)</option>
+                    <option value="5 минут">⏳ 5 МИНУТ (ТРЕНД)</option>
+                </select>
+            </div>
 
-        function switchTab(tab) {
-            triggerHaptic();
-            document.getElementById('section-signals').classList.add('hidden');
-            document.getElementById('section-calc').classList.add('hidden');
-            document.getElementById('section-vip').classList.add('hidden');
+            <button id="signalBtn" class="signal-btn" onclick="startAnalysis()">⚡ ПОЛУЧИТЬ СИГНАЛ ОТ НЕЙРОСЕТИ</button>
 
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            <div id="analysisLoader" class="analysis-loader">
+                <div class="spinner"></div>
+                <div id="loaderText" class="loader-text">Подключение к терминалу брокера...</div>
+            </div>
 
-            if (tab === 'signals') {
-                document.getElementById('section-signals').classList.remove('hidden');
-                document.getElementById('tab-signals').classList.add('active');
-            } else if (tab === 'calc') {
-                document.getElementById('section-calc').classList.remove('hidden');
-                document.getElementById('tab-calc').classList.add('active');
-            } else if (tab === 'vip') {
-                document.getElementById('section-vip').classList.remove('hidden');
-                document.getElementById('tab-vip').classList.add('active');
-            }
-        }
-
-        function calculateRisk() {
-            const dep = parseFloat(document.getElementById('user-deposit').value) || 0;
-            document.getElementById('safe-trade').innerText = "$" + (dep * 0.03).toFixed(2);
-            document.getElementById('max-trade').innerText = "$" + (dep * 0.05).toFixed(2);
-            document.getElementById('expected-profit').innerText = "+$" + (dep * 0.03 * 0.95).toFixed(2);
-        }
-
-        function generateSignal() {
-            triggerHaptic();
-            const btn = document.getElementById('signal-btn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>ИИ АНАЛИЗИРУЕТ СТАКАН И НОВОСТИ...</span>`;
-            btn.disabled = true;
-
-            setTimeout(() => {
-                btn.innerHTML = `<i class="fa-solid fa-bolt"></i><span>ПОЛУЧИТЬ ТОЧНЫЙ СИГНАЛ ИИ</span>`;
-                btn.disabled = false;
-
-                const isBuy = Math.random() > 0.4;
-                const basePrice = 1.08500 + (Math.random() * 0.00100);
-                
-                document.getElementById('entry-price').innerText = basePrice.toFixed(5);
-                document.getElementById('target-price').innerText = (basePrice + (isBuy ? 0.00048 : -0.00048)).toFixed(5);
-                document.getElementById('orderbook-vol').innerText = "$" + (1.1 + Math.random() * 0.8).toFixed(1) + "M (" + (isBuy ? "BUY" : "SELL") + ")";
-
-                const dirBox = document.getElementById('signal-direction');
-                dirBox.className = isBuy ? "text-2xl font-black text-emerald-400 tracking-wider" : "text-2xl font-black text-rose-500 tracking-wider";
-                dirBox.innerText = isBuy ? "ПОКУПКА ⬆️ (ВВЕРХ)" : "ПРОДАЖА ⬇️ (ВНИЗ)";
-            }, 900);
-        }
-
-        function startLiveToasts() {
-            const users = ['@alex_trade', '@mikhail_v', '@dmitry_invest', '@sergey_pro', '@anna_crypto'];
-            setInterval(() => {
-                const randomUser = users[Math.floor(Math.random() * users.length)];
-                const randomProfit = Math.floor(60 + Math.random() * 220);
-                document.getElementById('toast-user').innerText = `${randomUser}*** только что заработал`;
-                document.getElementById('toast-details').innerText = `+$${randomProfit} на EUR/USD (ВВЕРХ ⬆️)`;
-                const toast = document.getElementById('live-toast');
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 3500);
-            }, 9000);
-        }
-    </script>
-</body>
-</html>
+            <div id="signalResult" class="signal-result">
+                <div class="signal-header">
+                    <span id="resImpulse">ИМПУЛЬС: 97.2%</span>
+                    <span id="resAccuracy">ТОЧНОСТЬ: 99.4%</span>
+                </div>
+                <div class="signal-action"
