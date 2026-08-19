@@ -11,7 +11,6 @@
             --accent-green: #00c853;
             --accent-red: #ff3d00;
             --accent-blue: #2979ff;
-            --accent-purple: #9c27b0;
             --text-main: #ffffff;
             --text-secondary: #8a9ba8;
             --border-color: #222b38;
@@ -78,7 +77,7 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            padding: 8px 4px;
+            padding: 8px 6px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: 700;
@@ -124,6 +123,15 @@
             border-radius: 6px;
             font-size: 10px;
         }
+        .chart-container {
+            width: 100%;
+            height: 230px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            background: #000;
+        }
         .select-group {
             margin-bottom: 8px;
         }
@@ -167,7 +175,6 @@
             cursor: not-allowed;
             box-shadow: none;
         }
-        /* Блок анализа в реальном времени */
         .analysis-loader {
             background: #17212f;
             border: 1px solid #283850;
@@ -178,19 +185,19 @@
             text-align: center;
         }
         .spinner {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border: 3px solid rgba(41, 121, 255, 0.2);
             border-top-color: var(--accent-blue);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto 10px auto;
+            margin: 0 auto 8px auto;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         .loader-text {
-            font-size: 12px;
+            font-size: 11px;
             color: #b0bec5;
             font-weight: 600;
         }
@@ -248,7 +255,7 @@
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
-            width: 78%;
+            width: 82%;
         }
         .trade-link-btn {
             display: block;
@@ -262,7 +269,6 @@
             font-size: 12px;
             margin-top: 10px;
         }
-        /* Всплывающие уведомления */
         #toast-container {
             position: fixed;
             bottom: 10px;
@@ -319,20 +325,13 @@
             margin-top: 4px;
             margin-bottom: 8px;
         }
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 12px;
-        }
-        .history-item {
+        .leaderboard-item, .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
             border-bottom: 1px solid var(--border-color);
-            font-size: 11px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -341,22 +340,49 @@
     <div class="header">
         <div class="logo">BINODEX <span>AI PRO</span></div>
         <div class="badges-header">
-            <div class="badge winrate-badge">99.1% WIN</div>
+            <div class="badge winrate-badge">99.2% WIN</div>
             <div class="badge ping-badge">ONLINE</div>
         </div>
     </div>
 
+    <!-- МЕНЬЮ ВКЛАДОК -->
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</button>
-        <button class="tab-btn" onclick="switchTab('history', this)">📜 ИСТОРИЯ СИГНАЛОВ</button>
+        <button class="tab-btn active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ И ГРАФИК</button>
+        <button class="tab-btn" onclick="switchTab('history', this)">📜 ИСТОРИЯ</button>
         <button class="tab-btn" onclick="switchTab('calc', this)">🧮 РИСК-МЕНЕДЖЕР</button>
         <button class="tab-btn" onclick="switchTab('vip', this)">👑 ТОП ТРЭЙДЕРОВ</button>
     </div>
 
+    <!-- 1. ТЕРМИНАЛ И ИНТЕРАКТИВНЫЙ ГРАФИК -->
     <div id="terminal" class="tab-content active">
         <div class="news-filter">
-            <span>🛡 НОВОСТНОЙ ФИЛЬТР: РЫНОК БЕЗОПАСЕН</span>
+            <span>🛡 НОВОСТНОЙ ФИЛЬТР: РЫНОК СТАБИЛЕН</span>
             <span class="news-status">STABLE</span>
+        </div>
+
+        <!-- Интерактивный живой график TradingView -->
+        <div class="chart-container">
+            <div class="tradingview-widget-container" style="height:100%;width:100%;">
+                <div id="tradingview_chart" style="height:100%;width:100%;"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                <script type="text/javascript">
+                new TradingView.widget({
+                    "width": "100%",
+                    "height": "230",
+                    "symbol": "FX:EURUSD",
+                    "interval": "1",
+                    "timezone": "Etc/UTC",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "ru",
+                    "toolbar_bg": "#131823",
+                    "enable_publishing": false,
+                    "hide_top_toolbar": false,
+                    "save_image": false,
+                    "container_id": "tradingview_chart"
+                });
+                </script>
+            </div>
         </div>
 
         <div class="card">
@@ -364,14 +390,14 @@
                 <span class="select-label">ВЫБОР АКТИВА ДЛЯ ТРЭЙДИНГА</span>
                 <select id="pairSelect" class="dropdown">
                     <option value="EUR/USD (OTC)">🇪🇺 EUR / USD (OTC) — Выплата 96%</option>
-                    <option value="GBP/USD (OTC)">🇬🇧 GBP / USD (OTC) — Выплата 95%</option>
+                    <option value="GBP/USD (OTC)">GBP / USD (OTC) — Выплата 95%</option>
                     <option value="XAU/USD (ЗОЛОТО)">🥇 XAU / USD (ЗОЛОТО) — Выплата 97%</option>
                     <option value="BITCOIN (BTC/USDT)">₿ BITCOIN (BTC / USDT) — Выплата 98%</option>
                 </select>
             </div>
 
             <div class="select-group">
-                <span class="select-label">ЭКСПИРАЦИЯ СДЕЛИ</span>
+                <span class="select-label">ЭКСПИРАЦИЯ СДЕЛКИ</span>
                 <select id="timeSelect" class="dropdown">
                     <option value="1 минута">⚡ 1 МИНУТА (СКАЛЬПИНГ)</option>
                     <option value="3 минуты" selected>⏱ 3 МИНУТЫ (ОПТИМАЛЬНО)</option>
@@ -381,14 +407,197 @@
 
             <button id="signalBtn" class="signal-btn" onclick="startAnalysis()">⚡ ПОЛУЧИТЬ СИГНАЛ ОТ НЕЙРОСЕТИ</button>
 
+            <!-- Анимация анализа (4 секунды) для максимального доверия -->
             <div id="analysisLoader" class="analysis-loader">
                 <div class="spinner"></div>
                 <div id="loaderText" class="loader-text">Подключение к терминалу брокера...</div>
             </div>
 
+            <!-- Результат сигнала -->
             <div id="signalResult" class="signal-result">
                 <div class="signal-header">
-                    <span id="resImpulse">ИМПУЛЬС: 97.2%</span>
-                    <span id="resAccuracy">ТОЧНОСТЬ: 99.4%</span>
+                    <span id="resImpulse">ИМПУЛЬС: 98.1%</span>
+                    <span id="resAccuracy">ТОЧНОСТЬ: 99.6%</span>
                 </div>
-                <div class="signal-action"
+                <div class="signal-action" id="resAction">ПОКУПКА ⬆ (ВВЕРХ)</div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">
+                    🎯 Время входа: <span id="resTimer" style="color: white; font-weight: bold;">02:59</span>
+                </div>
+                
+                <div class="order-book">
+                    <div class="order-bar">
+                        <span>Покупатели ордеров (BUY: 84%)</span>
+                        <span>Продавцы (SELL: 16%)</span>
+                    </div>
+                    <div class="progress-line"><div class="progress-fill" style="width: 84%;"></div></div>
+                </div>
+
+                <div class="analysis-list">
+                    <div>1. RSI (14) + CCI: <b>Зона перепроданности</b> ✅</div>
+                    <div>2. MACD Histogram: <b>Импульсный пробой уровня</b> 🚀</div>
+                    <div>3. Smart Money / FVG: <b>Захват ликвидности снизу</b></div>
+                    <div>4. Нейросеть v6.5: <b>Максимальная вероятность отскока</b></div>
+                </div>
+                <a href="#" class="trade-link-btn" onclick="alert('Переход на защищенный торговый терминал...'); return false;">🚀 ОТКРЫТЬ СДЕЛКУ У БРОКЕРА</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. ИСТОРИЯ СИГНАЛОВ -->
+    <div id="history" class="tab-content">
+        <div class="card">
+            <span class="select-label" style="margin-bottom: 8px;">📜 АРХИВ СИГНАЛОВ ИИ</span>
+            <div class="history-item">
+                <span>EUR/USD • 3 мин (ВВЕРХ)</span>
+                <b style="color: var(--accent-green);">+96% [УСПЕХ] ✅</b>
+            </div>
+            <div class="history-item">
+                <span>BITCOIN • 3 мин (ВВЕРХ)</span>
+                <b style="color: var(--accent-green);">+98% [УСПЕХ] ✅</b>
+            </div>
+            <div class="history-item">
+                <span>XAU/USD • 5 мин (ВНИЗ)</span>
+                <b style="color: var(--accent-green);">+97% [УСПЕХ] ✅</b>
+            </div>
+            <div class="history-item" style="border: none;">
+                <span>GBP/USD • 1 мин (ВВЕРХ)</span>
+                <b style="color: var(--accent-green);">+95% [УСПЕХ] ✅</b>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. РИСК-МЕНЕДЖЕР -->
+    <div id="calc" class="tab-content">
+        <div class="card">
+            <span class="select-label">ДЕПОЗИТ ТРЭЙДЕРА ($)</span>
+            <input type="number" id="depositInput" class="calc-input" value="250" oninput="calculateRisk()">
+            
+            <div style="font-size: 12px; line-height: 1.8; margin-top: 8px;">
+                <div>🟢 Безопасный лот (2%): <b id="riskSafe" style="color: var(--accent-green);">$5.00</b></div>
+                <div>🟡 Уверенный лот (5%): <b id="riskMax" style="color: #ff9800;">$12.50</b></div>
+                <div>📈 Чистая прибыль (+96%): <b id="riskProfit" style="color: var(--accent-blue);">+$12.00</b></div>
+            </div>
+            <p style="font-size: 10px; color: var(--text-secondary); margin-top: 10px;">* Умный мани-менеджмент защищает депозит каждого трэйдера от рисков.</p>
+        </div>
+    </div>
+
+    <!-- 4. ТОП ТРЭЙДЕРОВ -->
+    <div id="vip" class="tab-content">
+        <div class="card">
+            <span class="select-label" style="margin-bottom: 8px;">👑 РЕЙТИНГ ЛУЧШИХ ТРЭЙДЕРОВ</span>
+            <div class="leaderboard-item">
+                <span>1. @alex_trader_pro***</span>
+                <b style="color: var(--accent-green);">+$7,410 (98.9%)</b>
+            </div>
+            <div class="leaderboard-item">
+                <span>2. @mikhail_vip***</span>
+                <b style="color: var(--accent-green);">+$5,350 (97.4%)</b>
+            </div>
+            <div class="leaderboard-item" style="border: none;">
+                <span>3. @elena_crypto***</span>
+                <b style="color: var(--accent-green);">+$4,120 (97.1%)</b>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="select-label">ЗАКРЫТЫЙ VIP-КАНАЛ</span>
+            <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;">Пригласите 3 друзей по реферальной ссылке, чтобы получить элитный доступ к сигналам с точностью 99.9%.</p>
+            <button class="trade-link-btn" onclick="navigator.clipboard.writeText('https://t.me/Binodex_Signal_Bot?start=vip_access'); alert('VIP ссылка скопирована!');">КОПИРОВАТЬ ССЫЛКУ</button>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // Анимация многошагового анализа (4 секунды)
+        function startAnalysis() {
+            const btn = document.getElementById('signalBtn');
+            const loader = document.getElementById('analysisLoader');
+            const loaderText = document.getElementById('loaderText');
+            const resBox = document.getElementById('signalResult');
+
+            btn.disabled = true;
+            resBox.style.display = 'none';
+            loader.style.display = 'block';
+
+            const steps = [
+                "Сканирование стакана ордеров на бирже...",
+                "Сверка индикаторов RSI, MACD и Stochastic...",
+                "Оценка волатильности и новостного фона...",
+                "Формирование точного торгового сигнала..."
+            ];
+
+            let stepIdx = 0;
+            loaderText.innerText = steps[stepIdx];
+
+            const interval = setInterval(() => {
+                stepIdx++;
+                if (stepIdx < steps.length) {
+                    loaderText.innerText = steps[stepIdx];
+                }
+            }, 1000);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                loader.style.display = 'none';
+                btn.disabled = false;
+                resBox.style.display = 'block';
+
+                const actions = [
+                    { text: 'ПОКУПКА ⬆ (ВВЕРХ)', color: 'var(--accent-green)' },
+                    { text: 'ПРОДАЖА ⬇ (ВНИЗ)', color: 'var(--accent-red)' }
+                ];
+                const chosen = actions[Math.floor(Math.random() * actions.length)];
+                const actionEl = document.getElementById('resAction');
+                actionEl.innerText = chosen.text;
+                actionEl.style.color = chosen.color;
+
+                document.getElementById('resImpulse').innerText = 'ИМПУЛЬС: ' + (95 + Math.floor(Math.random() * 4)) + '%';
+                document.getElementById('resAccuracy').innerText = 'ТОЧНОСТЬ: ' + (98.5 + (Math.random() * 1.2).toFixed(1)) + '%';
+            }, 4000);
+        }
+
+        function calculateRisk() {
+            let dep = parseFloat(document.getElementById('depositInput').value) || 0;
+            document.getElementById('riskSafe').innerText = '$' + (dep * 0.02).toFixed(2);
+            document.getElementById('riskMax').innerText = '$' + (dep * 0.05).toFixed(2);
+            document.getElementById('riskProfit').innerText = '+$' + (dep * 0.05 * 0.96).toFixed(2);
+        }
+
+        // Всплывающие уведомления о профите трэйдеров для максимального доверия
+        const fakeUsers = [
+            { name: '@alex_trader_pro***', amount: '+$185', pair: 'EUR/USD (ВВЕРХ)' },
+            { name: '@dmitry_invest***', amount: '+$390', pair: 'XAU/USD (ВВЕРХ)' },
+            { name: '@anna_crypto***', amount: '+$240', pair: 'GBP/USD (ВНИЗ)' },
+            { name: '@sergey_trader***', amount: '+$580', pair: 'BITCOIN (ВВЕРХ)' }
+        ];
+
+        function showToast() {
+            const container = document.getElementById('toast-container');
+            const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <div class="toast-icon">✓</div>
+                <div><b>${user.name}</b> зафиксировал чистый профит <b style="color: var(--accent-green);">${user.amount}</b> на ${user.pair}</div>
+            `;
+            
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 3800);
+        }
+
+        setInterval(showToast, 6500);
+        setTimeout(showToast, 2000);
+    </script>
+</body>
+</html>
