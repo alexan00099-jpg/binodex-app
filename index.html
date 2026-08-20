@@ -2,27 +2,27 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BinoDex AI Terminal</title>
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+<title>Binodex Signal Bot PRO</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 
 <style>
 :root{
-    --bg:#05070a;
-    --panel:#0b1017;
-    --panel2:#101722;
-    --border:#1d2a38;
-    --text:#f4f7fb;
-    --muted:#8492a6;
-    --green:#00e676;
-    --green2:#16c784;
-    --red:#ff4757;
-    --yellow:#ffc107;
-    --blue:#2196f3;
-    --purple:#9c6cff;
+    --bg:#05070b;
+    --panel:#0b1018;
+    --panel2:#0e1520;
+    --border:#1d2938;
+    --text:#eef4ff;
+    --muted:#8290a5;
+    --green:#00e59a;
+    --red:#ff4d6d;
+    --yellow:#ffc857;
+    --blue:#4da3ff;
     --cyan:#00d9ff;
-    --shadow:0 12px 40px rgba(0,0,0,.35);
 }
 
 *{
@@ -33,23 +33,18 @@
 body{
     margin:0;
     background:
-        radial-gradient(circle at 20% 0%,rgba(0,230,118,.06),transparent 30%),
-        radial-gradient(circle at 90% 10%,rgba(33,150,243,.06),transparent 28%),
-        var(--bg);
+        radial-gradient(circle at top,#101c2b 0,#05070b 42%);
     color:var(--text);
     font-family:Arial,Helvetica,sans-serif;
 }
 
-button,input,select{
+button,select{
     font:inherit;
 }
 
-button{
-    cursor:pointer;
-}
-
 .app{
-    max-width:900px;
+    width:100%;
+    max-width:1100px;
     margin:auto;
     padding:12px;
 }
@@ -58,138 +53,111 @@ button{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:12px 4px 18px;
+    padding:10px 4px 14px;
 }
 
 .logo{
-    font-size:27px;
+    font-size:23px;
     font-weight:900;
-    letter-spacing:-1px;
+    letter-spacing:.5px;
+}
+
+.logo span{
+    color:var(--cyan);
 }
 
 .status{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:12px;
     color:var(--green);
-    font-size:12px;
-    font-weight:800;
 }
 
-.lang{
-    border:1px solid var(--border);
-    padding:7px 10px;
-    border-radius:9px;
-    background:var(--panel);
-    font-size:12px;
-}
-
-.nav{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-    margin-bottom:12px;
-}
-
-.nav button{
-    background:var(--panel);
-    color:var(--muted);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:12px 5px;
-    font-weight:800;
-}
-
-.nav button.active{
-    color:white;
-    border-color:var(--green);
-    box-shadow:0 0 15px rgba(0,230,118,.08);
-}
-
-.section{
-    background:linear-gradient(180deg,var(--panel),#080d13);
-    border:1px solid var(--border);
-    border-radius:17px;
-    padding:15px;
-    margin-bottom:12px;
-    box-shadow:var(--shadow);
-}
-
-.section-title{
-    font-size:15px;
-    font-weight:900;
-    margin-bottom:14px;
+.dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 12px var(--green);
 }
 
 .controls{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:9px;
+    grid-template-columns:1.2fr 1fr;
+    gap:8px;
+    margin-bottom:9px;
 }
 
-select,input{
-    width:100%;
-    background:#080d13;
-    color:white;
+select,button{
+    background:var(--panel);
     border:1px solid var(--border);
-    border-radius:10px;
-    padding:12px;
+    color:var(--text);
+    border-radius:11px;
+    padding:11px;
     outline:none;
 }
 
-select:focus,input:focus{
-    border-color:var(--green);
-}
-
-.primary{
-    width:100%;
-    border:0;
-    border-radius:12px;
-    padding:14px;
-    margin-top:10px;
-    color:#001a0c;
-    background:linear-gradient(135deg,#00e676,#18d89b);
-    font-weight:900;
-}
-
-.secondary{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:12px;
-    margin-top:8px;
-    color:white;
-    background:#111923;
+button{
+    cursor:pointer;
     font-weight:800;
 }
 
-.signal{
-    text-align:center;
-    padding:18px;
-    border-radius:15px;
-    margin-bottom:12px;
+button.active{
+    border-color:var(--cyan);
+    color:var(--cyan);
+}
+
+.tf{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:5px;
+    margin-bottom:10px;
+}
+
+.tf button{
+    padding:8px 3px;
+    font-size:11px;
+}
+
+.card{
+    background:linear-gradient(145deg,var(--panel),#080d14);
     border:1px solid var(--border);
-    background:#080d13;
+    border-radius:15px;
+    padding:13px;
+    margin-bottom:10px;
+    box-shadow:0 10px 35px rgba(0,0,0,.22);
 }
 
-.signal-main{
-    font-size:34px;
-    font-weight:1000;
-    margin:5px 0;
+.card-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
 }
 
-.buy{
-    color:var(--green);
+.card-title b{
+    font-size:14px;
 }
 
-.sell{
-    color:var(--red);
-}
-
-.wait{
-    color:var(--yellow);
-}
-
-.signal-confidence{
-    font-size:13px;
+.small{
+    font-size:11px;
     color:var(--muted);
+}
+
+#chart{
+    width:100%;
+    height:410px;
+}
+
+.price{
+    font-size:28px;
+    font-weight:900;
+}
+
+.change{
+    font-size:12px;
+    margin-left:8px;
 }
 
 .grid{
@@ -199,248 +167,207 @@ select:focus,input:focus{
 }
 
 .metric{
-    background:#080d13;
+    background:var(--panel2);
     border:1px solid var(--border);
-    border-radius:12px;
-    padding:11px;
+    border-radius:11px;
+    padding:10px;
 }
 
-.metric-name{
-    font-size:11px;
+.metric-label{
+    font-size:10px;
     color:var(--muted);
-    margin-bottom:5px;
+    text-transform:uppercase;
 }
 
 .metric-value{
     font-size:15px;
     font-weight:900;
+    margin-top:4px;
 }
 
-.trade-box{
+.signal{
+    border-radius:17px;
+    padding:16px;
+    margin-bottom:10px;
+    background:linear-gradient(145deg,#0c1520,#080c12);
     border:1px solid var(--border);
-    border-radius:15px;
-    padding:13px;
-    background:
-        linear-gradient(135deg,rgba(0,230,118,.035),transparent);
 }
 
-.trade-row{
+.signal.long{
+    border-color:rgba(0,229,154,.65);
+    box-shadow:0 0 30px rgba(0,229,154,.09);
+}
+
+.signal.short{
+    border-color:rgba(255,77,109,.65);
+    box-shadow:0 0 30px rgba(255,77,109,.09);
+}
+
+.signal.wait{
+    border-color:rgba(255,200,87,.55);
+}
+
+.signal-head{
     display:flex;
     justify-content:space-between;
-    gap:10px;
-    padding:9px 0;
-    border-bottom:1px solid rgba(255,255,255,.05);
+    align-items:center;
 }
 
-.trade-row:last-child{
-    border-bottom:0;
+.direction{
+    font-size:25px;
+    font-weight:1000;
 }
 
-.green{
-    color:var(--green);
+.confidence{
+    font-size:17px;
+    font-weight:900;
 }
 
-.red{
-    color:var(--red);
-}
-
-.yellow{
-    color:var(--yellow);
-}
-
-.blue{
-    color:var(--blue);
-}
-
-.cyan{
-    color:var(--cyan);
-}
-
-.purple{
-    color:var(--purple);
-}
-
-.action{
-    padding:13px;
-    border-radius:13px;
-    margin-top:10px;
-    background:#101722;
-    border-left:4px solid var(--green);
-}
-
-.action strong{
-    display:block;
-    margin-bottom:5px;
-}
-
-.action.waitAction{
-    border-left-color:var(--yellow);
-}
-
-.action.sellAction{
-    border-left-color:var(--red);
-}
-
-.log{
-    font-family:monospace;
-    font-size:11px;
-    line-height:1.8;
-    color:#91a4b8;
-    background:#05090e;
-    border-radius:10px;
-    padding:10px;
-    max-height:190px;
-    overflow:auto;
-}
-
-.log .ok{
-    color:var(--green);
-}
-
-.log .warn{
-    color:var(--yellow);
-}
-
-.log .danger{
-    color:var(--red);
-}
-
-.progress{
-    height:7px;
-    background:#151d27;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.progress span{
-    display:block;
-    height:100%;
-    background:linear-gradient(90deg,var(--green),var(--cyan));
-}
-
-.small{
-    color:var(--muted);
-    font-size:11px;
-    line-height:1.5;
-}
-
-.badge{
-    display:inline-block;
-    padding:5px 8px;
-    border-radius:7px;
-    background:#111923;
-    border:1px solid var(--border);
-    font-size:10px;
-    font-weight:800;
-}
-
-.two{
+.levels{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-}
-
-.three{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-}
-
-.btn-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-}
-
-.danger-btn{
-    background:#241016;
-    color:#ff6673;
-    border:1px solid #4b1d26;
-}
-
-.good-btn{
-    background:#071e14;
-    color:#00e676;
-    border:1px solid #145a3a;
-}
-
-.info-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:12px;
-}
-
-.info-table th,
-.info-table td{
-    text-align:left;
-    padding:9px 5px;
-    border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.info-table th{
-    color:var(--muted);
-}
-
-.chart{
-    height:230px;
-    position:relative;
-    background:
-        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
-        #060a0f;
-    background-size:30px 30px;
-    border-radius:12px;
-    overflow:hidden;
-}
-
-.chart svg{
-    width:100%;
-    height:100%;
-}
-
-.price-line{
-    stroke:var(--green);
-    stroke-width:2;
-    fill:none;
+    grid-template-columns:repeat(2,1fr);
+    gap:7px;
+    margin-top:13px;
 }
 
 .level{
-    stroke:#58677a;
-    stroke-width:1;
-    stroke-dasharray:6 6;
+    background:rgba(255,255,255,.025);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:9px;
 }
 
-.tp{
-    stroke:var(--green);
-    stroke-width:1.5;
-    stroke-dasharray:5 5;
+.level span{
+    display:block;
+    font-size:10px;
+    color:var(--muted);
+    margin-bottom:4px;
 }
 
-.sl{
-    stroke:var(--red);
-    stroke-width:1.5;
-    stroke-dasharray:5 5;
+.level strong{
+    font-size:15px;
 }
 
-.hidden{
-    display:none!important;
+.green{color:var(--green)}
+.red{color:var(--red)}
+.yellow{color:var(--yellow)}
+.blue{color:var(--blue)}
+.cyan{color:var(--cyan)}
+
+.scorebar{
+    height:9px;
+    border-radius:20px;
+    background:#151e29;
+    overflow:hidden;
+    margin-top:8px;
 }
 
-@media(max-width:500px){
+.scorefill{
+    height:100%;
+    width:0%;
+    transition:.4s;
+}
+
+.reason{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    font-size:12px;
+}
+
+.reason:last-child{
+    border-bottom:0;
+}
+
+.good{
+    color:var(--green);
+}
+
+.bad{
+    color:var(--red);
+}
+
+.neutral{
+    color:var(--yellow);
+}
+
+.mtf{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.mtf-box{
+    background:var(--panel2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px;
+    text-align:center;
+}
+
+.mtf-box b{
+    display:block;
+    font-size:12px;
+    margin-bottom:5px;
+}
+
+.credit{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.credit-box{
+    background:linear-gradient(145deg,#0e1722,#080c12);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px;
+}
+
+.credit-number{
+    font-size:22px;
+    font-weight:1000;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:11px;
+}
+
+td,th{
+    padding:8px 5px;
+    border-bottom:1px solid var(--border);
+    text-align:left;
+}
+
+th{
+    color:var(--muted);
+}
+
+.footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:10px;
+    padding:15px;
+}
+
+@media(max-width:600px){
+    #chart{
+        height:330px;
+    }
+
     .grid{
-        grid-template-columns:1fr 1fr;
+        grid-template-columns:repeat(2,1fr);
     }
 
-    .three{
-        grid-template-columns:1fr 1fr 1fr;
+    .credit{
+        grid-template-columns:repeat(3,1fr);
     }
 
-    .section{
-        padding:12px;
-    }
-
-    .logo{
-        font-size:24px;
+    .credit-number{
+        font-size:17px;
     }
 }
 </style>
@@ -450,1051 +377,313 @@ select:focus,input:focus{
 
 <div class="app">
 
-<header class="header">
-    <div>
-        <div class="logo">BinoDex</div>
-        <div class="status">🟢 AI СТАТУС: АКТИВЕН</div>
+<div class="header">
+    <div class="logo">Bino<span>Dex</span> PRO</div>
+
+    <div class="status">
+        <div class="dot"></div>
+        LIVE ENGINE
     </div>
-    <div class="lang">RU / EN</div>
-</header>
-
-<nav class="nav">
-    <button class="active" onclick="showSection('terminal',this)">📊 ТЕРМИНАЛ</button>
-    <button onclick="showSection('academy',this)">📚 ОБУЧЕНИЕ</button>
-    <button onclick="showSection('vip',this)">🎁 VIP</button>
-</nav>
-
-<!-- =========================================================
-     TERMINAL
-========================================================= -->
-
-<div id="terminal">
-
-<section class="section">
-
-<div class="section-title">📊 ТЕРМИНАЛ</div>
+</div>
 
 <div class="controls">
+    <select id="symbol">
+        <option value="BTCUSDT">BTC / USDT</option>
+        <option value="ETHUSDT">ETH / USDT</option>
+        <option value="SOLUSDT">SOL / USDT</option>
+        <option value="BNBUSDT">BNB / USDT</option>
+        <option value="XRPUSDT">XRP / USDT</option>
+        <option value="DOGEUSDT">DOGE / USDT</option>
+        <option value="ADAUSDT">ADA / USDT</option>
+        <option value="AVAXUSDT">AVAX / USDT</option>
+        <option value="LINKUSDT">LINK / USDT</option>
+    </select>
 
-<select id="asset">
-<option value="BTCUSDT">BTC/USDT (Биткоин)</option>
-<option value="EURUSD">EUR/USD (Евро / Доллар)</option>
-<option value="ETHUSDT">ETH/USDT (Эфириум)</option>
-<option value="GBPUSD">GBP/USD (Фунт / Доллар)</option>
-<option value="SOLUSDT">SOL/USDT (Солана)</option>
-<option value="AAPL">AAPL (Apple)</option>
-<option value="TSLA">TSLA (Tesla)</option>
-</select>
-
-<select id="timeframe">
-<option value="1m">1 Мин / Min</option>
-<option value="5m">5 Мин / Min</option>
-<option value="1h">1 Час / Hour</option>
-<option value="4h">4 Часа / 4 Hours</option>
-<option value="1d">1 День / Day</option>
-</select>
-
-</div>
-
-<button class="primary" onclick="runAnalysis()">
-🚀 ЗАПУСТИТЬ НОВЫЙ AI-АНАЛИЗ
-</button>
-
-<button class="secondary" onclick="refreshAnalysis()">
-🔄 ОБНОВИТЬ АНАЛИЗ
-</button>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">🎯 ОСНОВНОЙ ВЕРДИКТ</div>
-
-<div class="signal">
-
-<div class="small">ТЕКУЩЕЕ СОСТОЯНИЕ РЫНКА</div>
-
-<div id="signalMain" class="signal-main wait">
-ОЖИДАНИЕ АНАЛИЗА
-</div>
-
-<div id="confidence" class="signal-confidence">
-Нажмите «Запустить новый AI-анализ»
-</div>
-
-</div>
-
-<div id="mainAction" class="action waitAction">
-<strong>⏳ ДЕЙСТВИЕ</strong>
-Ожидание нового анализа.
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">🎯 ПЛАН СДЕЛКИ</div>
-
-<div class="trade-box">
-
-<div class="trade-row">
-<span>Направление</span>
-<strong id="direction">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Тип входа</span>
-<strong id="entryType">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Текущая цена</span>
-<strong id="currentPrice">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Зона входа</span>
-<strong id="entryZone">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Take Profit 1</span>
-<strong class="green" id="tp1">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Take Profit 2</span>
-<strong class="green" id="tp2">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Take Profit 3</span>
-<strong class="green" id="tp3">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Stop Loss</span>
-<strong class="red" id="sl">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Безубыток</span>
-<strong class="cyan" id="breakeven">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Следующее действие</span>
-<strong id="nextAction">—</strong>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">📈 ГРАФИК И КЛЮЧЕВЫЕ УРОВНИ</div>
-
-<div class="chart">
-
-<svg viewBox="0 0 800 230" preserveAspectRatio="none">
-
-<line x1="0" y1="60" x2="800" y2="60" class="level"/>
-<line x1="0" y1="120" x2="800" y2="120" class="level"/>
-<line x1="0" y1="180" x2="800" y2="180" class="level"/>
-
-<polyline
-id="chartLine"
-class="price-line"
-points="
-0,170
-35,165
-70,172
-105,155
-140,162
-175,145
-210,150
-245,130
-280,138
-315,122
-350,130
-385,108
-420,115
-455,95
-490,105
-525,88
-560,97
-595,80
-630,91
-665,72
-700,82
-735,65
-800,70
-"/>
-
-<line id="chartTP1" x1="0" y1="80" x2="800" y2="80" class="tp"/>
-<line id="chartSL" x1="0" y1="180" x2="800" y2="180" class="sl"/>
-
-</svg>
-
-</div>
-
-<div class="three" style="margin-top:9px">
-<div class="metric">
-<div class="metric-name">SUPPORT</div>
-<div class="metric-value green" id="support">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">RESISTANCE</div>
-<div class="metric-value red" id="resistance">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">VOLATILITY</div>
-<div class="metric-value yellow" id="volatility">—</div>
-</div>
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">📊 МУЛЬТИИНДИКАТОРНАЯ КОНФЛЮЭНТНОСТЬ</div>
-
-<div class="grid">
-
-<div class="metric">
-<div class="metric-name">Parabolic SAR</div>
-<div class="metric-value" id="sar">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">RSI (14)</div>
-<div class="metric-value" id="rsi">50.00</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">MACD</div>
-<div class="metric-value" id="macd">READY</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Bollinger Bands</div>
-<div class="metric-value" id="bb">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">EMA 20/50</div>
-<div class="metric-value" id="ema">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">EMA 200</div>
-<div class="metric-value" id="ema200">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">ADX</div>
-<div class="metric-value" id="adx">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Stochastic</div>
-<div class="metric-value" id="stoch">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">ATR</div>
-<div class="metric-value" id="atr">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">VWAP</div>
-<div class="metric-value" id="vwap">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Объём</div>
-<div class="metric-value" id="volume">Ожидание</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Импульс</div>
-<div class="metric-value" id="momentum">Ожидание</div>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">🧠 СИСТЕМА РЕШЕНИЯ AI</div>
-
-<div class="grid">
-
-<div class="metric">
-<div class="metric-name">Тренд</div>
-<div class="metric-value" id="trend">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Сила тренда</div>
-<div class="metric-value" id="trendStrength">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Импульс</div>
-<div class="metric-value" id="momentumState">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Ликвидность</div>
-<div class="metric-value" id="liquidity">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Рыночная структура</div>
-<div class="metric-value" id="structure">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Состояние толпы</div>
-<div class="metric-value" id="crowd">—</div>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">🧭 МАТРИЦА ТАЙМФРЕЙМОВ</div>
-
-<table class="info-table">
-
-<thead>
-<tr>
-<th>TF</th>
-<th>Тренд</th>
-<th>RSI</th>
-<th>Импульс</th>
-<th>Сигнал</th>
-</tr>
-</thead>
-
-<tbody>
-
-<tr>
-<td>1м</td>
-<td id="tf1trend">—</td>
-<td id="tf1rsi">—</td>
-<td id="tf1mom">—</td>
-<td id="tf1signal">—</td>
-</tr>
-
-<tr>
-<td>5м</td>
-<td id="tf5trend">—</td>
-<td id="tf5rsi">—</td>
-<td id="tf5mom">—</td>
-<td id="tf5signal">—</td>
-</tr>
-
-<tr>
-<td>1ч</td>
-<td id="tf1htrend">—</td>
-<td id="tf1hrsi">—</td>
-<td id="tf1hmom">—</td>
-<td id="tf1hsignal">—</td>
-</tr>
-
-<tr>
-<td>4ч</td>
-<td id="tf4htrend">—</td>
-<td id="tf4hrsi">—</td>
-<td id="tf4hmom">—</td>
-<td id="tf4hsignal">—</td>
-</tr>
-
-<tr>
-<td>Д</td>
-<td id="tfdtrend">—</td>
-<td id="tfdrsi">—</td>
-<td id="tfdmom">—</td>
-<td id="tfdsignal">—</td>
-</tr>
-
-</tbody>
-</table>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">⚡ ТОЧКА ВХОДА</div>
-
-<div class="grid">
-
-<div class="metric">
-<div class="metric-name">Рекомендуемый вход</div>
-<div class="metric-value cyan" id="entryDecision">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Режим</div>
-<div class="metric-value" id="entryMode">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Лимитная зона</div>
-<div class="metric-value" id="limitZone">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Отмена сценария</div>
-<div class="metric-value red" id="invalidLevel">—</div>
-</div>
-
-</div>
-
-<div id="entryInstruction" class="action">
-<strong>ИНСТРУКЦИЯ</strong>
-Запустите анализ.
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">🎯 TAKE PROFIT / STOP LOSS</div>
-
-<div class="two">
-
-<div class="trade-box">
-
-<div class="trade-row">
-<span>TP1</span>
-<strong class="green" id="tpBox1">—</strong>
-</div>
-
-<div class="trade-row">
-<span>TP2</span>
-<strong class="green" id="tpBox2">—</strong>
-</div>
-
-<div class="trade-row">
-<span>TP3</span>
-<strong class="green" id="tpBox3">—</strong>
-</div>
-
-</div>
-
-<div class="trade-box">
-
-<div class="trade-row">
-<span>SL</span>
-<strong class="red" id="slBox">—</strong>
-</div>
-
-<div class="trade-row">
-<span>Безубыток</span>
-<strong class="cyan" id="beBox">—</strong>
-</div>
-
-<div class="trade-row">
-<span>RR</span>
-<strong id="rrBox">—</strong>
-</div>
-
-</div>
-
-</div>
-
-<div id="tpInstruction" class="action">
-<strong>УПРАВЛЕНИЕ ПОЗИЦИЕЙ</strong>
-После входа система покажет, когда фиксировать часть позиции и когда переносить SL.
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">🔄 ЧТО ДЕЛАТЬ ПОСЛЕ ОБНОВЛЕНИЯ</div>
-
-<div id="refreshDecision" class="action waitAction">
-
-<strong>ОЖИДАНИЕ</strong>
-
-Нажмите «Обновить анализ». Система определит:
-
-входить по рынку, ждать лимитную зону, ждать подтверждение, двигать Take Profit, перенести Stop Loss в безубыток или полностью ждать отработку сценария.
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">📌 УПРАВЛЕНИЕ ОТКРЫТОЙ СДЕЛКОЙ</div>
-
-<div class="grid">
-
-<div class="metric">
-<div class="metric-name">Статус позиции</div>
-<div class="metric-value" id="positionStatus">НЕТ ПОЗИЦИИ</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Плавающий результат</div>
-<div class="metric-value" id="floating">+$0.00</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">SL действие</div>
-<div class="metric-value" id="slAction">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">TP действие</div>
-<div class="metric-value" id="tpAction">—</div>
-</div>
-
-</div>
-
-<div class="btn-row" style="margin-top:10px">
-
-<button class="secondary good-btn" onclick="simulatePosition('BUY')">
-🟢 ОТКРЫТЬ LONG
-</button>
-
-<button class="secondary danger-btn" onclick="simulatePosition('SELL')">
-🔴 ОТКРЫТЬ SHORT
-</button>
-
-</div>
-
-<button class="secondary" onclick="closePosition()">
-⏹ ЗАКРЫТЬ ПОЗИЦИЮ
-</button>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">🧠 ПСИХОЛОГИЯ РЫНКА И ТОЛПЫ</div>
-
-<div class="grid">
-
-<div class="metric">
-<div class="metric-name">FOMO</div>
-<div class="metric-value" id="fomo">Низкий</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Паника</div>
-<div class="metric-value" id="panic">Низкая</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Жадность</div>
-<div class="metric-value" id="greed">Умеренная</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Ликвидации</div>
-<div class="metric-value" id="liquidation">Норма</div>
-</div>
-
-</div>
-
-<div class="action waitAction">
-
-<strong>ПРАВИЛО ПСИХОЛОГИИ</strong>
-
-Не входить только потому, что цена резко растёт или падает. Сначала дождаться подтверждения структуры, импульса и зоны ликвидности.
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">🛡️ РИСК-МЕНЕДЖМЕНТ</div>
-
-<div class="controls">
-
-<div>
-<div class="small">Торговый баланс ($)</div>
-<input id="balance" type="number" value="1000">
-</div>
-
-<div>
-<div class="small">Риск на сделку (%)</div>
-<input id="risk" type="number" value="1" min="0.1" max="5" step="0.1">
-</div>
-
-</div>
-
-<div class="grid" style="margin-top:9px">
-
-<div class="metric">
-<div class="metric-name">Максимальный риск</div>
-<div class="metric-value red" id="riskMoney">$10.00</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Размер позиции</div>
-<div class="metric-value cyan" id="positionSize">$200.00</div>
-</div>
-
-</div>
-
-<div class="action">
-
-<strong>МАНИ-МЕНЕДЖМЕНТ</strong>
-
-Не увеличивать размер позиции после убыточной сделки. При достижении первой цели часть позиции можно зафиксировать, а защитный стоп перенести ближе к безубытку только после подтверждения движения.
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">⚖️ ГЛУБИНА СТАКАНА МАРКЕТМЕЙКЕРОВ</div>
-
-<div class="grid">
-
-<div class="metric">
-<div class="metric-name">BUY LIQUIDITY</div>
-<div class="metric-value green" id="buyLiquidity">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">SELL LIQUIDITY</div>
-<div class="metric-value red" id="sellLiquidity">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Крупные заявки</div>
-<div class="metric-value" id="largeOrders">—</div>
-</div>
-
-<div class="metric">
-<div class="metric-name">Дисбаланс</div>
-<div class="metric-value cyan" id="imbalance">—</div>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="section-title">💰 КАЛЬКУЛЯТОР СЛОЖНОГО ПРОЦЕНТА</div>
-
-<div class="controls">
-
-<input id="calcDeposit" type="number" value="100">
-
-<input id="calcPercent" type="number" value="10">
-
-<input id="calcDays" type="number" value="7">
-
+    <button id="analyzeBtn">⚡ ГЛУБОКИЙ АНАЛИЗ</button>
 </div>
-
-<div class="action">
 
-<strong>ПРОГНОЗ РАСЧЁТА</strong>
-
-<div id="compoundResult">$194.87</div>
-
+<div class="tf">
+    <button data-tf="1m">1M</button>
+    <button data-tf="5m">5M</button>
+    <button data-tf="15m" class="active">15M</button>
+    <button data-tf="1h">1H</button>
+    <button data-tf="4h">4H</button>
+    <button data-tf="1d">1D</button>
 </div>
-
-</section>
 
+<div class="card">
 
-<section class="section">
+    <div class="card-title">
+        <div>
+            <b id="symbolTitle">BTC / USDT</b>
+            <div class="small">BINANCE FUTURES • REAL-TIME</div>
+        </div>
 
-<div class="section-title">📑 ИСТОРИЯ СЕССИОННЫХ СДЕЛОК ИИ</div>
+        <div>
+            <span class="price" id="price">—</span>
+            <span class="change" id="priceChange">—</span>
+        </div>
+    </div>
 
-<div class="log" id="history">
+    <div id="chart"></div>
 
-[22:40:12] EUR/USD • ВВЕРХ • СУММА: $50 • УСПЕХ (+$46.00)<br>
-[22:42:30] BTC/USDT • ВВЕРХ • СУММА: $30 • УСПЕХ (+$27.60)<br>
-[22:45:00] ETH/USDT • ВВЕРХ • СУММА: $40 • УСПЕХ (+$36.80)
-
 </div>
 
-</section>
+<div id="signalBox" class="signal wait">
 
+    <div class="signal-head">
+        <div>
+            <div class="small">ОБЩИЙ СЦЕНАРИЙ</div>
+            <div id="direction" class="direction yellow">
+                ОЖИДАНИЕ
+            </div>
+        </div>
 
-<section class="section">
+        <div style="text-align:right">
+            <div class="small">CONFIDENCE</div>
+            <div id="confidence" class="confidence">0%</div>
+        </div>
+    </div>
 
-<div class="section-title">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG)</div>
+    <div class="scorebar">
+        <div id="scoreFill" class="scorefill"></div>
+    </div>
 
-<div class="log" id="liveLog">
+    <div class="small" style="margin-top:10px" id="action">
+        Собираю данные...
+    </div>
 
-<span>[22:45:01] Инициализация квантового ядра v4.8...</span><br>
-<span>[22:45:04] Загрузка индикатора Parabolic SAR на свечи... Успешно.</span><br>
-<span>[22:45:08] Канал связи с биржевыми шлюзами активен...</span><br>
-<span>[22:45:12] Ожидание пользовательского сканирования рынка...</span>
+    <div class="levels">
 
-</div>
+        <div class="level">
+            <span>ENTRY ZONE</span>
+            <strong id="entry">—</strong>
+        </div>
 
-</section>
+        <div class="level">
+            <span>STOP LOSS</span>
+            <strong id="sl">—</strong>
+        </div>
 
+        <div class="level">
+            <span>TAKE PROFIT 1</span>
+            <strong id="tp1" class="green">—</strong>
+        </div>
 
-<section class="section">
+        <div class="level">
+            <span>TAKE PROFIT 2</span>
+            <strong id="tp2" class="green">—</strong>
+        </div>
 
-<div class="section-title">🌐 МОНИТОРИНГ КИТОВ И ПУЛОВ</div>
+        <div class="level">
+            <span>TAKE PROFIT 3</span>
+            <strong id="tp3" class="green">—</strong>
+        </div>
 
-<div class="action">
+        <div class="level">
+            <span>RISK / REWARD</span>
+            <strong id="rr">—</strong>
+        </div>
 
-<strong>СКАНЕР КРУПНЫХ ДВИЖЕНИЙ</strong>
+    </div>
 
-<span id="whaleStatus">
-Инициализация сканера китовых транзакций...
-</span>
+    <div class="small" style="margin-top:11px">
+        <span id="tradePlan">План сделки формируется после подтверждения.</span>
+    </div>
 
 </div>
 
-</section>
+<div class="card">
 
+    <div class="card-title">
+        <b>🧠 MULTI-TIMEFRAME ANALYSIS</b>
+        <span class="small">TREND FILTER</span>
+    </div>
 
-<section class="section">
+    <div class="mtf">
 
-<div class="section-title">📊 ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ</div>
-
-<div class="three">
-
-<div class="metric">
-<div class="metric-name">ПЛЮСОВЫЕ СДЕЛКИ</div>
-<div class="metric-value green" id="wins">0</div>
-</div>
+        <div class="mtf-box">
+            <b>15M</b>
+            <span id="mtf15">—</span>
+        </div>
 
-<div class="metric">
-<div class="metric-name">МИНУСОВЫЕ СДЕЛКИ</div>
-<div class="metric-value red" id="losses">0</div>
-</div>
+        <div class="mtf-box">
+            <b>1H</b>
+            <span id="mtf1h">—</span>
+        </div>
 
-<div class="metric">
-<div class="metric-name">ВИНРЕЙТ</div>
-<div class="metric-value cyan" id="winrate">0%</div>
-</div>
+        <div class="mtf-box">
+            <b>4H</b>
+            <span id="mtf4h">—</span>
+        </div>
 
-</div>
+    </div>
 
-<div class="metric" style="margin-top:8px">
-<div class="metric-name">ТЕКУЩИЙ БАЛАНС ($)</div>
-<div class="metric-value" id="currentBalance">$0.00</div>
 </div>
 
-<button class="primary" onclick="saveResult()">
-ЗАФИКСИРОВАТЬ РЕЗУЛЬТАТ
-</button>
+<div class="card">
 
-</section>
+    <div class="card-title">
+        <b>📊 INDICATORS</b>
+        <span class="small">LIVE CALCULATION</span>
+    </div>
 
-</div>
+    <div class="grid">
 
+        <div class="metric">
+            <div class="metric-label">RSI 14</div>
+            <div class="metric-value" id="rsi">—</div>
+        </div>
 
-<!-- =========================================================
-     ACADEMY
-     НЕ УДАЛЯЕМ СОДЕРЖИМОЕ
-========================================================= -->
+        <div class="metric">
+            <div class="metric-label">ADX</div>
+            <div class="metric-value" id="adx">—</div>
+        </div>
 
-<div id="academy" class="hidden">
+        <div class="metric">
+            <div class="metric-label">MACD</div>
+            <div class="metric-value" id="macd">—</div>
+        </div>
 
-<section class="section">
+        <div class="metric">
+            <div class="metric-label">EMA 20</div>
+            <div class="metric-value" id="ema20">—</div>
+        </div>
 
-<div class="section-title">📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ</div>
+        <div class="metric">
+            <div class="metric-label">EMA 50</div>
+            <div class="metric-value" id="ema50">—</div>
+        </div>
 
-<h3>⚡ ПОЧЕМУ ТРЕЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:</h3>
+        <div class="metric">
+            <div class="metric-label">EMA 200</div>
+            <div class="metric-value" id="ema200">—</div>
+        </div>
 
-<div class="grid">
+        <div class="metric">
+            <div class="metric-label">ATR</div>
+            <div class="metric-value" id="atr">—</div>
+        </div>
 
-<div class="metric">
-<strong>ОТ $5</strong><br>
-<span class="small">МИНИМАЛЬНЫЙ ДЕПОЗИТ</span>
-</div>
+        <div class="metric">
+            <div class="metric-label">VWAP</div>
+            <div class="metric-value" id="vwap">—</div>
+        </div>
 
-<div class="metric">
-<strong>ДО 96%</strong><br>
-<span class="small">ДОХОДНОСТЬ СДЕЛОК</span>
-</div>
+        <div class="metric">
+            <div class="metric-label">BB POSITION</div>
+            <div class="metric-value" id="bb">—</div>
+        </div>
 
-<div class="metric">
-<strong>БЕСПЛАТНО</strong><br>
-<span class="small">ДЕМО-СЧЕТ ДЛЯ ТРЕНИРОВОК</span>
-</div>
+        <div class="metric">
+            <div class="metric-label">VOLUME</div>
+            <div class="metric-value" id="volume">—</div>
+        </div>
 
-<div class="metric">
-<strong>МОМЕНТАЛЬНО</strong><br>
-<span class="small">ВЫВОД СРЕДСТВ</span>
-</div>
+    </div>
 
 </div>
-
-<p>
-Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.
-</p>
-
-
-<h3>🎯 ПОДРОБНО О ДЕМО-СЧЕТЕ: БЕЗОПАСНЫЙ СТАРТ</h3>
-
-<p>
-Демо-счет — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:
-</p>
-
-<p>
-<strong>Виртуальный баланс:</strong> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.
-</p>
-
-<p>
-<strong>Полная имитация рынка:</strong> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.
-</p>
-
-<p>
-<strong>Тест стратегий:</strong> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.
-</p>
-
-<p>
-<strong>Мгновенное переключение:</strong> Как только вы почувствуете уверенность, можно в один клик переключиться на реальный счет и начать зарабатывать.
-</p>
-
-
-<h3>1. С чего начать новичку: от регистрации до первой прибыли</h3>
-
-<p>
-Если вы никогда раньше не занимались трейдингом, путь к успешной торговле состоит из 4 простых шагов:
-</p>
-
-<p>
-<strong>Шаг 1. Регистрация и демо-счет:</strong> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.
-</p>
-
-<p>
-<strong>Шаг 2. Выбор актива и времени:</strong> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 дня).
-</p>
-
-<p>
-<strong>Шаг 3. Анализ и сигналы:</strong> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.
-</p>
-
-<p>
-<strong>Шаг 4. Открытие сделки:</strong> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления (ВВЕРХ или ВНИЗ). При верном прогнозе чистая прибыль зачисляется мгновенно!
-</p>
-
-
-<h3>2. Как работает ИИ-терминал и Parabolic SAR</h3>
 
-<p>
-Главный трендовый индикатор нашего терминала — <strong>Parabolic SAR</strong> — отображается прямо на ценовых свечах в виде точек:
-</p>
+<div class="card">
 
-<p>
-<strong>Точки под свечами (зеленые):</strong> Сигнализируют о сильном бычьем тренде и росте цены. Время открывать сделки ВВЕРХ.
-</p>
+    <div class="card-title">
+        <b>🐋 MARKET MICROSTRUCTURE</b>
+        <span class="small">FUTURES DATA</span>
+    </div>
 
-<p>
-<strong>Точки над свечами (красные):</strong> Указывают на медвежий тренд и давление продавцов. Идеально для входа ВНИЗ.
-</p>
+    <div class="grid">
 
-<p>
-<strong>Смена точек:</strong> Пересечение графика через точки SAR дает мощный сигнал разворота тренда с высокой точностью.
-</p>
+        <div class="metric">
+            <div class="metric-label">ORDER BOOK</div>
+            <div class="metric-value" id="orderbook">—</div>
+        </div>
 
+        <div class="metric">
+            <div class="metric-label">OPEN INTEREST</div>
+            <div class="metric-value" id="oi">—</div>
+        </div>
 
-<h3>3. Торговля по стратегии RSI и сигналам</h3>
+        <div class="metric">
+            <div class="metric-label">FUNDING</div>
+            <div class="metric-value" id="funding">—</div>
+        </div>
 
-<p>
-Индикатор RSI (Индекс относительной силы) помогает находить точные точки разворота цены на экстремумах:
-</p>
+        <div class="metric">
+            <div class="metric-label">LIQUIDATIONS</div>
+            <div class="metric-value" id="liquidations">—</div>
+        </div>
 
-<p>
-<strong>Зона выше 70%:</strong> Актив перекуплен покупателями, ожидается коррекция или падение цен.
-</p>
+    </div>
 
-<p>
-<strong>Зона ниже 30%:</strong> Актив перепродан продавцами, рынок готов к резкому отскоку вверх.
-</p>
-
-<p>
-<strong>Торговля по сигналам:</strong> Используя готовые квантовые сигналы ИИ и командные сессии, вы можете совершать сделки с высокой точностью!
-</p>
-
-
-<h3>4. Золотые правила мани-менеджмента</h3>
-
-<p>
-Соблюдение правил риска — главный секрет стабильного заработка:
-</p>
-
-<p>
-<strong>Риск на сделку:</strong> Выделяйте не более 2-5% от депозита на одну позицию.
-</p>
-
-<p>
-<strong>Дисциплина:</strong> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.
-</p>
-
-
-<h3>Время зарабатывать профессионально!</h3>
-
-<p>
-Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трейдинг на новый уровень прибыльности.
-</p>
-
-<a href="https://bdclick.app/smart/naJly9" target="_blank">
-<button class="primary">Начать трейдить</button>
-</a>
-
-</section>
-
 </div>
 
+<div class="card">
 
-<!-- =========================================================
-     VIP
-     НЕ УДАЛЯЕМ СОДЕРЖИМОЕ
-========================================================= -->
+    <div class="card-title">
+        <b>🎯 CREDIT VIEW</b>
+        <span class="small">SIGNAL QUALITY</span>
+    </div>
 
-<div id="vip" class="hidden">
+    <div class="credit">
 
-<section class="section">
+        <div class="credit-box">
+            <div class="small">TREND</div>
+            <div id="creditTrend" class="credit-number">—</div>
+        </div>
 
-<div class="section-title">🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА</div>
+        <div class="credit-box">
+            <div class="small">MOMENTUM</div>
+            <div id="creditMomentum" class="credit-number">—</div>
+        </div>
 
-<div class="action">
+        <div class="credit-box">
+            <div class="small">QUALITY</div>
+            <div id="creditQuality" class="credit-number">—</div>
+        </div>
 
-<strong>🔗 ВАША ПЕРСОНАЛЬНАЯ РЕФЕРАЛЬНАЯ ССЫЛКА:</strong>
+    </div>
 
-<p>
-Пригласите 3 друзей по этой ссылке в нашу команду — получите <strong>VIP на 1 неделю</strong>! За регистрацию и пополнение — <strong>VIP на 1 месяц</strong>.
-</p>
-
-<button class="secondary" onclick="copyReferral()">
-Копировать
-</button>
-
 </div>
 
-<div class="grid">
+<div class="card">
 
-<div class="metric">
-<div class="metric-name">Приглашено друзей</div>
-<div class="metric-value">0 / 3</div>
-</div>
+    <div class="card-title">
+        <b>🔍 ANALYSIS BREAKDOWN</b>
+        <span class="small">ENGINE DECISION</span>
+    </div>
 
-<div class="metric">
-<div class="metric-name">До VIP осталось</div>
-<div class="metric-value cyan">3 друга</div>
-</div>
+    <div id="reasons"></div>
 
 </div>
-
-
-<h3>📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:</h3>
-
-<p>
-<strong>• Вариант 1 (VIP на 1 месяц):</strong> Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите сделку на реальном счёте с любым активом и суммой.
-</p>
-
-<p>
-<strong>• Вариант 2 (VIP на 1 неделю):</strong> Пригласите всего 3 друзей по вашей реферальной ссылке выше в нашу команду.
-</p>
 
-<a href="https://bdclick.app/smart/naJly9" target="_blank">
-<button class="primary">Зарегистрироваться и получить VIP</button>
-</a>
+<div class="card">
 
+    <div class="card-title">
+        <b>📜 SIGNAL HISTORY</b>
+        <span class="small">LOCAL</span>
+    </div>
 
-<h3>🚀 ЧТО ДАЕТ VIP (ВСЕ ПРИВИЛЕГИИ):</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>TIME</th>
+                <th>SIGNAL</th>
+                <th>PRICE</th>
+                <th>CONF.</th>
+            </tr>
+        </thead>
 
-<p>
-<strong>ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:</strong> Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.
-</p>
+        <tbody id="history"></tbody>
+    </table>
 
-<p>
-<strong>ПОВЫШЕННАЯ ТОЧНОСТЬ АЛГОРИТМОВ ИИ:</strong> Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.
-</p>
-
-<p>
-<strong>АВТОМАТИЧЕСКИЙ КОПИ-ТРЕЙДИНГ:</strong> Зеркалирование сделок лучших трейдеров платформы в один клик с защитой от просадок.
-</p>
-
-<p>
-<strong>ПРИОРИТЕТНЫЕ СЕРВЕРА С МИНИМАЛЬНЫМ ПИНГОМ:</strong> Мгновенное исполнение ордеров без задержек и проскальзываний на самых быстрых каналах.
-</p>
-
-<p>
-<strong>ЕЖЕНЕДЕЛЬНЫЕ ДЕНЕЖНЫЕ ТУРНИРЫ:</strong> Участие в закрытых розыгрышах ценных призов и депозитов среди участников VIP-команды.
-</p>
-
-<p>
-<strong>ПЕРСОНАЛЬНЫЙ МАНИ-МЕНЕДЖМЕНТ ПЛАН:</strong> Индивидуальная стратегия разгона депозита от профессиональных трейдеров с личным разбором ошибок.
-</p>
-
-<p>
-<strong>АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:</strong> Автоматическое предупреждение и защита депозита во время выхода важных макроэкономических новостей.
-</p>
-
-<p>
-<strong>ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):</strong> Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.
-</p>
-
-
-<a href="https://bdclick.app/smart/naJly9" target="_blank">
-<button class="primary">Получить VIP доступ прямо сейчас</button>
-</a>
-
-
-<div class="action">
-
-<strong>💬 ВАШ ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР:</strong>
-
-<p>
-Остались вопросы по VIP доступу, пополнению или стратегии? Напишите нашему официальному представителю в Telegram, и вам помогут моментально!
-</p>
-
-<a href="https://t.me/jenna_mo1" target="_blank">
-<button class="secondary">Написать менеджеру (@jenna_mo1)</button>
-</a>
-
 </div>
-
-</section>
 
+<div class="footer">
+    BinoDex PRO • Market analysis engine<br>
+    Data: Binance Futures public market feeds
 </div>
 
-
-<section class="section">
-
-<button class="secondary" onclick="shareBot()">
-📤 ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ
-</button>
-
-</section>
-
 </div>
-
 
 <script>
 
@@ -1502,7 +691,7 @@ points="
    TELEGRAM
 ========================================================= */
 
-const tg = window.Telegram && window.Telegram.WebApp;
+const tg = window.Telegram?.WebApp;
 
 if(tg){
     tg.ready();
@@ -1511,838 +700,55 @@ if(tg){
 
 
 /* =========================================================
-   STATE
+   CONFIG
 ========================================================= */
 
-let state = {
-    price: 0,
-    direction: "WAIT",
-    entry: 0,
-    tp1: 0,
-    tp2: 0,
-    tp3: 0,
-    sl: 0,
-    support: 0,
-    resistance: 0,
-    position: null,
-    wins: 0,
-    losses: 0,
-    profit: 0,
-    analysisCount: 0
-};
+const API = "https://fapi.binance.com";
+
+let symbol = "BTCUSDT";
+let timeframe = "15m";
+
+let candles = [];
+let currentAnalysis = null;
+
+let chart;
+let candleSeries;
+let ema20Series;
+let ema50Series;
+let ema200Series;
+let vwapSeries;
+
+let socket = null;
+let liquidationSocket = null;
 
 
 /* =========================================================
-   SECTION NAVIGATION
+   HELPERS
 ========================================================= */
 
-function showSection(name,btn){
+const $ = id => document.getElementById(id);
 
-    document.getElementById("terminal").classList.add("hidden");
-    document.getElementById("academy").classList.add("hidden");
-    document.getElementById("vip").classList.add("hidden");
+function fmt(n, digits=2){
 
-    document.getElementById(name).classList.remove("hidden");
+    if(n === null || n === undefined || !isFinite(n))
+        return "—";
 
-    document.querySelectorAll(".nav button")
-        .forEach(x=>x.classList.remove("active"));
+    if(n >= 1000)
+        return n.toLocaleString("en-US",{
+            minimumFractionDigits:digits,
+            maximumFractionDigits:digits
+        });
 
-    if(btn) btn.classList.add("active");
+    return Number(n).toFixed(digits);
 }
 
-
-/* =========================================================
-   RANDOM HELPERS
-========================================================= */
-
-function random(min,max){
-    return Math.random()*(max-min)+min;
+function pct(n){
+    if(!isFinite(n)) return "—";
+    return n.toFixed(2) + "%";
 }
 
-function rnd(min,max,dec=2){
-    return Number(random(min,max).toFixed(dec));
-}
-
-function priceFor(asset){
-
-    const prices={
-        BTCUSDT:Math.round(random(85000,125000)),
-        ETHUSDT:Math.round(random(2500,5000)),
-        SOLUSDT:Math.round(random(100,300)),
-        EURUSD:rnd(1.03,1.20,5),
-        GBPUSD:rnd(1.20,1.40,5),
-        AAPL:rnd(150,280,2),
-        TSLA:rnd(180,450,2)
-    };
-
-    return prices[asset] || 100;
-}
-
-function formatPrice(v){
-
-    if(v < 2) return Number(v).toFixed(5);
-    if(v < 100) return Number(v).toFixed(2);
-
-    return Math.round(v).toLocaleString("en-US");
-}
-
-function pct(a,b){
-    return Math.abs((a-b)/b*100);
-}
-
-
-/* =========================================================
-   LOG
-========================================================= */
-
-function log(text,type=""){
-
-    const el=document.getElementById("liveLog");
-
-    const time=new Date().toLocaleTimeString("ru-RU");
-
-    el.innerHTML +=
-        `<br><span class="${type}">[${time}] ${text}</span>`;
-
-    el.scrollTop=el.scrollHeight;
-}
-
-
-/* =========================================================
-   ANALYSIS
-========================================================= */
-
-function runAnalysis(){
-
-    const asset=document.getElementById("asset").value;
-    const tf=document.getElementById("timeframe").value;
-
-    state.analysisCount++;
-
-    const base=priceFor(asset);
-
-    state.price=base;
-
-    /*
-      Композитная модель интерфейса.
-      Для реального live-feed сюда можно подключить
-      API биржи/провайдера котировок.
-    */
-
-    let bullish=Math.random();
-    let direction;
-
-    if(bullish>0.66){
-        direction="BUY";
-    }else if(bullish<0.34){
-        direction="SELL";
-    }else{
-        direction="WAIT";
-    }
-
-    state.direction=direction;
-
-    const trendScore=rnd(55,94,0);
-    const rsi=rnd(28,72,2);
-    const adx=rnd(18,48,2);
-    const atr=rnd(.4,3.8,2);
-
-    const resistance=base*(1+random(.004,.018));
-    const support=base*(1-random(.004,.018));
-
-    state.support=support;
-    state.resistance=resistance;
-
-    let entry=base;
-
-    if(direction==="BUY"){
-        entry=base*(1-random(.001,.006));
-        state.tp1=entry*(1+random(.006,.012));
-        state.tp2=entry*(1+random(.014,.024));
-        state.tp3=entry*(1+random(.026,.045));
-        state.sl=entry*(1-random(.006,.011));
-    }
-
-    if(direction==="SELL"){
-        entry=base*(1+random(.001,.006));
-        state.tp1=entry*(1-random(.006,.012));
-        state.tp2=entry*(1-random(.014,.024));
-        state.tp3=entry*(1-random(.026,.045));
-        state.sl=entry*(1+random(.006,.011));
-    }
-
-    if(direction==="WAIT"){
-        entry=base;
-        state.tp1=base;
-        state.tp2=base;
-        state.tp3=base;
-        state.sl=base;
-    }
-
-    state.entry=entry;
-
-    updateIndicators(rsi,adx,atr,trendScore);
-    updateTradePlan(direction,entry,base);
-    updateTimeframes();
-    updatePsychology();
-    updateRisk();
-
-    log("Получены новые рыночные параметры...","ok");
-    log("Проверка структуры рынка...");
-    log("Проверка ликвидности...");
-    log("Синхронизация RSI / MACD / SAR / EMA / BB...");
-    log("Расчёт зон входа...");
-    log("Расчёт TP / SL...");
-    log("Формирование торгового сценария...","ok");
-
-    updateHistory(asset,direction,base);
-
-}
-
-
-/* =========================================================
-   REFRESH
-========================================================= */
-
-function refreshAnalysis(){
-
-    runAnalysis();
-
-    const box=document.getElementById("refreshDecision");
-
-    if(state.position){
-
-        if(state.direction===state.position){
-
-            box.className="action";
-
-            box.innerHTML=`
-                <strong>🔄 ПОЗИЦИЯ СОХРАНЯЕТСЯ</strong>
-                Тренд пока поддерживает направление позиции.
-                Не увеличивать позицию.
-                Контролировать TP/SL.
-                При достижении зоны безубытка система рекомендует оценить перенос SL.
-            `;
-
-        }else{
-
-            box.className="action waitAction";
-
-            box.innerHTML=`
-                <strong>⚠️ КОНФЛИКТ СЦЕНАРИЯ</strong>
-                Новый анализ больше не подтверждает прежнее направление.
-                Не усреднять автоматически.
-                Дождаться подтверждения структуры.
-            `;
-
-        }
-
-    }else{
-
-        if(state.direction==="BUY"){
-
-            box.className="action";
-
-            box.innerHTML=`
-                <strong>🟢 ДЕЙСТВИЕ: LONG-СЦЕНАРИЙ</strong>
-                Вход возможен только при подтверждении зоны.
-                Если цена уже резко ушла вверх — не догонять.
-                Ждать откат к зоне входа либо подтверждение импульса.
-                После TP1 рассмотреть частичную фиксацию и защиту позиции.
-            `;
-
-        }else if(state.direction==="SELL"){
-
-            box.className="action sellAction";
-
-            box.innerHTML=`
-                <strong>🔴 ДЕЙСТВИЕ: SHORT-СЦЕНАРИЙ</strong>
-                Не входить после резкого падения в расширенной свече.
-                Ждать возврат к зоне либо подтверждение продолжения импульса.
-                После TP1 рассмотреть частичную фиксацию.
-            `;
-
-        }else{
-
-            box.className="action waitAction";
-
-            box.innerHTML=`
-                <strong>🟡 ДЕЙСТВИЕ: ЖДАТЬ</strong>
-                Нет достаточной конвергенции факторов.
-                Не открывать позицию только ради входа.
-                Ждать формирования более чистой структуры.
-            `;
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   INDICATORS
-========================================================= */
-
-function updateIndicators(rsi,adx,atr,trendScore){
-
-    const bullish=state.direction==="BUY";
-    const bearish=state.direction==="SELL";
-
-    document.getElementById("sar").innerText=
-        bullish?"BUY / точки под свечами":
-        bearish?"SELL / точки над свечами":
-        "Нейтрально";
-
-    document.getElementById("sar").className=
-        "metric-value "+(bullish?"green":bearish?"red":"yellow");
-
-    document.getElementById("rsi").innerText=rsi.toFixed(2);
-
-    document.getElementById("rsi").className=
-        "metric-value "+
-        (rsi>70?"red":rsi<30?"green":"yellow");
-
-    document.getElementById("macd").innerText=
-        bullish?"BULLISH":
-        bearish?"BEARISH":
-        "NEUTRAL";
-
-    document.getElementById("bb").innerText=
-        Math.random()>0.5?"Расширение":"Сжатие";
-
-    document.getElementById("ema").innerText=
-        bullish?"20 > 50":"20 < 50";
-
-    document.getElementById("ema200").innerText=
-        bullish?"Цена выше EMA200":
-        bearish?"Цена ниже EMA200":
-        "Цена около EMA200";
-
-    document.getElementById("adx").innerText=
-        adx.toFixed(2);
-
-    document.getElementById("stoch").innerText=
-        rnd(20,85,2).toFixed(2);
-
-    document.getElementById("atr").innerText=
-        atr.toFixed(2)+"%";
-
-    document.getElementById("vwap").innerText=
-        bullish?"Цена выше VWAP":
-        bearish?"Цена ниже VWAP":
-        "Около VWAP";
-
-    document.getElementById("volume").innerText=
-        Math.random()>0.55?"Повышенный":"Средний";
-
-    document.getElementById("momentum").innerText=
-        bullish?"Положительный":
-        bearish?"Отрицательный":
-        "Слабый";
-
-    document.getElementById("trend").innerText=
-        bullish?"ВОСХОДЯЩИЙ":
-        bearish?"НИСХОДЯЩИЙ":
-        "БОКОВОЙ";
-
-    document.getElementById("trendStrength").innerText=
-        trendScore+" / 100";
-
-    document.getElementById("momentumState").innerText=
-        bullish?"Ускорение":
-        bearish?"Ускорение вниз":
-        "Нейтральный";
-
-    document.getElementById("liquidity").innerText=
-        Math.random()>0.5?"Высокая":"Средняя";
-
-    document.getElementById("structure").innerText=
-        bullish?"HH / HL":
-        bearish?"LH / LL":
-        "Range";
-
-    document.getElementById("crowd").innerText=
-        bullish?"Покупатели доминируют":
-        bearish?"Продавцы доминируют":
-        "Баланс";
-
-    document.getElementById("support").innerText=
-        formatPrice(state.support);
-
-    document.getElementById("resistance").innerText=
-        formatPrice(state.resistance);
-
-    document.getElementById("volatility").innerText=
-        Math.random()>0.5?"ВЫСОКАЯ":"СРЕДНЯЯ";
-
-    document.getElementById("buyLiquidity").innerText=
-        rnd(35,70)+"%";
-
-    document.getElementById("sellLiquidity").innerText=
-        rnd(30,65)+"%";
-
-    document.getElementById("largeOrders").innerText=
-        Math.floor(random(8,31));
-
-    document.getElementById("imbalance").innerText=
-        bullish?"+ BUY":
-        bearish?"- SELL":
-        "BALANCE";
-}
-
-
-/* =========================================================
-   TRADE PLAN
-========================================================= */
-
-function updateTradePlan(direction,entry,base){
-
-    const signal=document.getElementById("signalMain");
-    const confidence=document.getElementById("confidence");
-    const action=document.getElementById("mainAction");
-
-    if(direction==="BUY"){
-
-        signal.innerText="🟢 BUY / LONG";
-        signal.className="signal-main buy";
-
-        confidence.innerText=
-            "Конфлюэнтность факторов: "+
-            rnd(72,94,0)+"%";
-
-        action.className="action";
-
-        action.innerHTML=`
-            <strong>🟢 ВХОД ПО LONG-СЦЕНАРИЮ</strong>
-            Основной вариант — ждать подтверждение зоны входа.
-            Не покупать импульсную свечу после сильного ускорения.
-            Контроль риска обязателен.
-        `;
-
-        document.getElementById("direction").innerText="BUY / LONG";
-        document.getElementById("direction").className="green";
-
-        document.getElementById("entryType").innerText=
-            Math.random()>0.5?"MARKET после подтверждения":"LIMIT на откате";
-
-        document.getElementById("entryDecision").innerText=
-            "LONG после подтверждения";
-
-        document.getElementById("entryMode").innerText=
-            "Откат / подтверждение";
-
-        document.getElementById("limitZone").innerText=
-            formatPrice(entry*0.995)+" — "+formatPrice(entry);
-
-        document.getElementById("invalidLevel").innerText=
-            formatPrice(state.sl);
-
-        document.getElementById("entryInstruction").innerHTML=`
-            <strong>🟢 LONG-ИНСТРУКЦИЯ</strong>
-            Ждать возврата в отмеченную зону.
-            Если цена подтверждает поддержку и импульс возвращается вверх —
-            сценарий активен.
-            Если цена ломает защитный уровень — сценарий отменяется.
-        `;
-
-    }else if(direction==="SELL"){
-
-        signal.innerText="🔴 SELL / SHORT";
-        signal.className="signal-main sell";
-
-        confidence.innerText=
-            "Конфлюэнтность факторов: "+
-            rnd(72,94,0)+"%";
-
-        action.className="action sellAction";
-
-        action.innerHTML=`
-            <strong>🔴 ВХОД ПО SHORT-СЦЕНАРИЮ</strong>
-            Не продавать после резкого импульсного падения.
-            Предпочтительно дождаться возврата в зону и подтверждения продавцов.
-        `;
-
-        document.getElementById("direction").innerText="SELL / SHORT";
-        document.getElementById("direction").className="red";
-
-        document.getElementById("entryType").innerText=
-            Math.random()>0.5?"MARKET после подтверждения":"LIMIT на откате";
-
-        document.getElementById("entryDecision").innerText=
-            "SHORT после подтверждения";
-
-        document.getElementById("entryMode").innerText=
-            "Откат / подтверждение";
-
-        document.getElementById("limitZone").innerText=
-            formatPrice(entry)+" — "+formatPrice(entry*1.005);
-
-        document.getElementById("invalidLevel").innerText=
-            formatPrice(state.sl);
-
-        document.getElementById("entryInstruction").innerHTML=`
-            <strong>🔴 SHORT-ИНСТРУКЦИЯ</strong>
-            Ждать возврата к сопротивлению или зоне предложения.
-            При подтверждении продавцов сценарий активируется.
-            При пробое защитного уровня сценарий отменяется.
-        `;
-
-    }else{
-
-        signal.innerText="🟡 WAIT";
-        signal.className="signal-main wait";
-
-        confidence.innerText=
-            "Конфлюэнтность недостаточна для агрессивного входа";
-
-        action.className="action waitAction";
-
-        action.innerHTML=`
-            <strong>🟡 ЖДАТЬ</strong>
-            Рынок не даёт достаточно чистого преимущества.
-            Не открывать позицию только ради наличия сигнала.
-        `;
-
-        document.getElementById("direction").innerText="WAIT";
-        document.getElementById("direction").className="yellow";
-
-        document.getElementById("entryType").innerText="НЕТ ВХОДА";
-
-        document.getElementById("entryDecision").innerText=
-            "Ждать подтверждение";
-
-        document.getElementById("entryMode").innerText=
-            "NO TRADE";
-
-        document.getElementById("limitZone").innerText="—";
-        document.getElementById("invalidLevel").innerText="—";
-
-        document.getElementById("entryInstruction").innerHTML=`
-            <strong>🟡 НЕТ СДЕЛКИ</strong>
-            Ждать формирования направленного движения.
-            После следующего обновления проверить структуру заново.
-        `;
-
-    }
-
-    document.getElementById("currentPrice").innerText=
-        formatPrice(base);
-
-    document.getElementById("entryZone").innerText=
-        direction==="WAIT"
-        ?"—"
-        :formatPrice(entry);
-
-    document.getElementById("tp1").innerText=
-        direction==="WAIT"?"—":formatPrice(state.tp1);
-
-    document.getElementById("tp2").innerText=
-        direction==="WAIT"?"—":formatPrice(state.tp2);
-
-    document.getElementById("tp3").innerText=
-        direction==="WAIT"?"—":formatPrice(state.tp3);
-
-    document.getElementById("sl").innerText=
-        direction==="WAIT"?"—":formatPrice(state.sl);
-
-    document.getElementById("breakeven").innerText=
-        direction==="WAIT"?"—":
-        "После TP1 / подтверждения";
-
-    document.getElementById("nextAction").innerText=
-        direction==="BUY"?"Ждать LONG-зону":
-        direction==="SELL"?"Ждать SHORT-зону":
-        "Ждать";
-
-    document.getElementById("tpBox1").innerText=
-        direction==="WAIT"?"—":formatPrice(state.tp1);
-
-    document.getElementById("tpBox2").innerText=
-        direction==="WAIT"?"—":formatPrice(state.tp2);
-
-    document.getElementById("tpBox3").innerText=
-        direction==="WAIT"?"—":formatPrice(state.tp3);
-
-    document.getElementById("slBox").innerText=
-        direction==="WAIT"?"—":formatPrice(state.sl);
-
-    document.getElementById("beBox").innerText=
-        direction==="WAIT"?"—":"После TP1";
-
-    let riskReward=0;
-
-    if(direction==="BUY"){
-        riskReward=
-            (state.tp2-entry)/(entry-state.sl);
-    }
-
-    if(direction==="SELL"){
-        riskReward=
-            (entry-state.tp2)/(state.sl-entry);
-    }
-
-    document.getElementById("rrBox").innerText=
-        direction==="WAIT"?"—":"1:"+Math.max(1,riskReward).toFixed(2);
-
-    document.getElementById("tpInstruction").innerHTML=`
-        <strong>🎯 УПРАВЛЕНИЕ TAKE PROFIT</strong>
-        TP1 — первая зона фиксации части позиции.
-        После подтверждения движения можно рассмотреть перенос SL.
-        TP2 — основная зона.
-        TP3 — расширенная цель при сохранении импульса.
-        Если импульс ослабевает возле цели — не увеличивать позицию.
-    `;
-
-    updateChart();
-}
-
-
-/* =========================================================
-   TIMEFRAMES
-========================================================= */
-
-function updateTimeframes(){
-
-    const rows=[
-        ["tf1trend","tf1rsi","tf1mom","tf1signal"],
-        ["tf5trend","tf5rsi","tf5mom","tf5signal"],
-        ["tf1htrend","tf1hrsi","tf1hmom","tf1hsignal"],
-        ["tf4htrend","tf4hrsi","tf4hmom","tf4hsignal"],
-        ["tfdtrend","tfdrsi","tfdmom","tfdsignal"]
-    ];
-
-    rows.forEach((r,i)=>{
-
-        let d=state.direction;
-
-        if(i===0 && Math.random()<.25)
-            d="WAIT";
-
-        if(i===4 && Math.random()<.2)
-            d=state.direction==="BUY"?"SELL":
-              state.direction==="SELL"?"BUY":"WAIT";
-
-        document.getElementById(r[0]).innerText=
-            d==="BUY"?"BULLISH":
-            d==="SELL"?"BEARISH":"RANGE";
-
-        document.getElementById(r[1]).innerText=
-            rnd(32,68,1);
-
-        document.getElementById(r[2]).innerText=
-            d==="BUY"?"POSITIVE":
-            d==="SELL"?"NEGATIVE":"NEUTRAL";
-
-        document.getElementById(r[3]).innerText=
-            d==="BUY"?"BUY":
-            d==="SELL"?"SELL":"WAIT";
-
-    });
-
-}
-
-
-/* =========================================================
-   PSYCHOLOGY
-========================================================= */
-
-function updatePsychology(){
-
-    const values=[
-        ["fomo",["Низкий","Умеренный","Высокий"]],
-        ["panic",["Низкая","Умеренная","Высокая"]],
-        ["greed",["Низкая","Умеренная","Высокая"]]
-    ];
-
-    values.forEach(v=>{
-        document.getElementById(v[0]).innerText=
-            v[1][Math.floor(Math.random()*v[1].length)];
-    });
-
-    document.getElementById("liquidation").innerText=
-        Math.random()>0.7?"Повышенная":"Норма";
-
-}
-
-
-/* =========================================================
-   RISK
-========================================================= */
-
-function updateRisk(){
-
-    const balance=
-        Number(document.getElementById("balance").value)||0;
-
-    const risk=
-        Number(document.getElementById("risk").value)||0;
-
-    const riskMoney=balance*risk/100;
-
-    document.getElementById("riskMoney").innerText=
-        "$"+riskMoney.toFixed(2);
-
-    document.getElementById("positionSize").innerText=
-        "$"+(riskMoney*20).toFixed(2);
-
-    document.getElementById("currentBalance").innerText=
-        "$"+balance.toFixed(2);
-
-}
-
-
-/* =========================================================
-   OPEN POSITION
-========================================================= */
-
-function simulatePosition(side){
-
-    if(state.direction==="WAIT"){
-        alert("Система сейчас показывает WAIT. Сначала дождитесь подтверждения сценария.");
-        return;
-    }
-
-    if(side!==state.direction){
-        alert("Выбранное направление не совпадает с текущим аналитическим сценарием.");
-        return;
-    }
-
-    state.position=side;
-
-    document.getElementById("positionStatus").innerText=
-        side==="BUY"?"🟢 LONG ОТКРЫТ":"🔴 SHORT ОТКРЫТ";
-
-    document.getElementById("positionStatus").className=
-        "metric-value "+(side==="BUY"?"green":"red");
-
-    document.getElementById("floating").innerText="+$0.00";
-
-    document.getElementById("slAction").innerText=
-        "Контролировать SL";
-
-    document.getElementById("tpAction").innerText=
-        "Ждать TP1";
-
-    document.getElementById("refreshDecision").innerHTML=`
-        <strong>📌 ПОЗИЦИЯ ОТКРЫТА</strong>
-        Следующее обновление проверит,
-        сохраняется ли сценарий,
-        нужно ли ждать TP,
-        переносить SL или прекращать сценарий.
-    `;
-
-    log(
-        "Открыта тестовая позиция "+
-        (side==="BUY"?"LONG":"SHORT"),
-        side==="BUY"?"ok":"danger"
-    );
-
-}
-
-
-/* =========================================================
-   CLOSE POSITION
-========================================================= */
-
-function closePosition(){
-
-    if(!state.position){
-        alert("Открытой позиции нет.");
-        return;
-    }
-
-    const result=random(-1,1);
-
-    if(result>0){
-        state.wins++;
-        state.profit+=random(5,25);
-    }else{
-        state.losses++;
-        state.profit-=random(5,20);
-    }
-
-    state.position=null;
-
-    document.getElementById("positionStatus").innerText=
-        "НЕТ ПОЗИЦИИ";
-
-    document.getElementById("positionStatus").className=
-        "metric-value";
-
-    document.getElementById("floating").innerText=
-        "$0.00";
-
-    updateStats();
-
-    log("Позиция закрыта.","ok");
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-function updateStats(){
-
-    const total=state.wins+state.losses;
-
-    const wr=total
-        ? state.wins/total*100
-        : 0;
-
-    document.getElementById("wins").innerText=
-        state.wins;
-
-    document.getElementById("losses").innerText=
-        state.losses;
-
-    document.getElementById("winrate").innerText=
-        wr.toFixed(1)+"%";
-
-}
-
-
-/* =========================================================
-   SAVE RESULT
-========================================================= */
-
-function saveResult(){
-
-    updateStats();
-
-    alert(
-        "Результат зафиксирован.\n\n"+
-        "Плюсов: "+state.wins+
-        "\nМинусов: "+state.losses+
-        "\nВинрейт: "+
-        document.getElementById("winrate").innerText
-    );
-
-}
-
-
-/* =========================================================
-   HISTORY
-========================================================= */
-
-function updateHistory(asset,direction,price){
-
-    const history=document.getElementById("history");
-
-    const time=new Date().toLocaleTimeString("ru-RU");
-
-    const text=
-        `[${time}] ${asset} • `+
-        (direction==="BUY"?"LONG":
-         direction==="SELL"?"SHORT":"WAIT")+
-        ` • PRICE: ${formatPrice(price)}`;
-
-    history.innerHTML+=
-        `<br>${text}`;
-
-    history.scrollTop=history.scrollHeight;
-
+function sleep(ms){
+    return new Promise(r=>setTimeout(r,ms));
 }
 
 
@@ -2350,184 +756,1488 @@ function updateHistory(asset,direction,price){
    CHART
 ========================================================= */
 
-function updateChart(){
+function initChart(){
 
-    const tpLine=document.getElementById("chartTP1");
-    const slLine=document.getElementById("chartSL");
+    const el = $("chart");
 
-    if(state.direction==="BUY"){
+    chart = LightweightCharts.createChart(el,{
+        layout:{
+            background:{color:"#080d14"},
+            textColor:"#8997aa"
+        },
 
-        tpLine.setAttribute("y1","70");
-        tpLine.setAttribute("y2","70");
+        grid:{
+            vertLines:{color:"#101925"},
+            horzLines:{color:"#101925"}
+        },
 
-        slLine.setAttribute("y1","185");
-        slLine.setAttribute("y2","185");
+        crosshair:{
+            mode:LightweightCharts.CrosshairMode.Normal
+        },
 
-    }else if(state.direction==="SELL"){
+        rightPriceScale:{
+            borderColor:"#1d2938"
+        },
 
-        tpLine.setAttribute("y1","175");
-        tpLine.setAttribute("y2","175");
+        timeScale:{
+            borderColor:"#1d2938",
+            timeVisible:true,
+            secondsVisible:false
+        }
+    });
 
-        slLine.setAttribute("y1","65");
-        slLine.setAttribute("y2","65");
+    candleSeries = chart.addCandlestickSeries({
+        upColor:"#00e59a",
+        downColor:"#ff4d6d",
+        borderUpColor:"#00e59a",
+        borderDownColor:"#ff4d6d",
+        wickUpColor:"#00e59a",
+        wickDownColor:"#ff4d6d"
+    });
 
-    }else{
+    ema20Series = chart.addLineSeries({
+        color:"#ffc857",
+        lineWidth:1
+    });
 
-        tpLine.setAttribute("y1","120");
-        tpLine.setAttribute("y2","120");
+    ema50Series = chart.addLineSeries({
+        color:"#4da3ff",
+        lineWidth:1
+    });
 
-        slLine.setAttribute("y1","120");
-        slLine.setAttribute("y2","120");
+    ema200Series = chart.addLineSeries({
+        color:"#ff4d6d",
+        lineWidth:2
+    });
 
-    }
+    vwapSeries = chart.addLineSeries({
+        color:"#00d9ff",
+        lineWidth:1
+    });
 
+    window.addEventListener("resize",()=>{
+        chart.applyOptions({
+            width:el.clientWidth
+        });
+    });
 }
 
 
 /* =========================================================
-   COMPOUND
+   BINANCE REQUEST
 ========================================================= */
 
-function calculateCompound(){
+async function binance(path){
 
-    const deposit=
-        Number(document.getElementById("calcDeposit").value)||0;
+    const res = await fetch(API + path,{
+        cache:"no-store"
+    });
 
-    const percent=
-        Number(document.getElementById("calcPercent").value)||0;
+    if(!res.ok)
+        throw new Error("Binance API " + res.status);
 
-    const days=
-        Number(document.getElementById("calcDays").value)||0;
-
-    const result=
-        deposit*Math.pow(1+percent/100,days);
-
-    document.getElementById("compoundResult").innerText=
-        "$"+result.toFixed(2);
+    return await res.json();
 }
 
 
 /* =========================================================
-   REFERRAL
+   KLINES
 ========================================================= */
 
-function copyReferral(){
+async function getKlines(tf=timeframe,limit=500){
 
-    navigator.clipboard.writeText(
-        "https://bdclick.app/smart/naJly9"
+    return await binance(
+        `/fapi/v1/klines?symbol=${symbol}&interval=${tf}&limit=${limit}`
     );
+}
 
-    alert("Реферальная ссылка скопирована.");
+function normalizeKlines(data){
+
+    return data.map(x=>({
+        time:Math.floor(x[0]/1000),
+        open:+x[1],
+        high:+x[2],
+        low:+x[3],
+        close:+x[4],
+        volume:+x[5]
+    }));
 }
 
 
 /* =========================================================
-   SHARE
+   INDICATORS
 ========================================================= */
 
-function shareBot(){
+function sma(values,p){
 
-    const url="https://bdclick.app/smart/naJly9";
+    if(values.length<p) return null;
 
-    if(
-        tg &&
-        tg.openTelegramLink
-    ){
-        tg.openTelegramLink(
-            "https://t.me/share/url?url="+
-            encodeURIComponent(url)
-        );
-    }else{
+    let sum=0;
 
-        navigator.clipboard.writeText(url);
+    for(let i=values.length-p;i<values.length;i++)
+        sum+=values[i];
 
-        alert("Ссылка скопирована.");
+    return sum/p;
+}
+
+function ema(values,p){
+
+    if(values.length<p) return null;
+
+    const k=2/(p+1);
+
+    let e=sma(values.slice(0,p),p);
+
+    for(let i=p;i<values.length;i++)
+        e=values[i]*k+e*(1-k);
+
+    return e;
+}
+
+function emaSeries(values,p){
+
+    if(values.length<p) return [];
+
+    const k=2/(p+1);
+
+    let e=sma(values.slice(0,p),p);
+
+    const out=[];
+
+    out.push(e);
+
+    for(let i=p;i<values.length;i++){
+
+        e=values[i]*k+e*(1-k);
+
+        out.push(e);
     }
 
+    return out;
+}
+
+function rsi(values,p=14){
+
+    if(values.length<p+1) return null;
+
+    let gain=0;
+    let loss=0;
+
+    for(let i=1;i<=p;i++){
+
+        const d=values[i]-values[i-1];
+
+        if(d>=0) gain+=d;
+        else loss-=d;
+    }
+
+    gain/=p;
+    loss/=p;
+
+    for(let i=p+1;i<values.length;i++){
+
+        const d=values[i]-values[i-1];
+
+        const g=Math.max(d,0);
+        const l=Math.max(-d,0);
+
+        gain=(gain*(p-1)+g)/p;
+        loss=(loss*(p-1)+l)/p;
+    }
+
+    if(loss===0) return 100;
+
+    const rs=gain/loss;
+
+    return 100-(100/(1+rs));
+}
+
+function atr(data,p=14){
+
+    if(data.length<p+1) return null;
+
+    const tr=[];
+
+    for(let i=1;i<data.length;i++){
+
+        const h=data[i].high;
+        const l=data[i].low;
+        const pc=data[i-1].close;
+
+        tr.push(
+            Math.max(
+                h-l,
+                Math.abs(h-pc),
+                Math.abs(l-pc)
+            )
+        );
+    }
+
+    return sma(tr.slice(-p),p);
+}
+
+function macd(values){
+
+    const fast=ema(values,12);
+    const slow=ema(values,26);
+
+    if(fast===null || slow===null)
+        return null;
+
+    const macdLine=fast-slow;
+
+    const historical=[];
+
+    for(let i=26;i<values.length;i++){
+
+        const f=ema(values.slice(0,i+1),12);
+        const s=ema(values.slice(0,i+1),26);
+
+        if(f!==null && s!==null)
+            historical.push(f-s);
+    }
+
+    const signal=ema(historical,9);
+
+    return {
+        line:macdLine,
+        signal,
+        histogram:signal===null ? null : macdLine-signal
+    };
+}
+
+function bollinger(values,p=20,mult=2){
+
+    if(values.length<p) return null;
+
+    const arr=values.slice(-p);
+    const mean=sma(arr,p);
+
+    let variance=0;
+
+    for(const x of arr)
+        variance+=(x-mean)**2;
+
+    const sd=Math.sqrt(variance/p);
+
+    return {
+        middle:mean,
+        upper:mean+mult*sd,
+        lower:mean-mult*sd
+    };
+}
+
+function vwap(data){
+
+    let pv=0;
+    let vol=0;
+
+    for(const c of data){
+
+        const typical=(c.high+c.low+c.close)/3;
+
+        pv+=typical*c.volume;
+        vol+=c.volume;
+    }
+
+    return vol ? pv/vol : null;
+}
+
+function adx(data,p=14){
+
+    if(data.length < p*2+2)
+        return null;
+
+    let trs=[];
+    let plus=[];
+    let minus=[];
+
+    for(let i=1;i<data.length;i++){
+
+        const cur=data[i];
+        const prev=data[i-1];
+
+        const tr=Math.max(
+            cur.high-cur.low,
+            Math.abs(cur.high-prev.close),
+            Math.abs(cur.low-prev.close)
+        );
+
+        const up=cur.high-prev.high;
+        const down=prev.low-cur.low;
+
+        trs.push(tr);
+        plus.push(up>down && up>0 ? up : 0);
+        minus.push(down>up && down>0 ? down : 0);
+    }
+
+    let tr14=sma(trs.slice(0,p),p);
+    let p14=sma(plus.slice(0,p),p);
+    let m14=sma(minus.slice(0,p),p);
+
+    const dx=[];
+
+    for(let i=p;i<trs.length;i++){
+
+        tr14=(tr14*(p-1)+trs[i])/p;
+        p14=(p14*(p-1)+plus[i])/p;
+        m14=(m14*(p-1)+minus[i])/p;
+
+        const pdi=100*(p14/tr14);
+        const mdi=100*(m14/tr14);
+
+        const d=Math.abs(pdi-mdi)/(pdi+mdi)*100;
+
+        dx.push(d);
+    }
+
+    return sma(dx.slice(-p),p);
 }
 
 
 /* =========================================================
-   LIVE WHALE STATUS
+   ANALYZE ONE TIMEFRAME
 ========================================================= */
 
-function whaleUpdate(){
+function calculateTF(data){
 
-    const states=[
-        "Крупных аномальных перемещений не обнаружено.",
-        "Обнаружено повышенное движение ликвидности.",
-        "Фиксируется повышенная активность крупных ордеров.",
-        "Потоки ликвидности находятся в нормальном диапазоне."
-    ];
+    const closes=data.map(x=>x.close);
 
-    document.getElementById("whaleStatus").innerText=
-        states[Math.floor(Math.random()*states.length)];
+    const price=closes[closes.length-1];
+
+    const e20=ema(closes,20);
+    const e50=ema(closes,50);
+    const e200=ema(closes,200);
+
+    const r=rsi(closes);
+    const a=atr(data);
+    const m=macd(closes);
+    const bbv=bollinger(closes);
+    const vw=vwap(data);
+    const ax=adx(data);
+
+    let bull=0;
+    let bear=0;
+
+    if(price>e20) bull+=1;
+    else bull-=0;
+
+    if(e20>e50) bull+=2;
+    else bear+=2;
+
+    if(e50>e200) bull+=3;
+    else bear+=3;
+
+    if(price>e200) bull+=2;
+    else bear+=2;
+
+    if(m){
+
+        if(m.histogram>0) bull+=2;
+        else bear+=2;
+    }
+
+    if(r>52 && r<72)
+        bull+=2;
+
+    if(r<48 && r>28)
+        bear+=2;
+
+    if(vw){
+
+        if(price>vw) bull+=1;
+        else bear+=1;
+    }
+
+    if(ax!==null && ax>20){
+
+        if(bull>bear) bull+=2;
+        if(bear>bull) bear+=2;
+    }
+
+    const total=bull+bear;
+
+    let direction="NEUTRAL";
+
+    if(bull>bear*1.18)
+        direction="LONG";
+
+    else if(bear>bull*1.18)
+        direction="SHORT";
+
+    return {
+        price,
+        ema20:e20,
+        ema50:e50,
+        ema200:e200,
+        rsi:r,
+        atr:a,
+        macd:m,
+        bb:bbv,
+        vwap:vw,
+        adx:ax,
+        bull,
+        bear,
+        direction,
+        strength:total ? Math.abs(bull-bear)/total : 0
+    };
 }
 
 
 /* =========================================================
-   INIT
+   MULTI TIMEFRAME
 ========================================================= */
 
-document.getElementById("balance")
-    .addEventListener("input",updateRisk);
+async function multiTimeframe(){
 
-document.getElementById("risk")
-    .addEventListener("input",updateRisk);
+    const [d15,d1h,d4h]=await Promise.all([
+        getKlines("15m",300),
+        getKlines("1h",300),
+        getKlines("4h",300)
+    ]);
 
-document.getElementById("calcDeposit")
-    .addEventListener("input",calculateCompound);
+    const a15=calculateTF(normalizeKlines(d15));
+    const a1h=calculateTF(normalizeKlines(d1h));
+    const a4h=calculateTF(normalizeKlines(d4h));
 
-document.getElementById("calcPercent")
-    .addEventListener("input",calculateCompound);
+    return {a15,a1h,a4h};
+}
 
-document.getElementById("calcDays")
-    .addEventListener("input",calculateCompound);
 
-updateRisk();
-calculateCompound();
+/* =========================================================
+   MARKET MICROSTRUCTURE
+========================================================= */
 
-setInterval(whaleUpdate,7000);
+async function getMarketData(){
 
-setInterval(()=>{
+    const [depth,oi,premium]=await Promise.all([
+        binance(`/fapi/v1/depth?symbol=${symbol}&limit=20`),
+        binance(`/fapi/v1/openInterest?symbol=${symbol}`),
+        binance(`/fapi/v1/premiumIndex?symbol=${symbol}`)
+    ]);
 
-    if(state.position){
+    let bidVol=0;
+    let askVol=0;
 
-        const direction=state.position;
+    depth.bids.forEach(x=>{
+        bidVol+=+x[0]*+x[1];
+    });
 
-        const movement=random(-0.6,0.8);
+    depth.asks.forEach(x=>{
+        askVol+=+x[0]*+x[1];
+    });
 
-        document.getElementById("floating").innerText=
-            (movement>=0?"+":"")+
-            "$"+movement.toFixed(2);
+    const imbalance=
+        (bidVol-askVol)/(bidVol+askVol);
 
-        if(movement>0.5){
+    return {
+        imbalance,
+        openInterest:+oi.openInterest,
+        funding:+premium.lastFundingRate,
+        markPrice:+premium.markPrice
+    };
+}
 
-            document.getElementById("tpAction").innerText=
-                "Контролировать TP1";
 
-            document.getElementById("slAction").innerText=
-                "Рассмотреть защиту прибыли";
+/* =========================================================
+   FINAL ENGINE
+========================================================= */
 
-        }else if(movement<-.4){
+function finalDecision(base,mtf,market){
 
-            document.getElementById("slAction").innerText=
-                "Контролировать SL";
+    let longScore=0;
+    let shortScore=0;
 
+    const reasons=[];
+
+    /* 15M */
+    if(mtf.a15.direction==="LONG"){
+        longScore+=18;
+        reasons.push(["15M trend","LONG","+18"]);
+    }
+
+    else if(mtf.a15.direction==="SHORT"){
+        shortScore+=18;
+        reasons.push(["15M trend","SHORT","-18"]);
+    }
+
+    else{
+        reasons.push(["15M trend","NEUTRAL","0"]);
+    }
+
+    /* 1H */
+    if(mtf.a1h.direction==="LONG"){
+        longScore+=22;
+        reasons.push(["1H confirmation","LONG","+22"]);
+    }
+
+    else if(mtf.a1h.direction==="SHORT"){
+        shortScore+=22;
+        reasons.push(["1H confirmation","SHORT","-22"]);
+    }
+
+    /* 4H */
+    if(mtf.a4h.direction==="LONG"){
+        longScore+=25;
+        reasons.push(["4H trend","LONG","+25"]);
+    }
+
+    else if(mtf.a4h.direction==="SHORT"){
+        shortScore+=25;
+        reasons.push(["4H trend","SHORT","-25"]);
+    }
+
+    /* EMA */
+    if(base.price>base.ema200){
+
+        longScore+=8;
+        reasons.push(["Price vs EMA200","BULLISH","+8"]);
+    }
+
+    else{
+
+        shortScore+=8;
+        reasons.push(["Price vs EMA200","BEARISH","-8"]);
+    }
+
+    /* RSI */
+    if(base.rsi>52 && base.rsi<70){
+
+        longScore+=8;
+        reasons.push(["RSI","BULLISH","+8"]);
+    }
+
+    else if(base.rsi<48 && base.rsi>30){
+
+        shortScore+=8;
+        reasons.push(["RSI","BEARISH","-8"]);
+    }
+
+    else{
+
+        reasons.push(["RSI","NEUTRAL","0"]);
+    }
+
+    /* MACD */
+    if(base.macd?.histogram>0){
+
+        longScore+=8;
+        reasons.push(["MACD","BULLISH","+8"]);
+    }
+
+    else if(base.macd?.histogram<0){
+
+        shortScore+=8;
+        reasons.push(["MACD","BEARISH","-8"]);
+    }
+
+    /* VWAP */
+    if(base.price>base.vwap){
+
+        longScore+=5;
+        reasons.push(["VWAP","ABOVE","+5"]);
+    }
+
+    else{
+
+        shortScore+=5;
+        reasons.push(["VWAP","BELOW","-5"]);
+    }
+
+    /* Order book */
+    if(market){
+
+        if(market.imbalance>0.08){
+
+            longScore+=6;
+            reasons.push(["Order Book","BUY PRESSURE","+6"]);
         }
 
+        else if(market.imbalance<-0.08){
+
+            shortScore+=6;
+            reasons.push(["Order Book","SELL PRESSURE","-6"]);
+        }
     }
+
+    /* ADX filter */
+    if(base.adx!==null){
+
+        if(base.adx<16){
+
+            longScore-=8;
+            shortScore-=8;
+
+            reasons.push([
+                "ADX",
+                "WEAK TREND / RANGE",
+                "-8"
+            ]);
+        }
+
+        else if(base.adx>25){
+
+            if(longScore>shortScore)
+                longScore+=5;
+
+            else
+                shortScore+=5;
+
+            reasons.push([
+                "ADX",
+                "STRONG TREND",
+                "+5"
+            ]);
+        }
+    }
+
+    const maxScore=125;
+
+    const difference=Math.abs(longScore-shortScore);
+
+    const confidence=Math.min(
+        99,
+        Math.round((difference/maxScore)*100)
+    );
+
+    let direction="WAIT";
+
+    /*
+       Главное правило:
+       не давать сигнал при слабом перевесе.
+    */
+
+    if(
+        longScore>shortScore &&
+        confidence>=42 &&
+        mtf.a4h.direction!=="SHORT"
+    ){
+        direction="LONG";
+    }
+
+    else if(
+        shortScore>longScore &&
+        confidence>=42 &&
+        mtf.a4h.direction!=="LONG"
+    ){
+        direction="SHORT";
+    }
+
+    const atrValue=base.atr || base.price*0.01;
+
+    let entryLow=base.price;
+    let entryHigh=base.price;
+
+    let sl=base.price;
+    let tp1=base.price;
+    let tp2=base.price;
+    let tp3=base.price;
+
+    if(direction==="LONG"){
+
+        entryLow=base.price-atrValue*.20;
+        entryHigh=base.price+atrValue*.20;
+
+        sl=entryLow-atrValue*1.25;
+
+        const risk=base.price-sl;
+
+        tp1=base.price+risk*1.2;
+        tp2=base.price+risk*2;
+        tp3=base.price+risk*3;
+    }
+
+    else if(direction==="SHORT"){
+
+        entryLow=base.price-atrValue*.20;
+        entryHigh=base.price+atrValue*.20;
+
+        sl=entryHigh+atrValue*1.25;
+
+        const risk=sl-base.price;
+
+        tp1=base.price-risk*1.2;
+        tp2=base.price-risk*2;
+        tp3=base.price-risk*3;
+    }
+
+    const risk=Math.abs(base.price-sl);
+
+    const rr=risk>0
+        ? Math.abs(tp2-base.price)/risk
+        : 0;
+
+    return {
+        direction,
+        confidence,
+        longScore,
+        shortScore,
+        entryLow,
+        entryHigh,
+        sl,
+        tp1,
+        tp2,
+        tp3,
+        rr,
+        reasons
+    };
+}
+
+
+/* =========================================================
+   UI
+========================================================= */
+
+function renderAnalysis(base,mtf,market,decision){
+
+    currentAnalysis=decision;
+
+    $("price").textContent=fmt(base.price,2);
+
+    $("rsi").textContent=fmt(base.rsi,1);
+    $("adx").textContent=fmt(base.adx,1);
+    $("macd").textContent=
+        base.macd
+        ? fmt(base.macd.histogram,4)
+        : "—";
+
+    $("ema20").textContent=fmt(base.ema20,2);
+    $("ema50").textContent=fmt(base.ema50,2);
+    $("ema200").textContent=fmt(base.ema200,2);
+
+    $("atr").textContent=fmt(base.atr,2);
+    $("vwap").textContent=fmt(base.vwap,2);
+
+    if(base.bb){
+
+        const position=
+            (base.price-base.bb.lower)/
+            (base.bb.upper-base.bb.lower);
+
+        $("bb").textContent=
+            Math.round(position*100)+"%";
+    }
+
+    const avgVol=
+        sma(
+            candles.map(x=>x.volume),
+            20
+        );
+
+    const volumeRatio=
+        avgVol ? candles[candles.length-1].volume/avgVol : 0;
+
+    $("volume").textContent=
+        volumeRatio
+        ? volumeRatio.toFixed(2)+"x"
+        : "—";
+
+    $("orderbook").textContent=
+        market
+        ? (market.imbalance>0
+            ? "+" : "")+
+            (market.imbalance*100).toFixed(1)+"%"
+        : "—";
+
+    $("oi").textContent=
+        market
+        ? fmt(market.openInterest,0)
+        : "—";
+
+    $("funding").textContent=
+        market
+        ? (market.funding*100).toFixed(4)+"%"
+        : "—";
+
+
+    $("mtf15").textContent=mtf.a15.direction;
+    $("mtf1h").textContent=mtf.a1h.direction;
+    $("mtf4h").textContent=mtf.a4h.direction;
+
+
+    $("mtf15").className=
+        mtf.a15.direction==="LONG"
+        ? "green"
+        : mtf.a15.direction==="SHORT"
+        ? "red":"yellow";
+
+    $("mtf1h").className=
+        mtf.a1h.direction==="LONG"
+        ? "green"
+        : mtf.a1h.direction==="SHORT"
+        ? "red":"yellow";
+
+    $("mtf4h").className=
+        mtf.a4h.direction==="LONG"
+        ? "green"
+        : mtf.a4h.direction==="SHORT"
+        ? "red":"yellow";
+
+
+    const box=$("signalBox");
+
+    box.className="signal "+
+        (
+            decision.direction==="LONG"
+            ?"long"
+            :decision.direction==="SHORT"
+            ?"short"
+            :"wait"
+        );
+
+
+    const dir=$("direction");
+
+    dir.textContent=
+        decision.direction==="LONG"
+        ? "🟢 LONG"
+        :decision.direction==="SHORT"
+        ? "🔴 SHORT"
+        : "🟡 WAIT";
+
+
+    dir.className=
+        "direction "+
+        (
+            decision.direction==="LONG"
+            ?"green"
+            :decision.direction==="SHORT"
+            ?"red"
+            :"yellow"
+        );
+
+
+    $("confidence").textContent=
+        decision.confidence+"%";
+
+
+    $("scoreFill").style.width=
+        Math.min(100,decision.confidence)+"%";
+
+    $("scoreFill").style.background=
+        decision.direction==="LONG"
+        ?"var(--green)"
+        :decision.direction==="SHORT"
+        ?"var(--red)"
+        :"var(--yellow)";
+
+
+    if(decision.direction==="LONG"){
+
+        $("action").textContent=
+            "УСЛОВИЕ: ждать вход в указанную зону. После подтверждения импульса — LONG.";
+
+        $("tradePlan").textContent=
+            "После TP1 можно частично закрыть позицию и перевести SL ближе к безубытку.";
+    }
+
+    else if(decision.direction==="SHORT"){
+
+        $("action").textContent=
+            "УСЛОВИЕ: ждать вход в указанную зону. После подтверждения импульса — SHORT.";
+
+        $("tradePlan").textContent=
+            "После TP1 можно частично закрыть позицию и перевести SL ближе к безубытку.";
+    }
+
+    else{
+
+        $("action").textContent=
+            "НЕ ВХОДИТЬ. Недостаточно согласованных подтверждений.";
+
+        $("tradePlan").textContent=
+            "Ждём нового подтверждения. Система специально блокирует слабый сигнал.";
+    }
+
+
+    $("entry").textContent=
+        fmt(decision.entryLow,2)+" — "+
+        fmt(decision.entryHigh,2);
+
+    $("sl").textContent=
+        fmt(decision.sl,2);
+
+    $("tp1").textContent=
+        fmt(decision.tp1,2);
+
+    $("tp2").textContent=
+        fmt(decision.tp2,2);
+
+    $("tp3").textContent=
+        fmt(decision.tp3,2);
+
+    $("rr").textContent=
+        decision.rr
+        ? "1 : "+decision.rr.toFixed(2)
+        : "—";
+
+
+    $("creditTrend").textContent=
+        mtf.a4h.direction;
+
+    $("creditMomentum").textContent=
+        base.macd?.histogram>0
+        ? "BULL"
+        :base.macd?.histogram<0
+        ?"BEAR"
+        :"NEUTRAL";
+
+    $("creditQuality").textContent=
+        decision.confidence+"%";
+
+
+    renderReasons(decision.reasons);
+
+    saveSignal(decision,base.price);
+}
+
+
+/* =========================================================
+   REASONS
+========================================================= */
+
+function renderReasons(reasons){
+
+    $("reasons").innerHTML="";
+
+    reasons.forEach(r=>{
+
+        const row=document.createElement("div");
+
+        row.className="reason";
+
+        let cls="neutral";
+
+        if(
+            String(r[1]).includes("LONG") ||
+            String(r[1]).includes("BULL") ||
+            String(r[1]).includes("ABOVE") ||
+            String(r[2]).startsWith("+")
+        ){
+            cls="good";
+        }
+
+        if(
+            String(r[1]).includes("SHORT") ||
+            String(r[1]).includes("BEAR") ||
+            String(r[1]).includes("BELOW") ||
+            String(r[2]).startsWith("-")
+        ){
+            cls="bad";
+        }
+
+        row.innerHTML=`
+            <span>${r[0]}</span>
+            <strong class="${cls}">
+                ${r[1]} ${r[2]}
+            </strong>
+        `;
+
+        $("reasons").appendChild(row);
+    });
+}
+
+
+/* =========================================================
+   CHART DATA
+========================================================= */
+
+function updateChart(){
+
+    if(!candleSeries || !candles.length)
+        return;
+
+    candleSeries.setData(
+        candles.map(c=>({
+            time:c.time,
+            open:c.open,
+            high:c.high,
+            low:c.low,
+            close:c.close
+        }))
+    );
+
+
+    const closes=candles.map(x=>x.close);
+
+    const e20=emaSeries(closes,20);
+    const e50=emaSeries(closes,50);
+    const e200=emaSeries(closes,200);
+
+    const vwapValues=[];
+
+    let pv=0;
+    let vol=0;
+
+    candles.forEach(c=>{
+
+        const tp=(c.high+c.low+c.close)/3;
+
+        pv+=tp*c.volume;
+        vol+=c.volume;
+
+        vwapValues.push({
+            time:c.time,
+            value:pv/vol
+        });
+    });
+
+
+    function makeLine(series,values,p){
+
+        if(!values.length) return;
+
+        const result=[];
+
+        const start=candles.length-values.length;
+
+        for(let i=0;i<values.length;i++){
+
+            result.push({
+                time:candles[start+i].time,
+                value:values[i]
+            });
+        }
+
+        series.setData(result);
+    }
+
+    makeLine(ema20Series,e20,20);
+    makeLine(ema50Series,e50,50);
+    makeLine(ema200Series,e200,200);
+
+    vwapSeries.setData(vwapValues);
+
+    chart.timeScale().fitContent();
+}
+
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+async function load(){
+
+    try{
+
+        $("action").textContent=
+            "Загрузка рыночных данных...";
+
+        const raw=await getKlines(timeframe,500);
+
+        candles=normalizeKlines(raw);
+
+        updateChart();
+
+        const base=calculateTF(candles);
+
+        const mtf=await multiTimeframe();
+
+        let market=null;
+
+        try{
+            market=await getMarketData();
+        }catch(e){
+            console.warn(e);
+        }
+
+        const decision=
+            finalDecision(
+                base,
+                mtf,
+                market
+            );
+
+        renderAnalysis(
+            base,
+            mtf,
+            market,
+            decision
+        );
+
+        $("symbolTitle").textContent=
+            symbol.replace("USDT"," / USDT");
+
+    }catch(e){
+
+        console.error(e);
+
+        $("action").textContent=
+            "Ошибка получения данных Binance. Повторяю подключение...";
+    }
+}
+
+
+/* =========================================================
+   REAL-TIME KLINE
+========================================================= */
+
+function connectSocket(){
+
+    if(socket){
+        try{
+            socket.close();
+        }catch(e){}
+    }
+
+    const stream=
+        symbol.toLowerCase()+
+        "@kline_"+
+        timeframe;
+
+    socket=
+        new WebSocket(
+            "wss://fstream.binance.com/ws/"+stream
+        );
+
+    socket.onmessage=async event=>{
+
+        try{
+
+            const msg=JSON.parse(event.data);
+
+            if(!msg.k)
+                return;
+
+            const k=msg.k;
+
+            const candle={
+                time:Math.floor(k.t/1000),
+                open:+k.o,
+                high:+k.h,
+                low:+k.l,
+                close:+k.c,
+                volume:+k.v
+            };
+
+            if(
+                candles.length &&
+                candles[candles.length-1].time===candle.time
+            ){
+                candles[candles.length-1]=candle;
+            }
+
+            else{
+                candles.push(candle);
+
+                if(candles.length>500)
+                    candles.shift();
+            }
+
+            $("price").textContent=
+                fmt(candle.close,2);
+
+            updateChart();
+
+            /*
+              Не пересчитываем дорогой MTF-анализ
+              на каждый тик.
+            */
+
+            if(k.x){
+
+                await runAnalysisOnly();
+            }
+
+        }catch(e){
+            console.warn(e);
+        }
+    };
+
+    socket.onclose=()=>{
+        setTimeout(connectSocket,3000);
+    };
+}
+
+
+/* =========================================================
+   REAL-TIME LIQUIDATIONS
+========================================================= */
+
+function connectLiquidations(){
+
+    if(liquidationSocket){
+
+        try{
+            liquidationSocket.close();
+        }catch(e){}
+    }
+
+    liquidationSocket=
+        new WebSocket(
+            "wss://fstream.binance.com/ws/"+
+            symbol.toLowerCase()+
+            "@forceOrder"
+        );
+
+    liquidationSocket.onmessage=event=>{
+
+        try{
+
+            const msg=JSON.parse(event.data);
+
+            if(!msg.o)
+                return;
+
+            const o=msg.o;
+
+            const side=
+                o.S==="BUY"
+                ? "SHORT LIQ"
+                : "LONG LIQ";
+
+            const qty=+o.q;
+
+            $("liquidations").textContent=
+                side+" "+
+                fmt(qty,2);
+
+        }catch(e){}
+    };
+
+    liquidationSocket.onclose=()=>{
+        setTimeout(connectLiquidations,5000);
+    };
+}
+
+
+/* =========================================================
+   ANALYSIS
+========================================================= */
+
+let analysisRunning=false;
+
+async function runAnalysisOnly(){
+
+    if(analysisRunning)
+        return;
+
+    analysisRunning=true;
+
+    try{
+
+        const base=calculateTF(candles);
+
+        const market=await getMarketData();
+
+        const mtf=await multiTimeframe();
+
+        const decision=
+            finalDecision(
+                base,
+                mtf,
+                market
+            );
+
+        renderAnalysis(
+            base,
+            mtf,
+            market,
+            decision
+        );
+
+    }catch(e){
+
+        console.warn(e);
+
+    }finally{
+
+        analysisRunning=false;
+    }
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function saveSignal(decision,price){
+
+    if(
+        decision.direction==="WAIT"
+    )
+        return;
+
+    const key=
+        symbol+"_"+timeframe;
+
+    const previous=
+        JSON.parse(
+            localStorage.getItem(key+"_signals")||"[]"
+        );
+
+    const last=previous[0];
+
+    /*
+       Не записываем один и тот же сигнал
+       каждую секунду.
+    */
+
+    if(
+        last &&
+        last.direction===decision.direction &&
+        Date.now()-last.time<15*60*1000
+    ){
+        return;
+    }
+
+    previous.unshift({
+        time:Date.now(),
+        direction:decision.direction,
+        price,
+        confidence:decision.confidence
+    });
+
+    localStorage.setItem(
+        key+"_signals",
+        JSON.stringify(previous.slice(0,30))
+    );
+
+    renderHistory();
+}
+
+function renderHistory(){
+
+    const key=
+        symbol+"_"+timeframe;
+
+    const arr=
+        JSON.parse(
+            localStorage.getItem(key+"_signals")||"[]"
+        );
+
+    $("history").innerHTML="";
+
+    arr.slice(0,12).forEach(x=>{
+
+        const tr=document.createElement("tr");
+
+        const date=
+            new Date(x.time)
+            .toLocaleTimeString();
+
+        tr.innerHTML=`
+            <td>${date}</td>
+            <td class="${
+                x.direction==="LONG"
+                ?"green":"red"
+            }">${x.direction}</td>
+            <td>${fmt(x.price,2)}</td>
+            <td>${x.confidence}%</td>
+        `;
+
+        $("history").appendChild(tr);
+    });
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document.querySelectorAll(".tf button")
+.forEach(btn=>{
+
+    btn.addEventListener("click",async()=>{
+
+        document
+            .querySelectorAll(".tf button")
+            .forEach(x=>x.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        timeframe=btn.dataset.tf;
+
+        await load();
+
+        connectSocket();
+
+    });
+});
+
+
+$("symbol").addEventListener("change",async e=>{
+
+    symbol=e.target.value;
+
+    await load();
+
+    connectSocket();
+
+    connectLiquidations();
+
+    renderHistory();
+});
+
+
+$("analyzeBtn").addEventListener(
+    "click",
+    async()=>{
+
+        const btn=$("analyzeBtn");
+
+        btn.textContent="⚡ АНАЛИЗИРУЮ...";
+
+        await load();
+
+        btn.textContent="⚡ ГЛУБОКИЙ АНАЛИЗ";
+    }
+);
+
+
+/* =========================================================
+   AUTO REFRESH
+========================================================= */
+
+setInterval(async()=>{
+
+    try{
+
+        const market=await getMarketData();
+
+        $("funding").textContent=
+            (market.funding*100).toFixed(4)+"%";
+
+        $("oi").textContent=
+            fmt(market.openInterest,0);
+
+        $("orderbook").textContent=
+            (market.imbalance>0?"+":"")+
+            (market.imbalance*100).toFixed(1)+"%";
+
+    }catch(e){}
 
 },5000);
 
 
+/*
+   Полный пересчёт каждые 60 секунд.
+*/
+
+setInterval(()=>{
+
+    runAnalysisOnly();
+
+},60000);
+
+
 /* =========================================================
-   FIRST ANALYSIS
+   START
 ========================================================= */
 
-setTimeout(()=>{
-    runAnalysis();
-},900);
+(async function(){
+
+    initChart();
+
+    renderHistory();
+
+    await load();
+
+    connectSocket();
+
+    connectLiquidations();
+
+})();
 
 </script>
 
