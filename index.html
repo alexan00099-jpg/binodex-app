@@ -786,7 +786,7 @@
             feed.scrollTop = feed.scrollHeight;
         }
 
-        // ОБНОВЛЕННЫЙ АЛГОРИТМ СКАНИРОВАНИЯ: ДИНАМИЧЕСКИЙ РАСЧЕТ НАПРАВЛЕНИЯ (ВВЕРХ / ВНИЗ) И ТОЧНОСТИ
+        // АЛГОРИТМ СКАНИРОВАНИЯ БЕЗ ПРОЦЕНТОВ И ШАНСОВ УСПЕХА
         function runAnalysis() {
             const res = document.getElementById('signalResult');
             const btn = document.getElementById('scanBtn');
@@ -802,16 +802,14 @@
             setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 2/5] Расчет тренда по Parabolic SAR и RSI...' : '⚡ [Step 2/5] Calculating SAR & RSI trend...'; }, 600);
             setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 3/5] Фильтрация волатильности Боллинджера...' : '⚡ [Step 3/5] Filtering Bollinger volatility...'; }, 1200);
             setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 4/5] Синхронизация мультитаймфреймного ядра...' : '⚡ [Step 4/5] Synchronizing multi-tf core...'; }, 1800);
-            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 5/5] Формирование точного прогноза...' : '⚡ [Step 5/5] Generating precise forecast...'; }, 2400);
+            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 5/5] Формирование прогноза...' : '⚡ [Step 5/5] Generating forecast...'; }, 2400);
 
             setTimeout(() => {
-                // Псевдо-динамический алгоритм на основе выбранного актива, таймфрейма и текущего времени
                 const hashVal = (asset.length + parseInt(tf) + Math.floor(Date.now() / 10000)) % 2;
                 const isUp = hashVal === 0;
-                const confidence = (82.5 + (Math.random() * 13.4)).toFixed(1); // Реалистичная точность от 82.5% до 95.9%
 
-                const dirTextRu = isUp ? `НАПРАВЛЕНИЕ: ВВЕРХ (BUY) • Точность: ${confidence}%` : `НАПРАВЛЕНИЕ: ВНИЗ (SELL) • Точность: ${confidence}%`;
-                const dirTextEn = isUp ? `DIRECTION: UP (BUY) • Accuracy: ${confidence}%` : `DIRECTION: DOWN (SELL) • Accuracy: ${confidence}%`;
+                const dirTextRu = isUp ? 'НАПРАВЛЕНИЕ: ВВЕРХ (BUY)' : 'НАПРАВЛЕНИЕ: ВНИЗ (SELL)';
+                const dirTextEn = isUp ? 'DIRECTION: UP (BUY)' : 'DIRECTION: DOWN (SELL)';
                 const dirColor = isUp ? 'var(--accent-green)' : 'var(--accent-red)';
                 
                 const psarEl = document.getElementById('confPsar');
@@ -822,8 +820,8 @@
                 document.getElementById('confMacd').innerText = isUp ? 'CROSS UP ACTIVE (+1.85)' : 'CROSS DOWN ACTIVE (-1.45)';
                 
                 res.innerHTML = currentLang === 'ru' ? 
-                    `📈 АНАЛИЗ ЗАВЕРШЕН. СИГНАЛ ГОТОВ<br><b style="color:${dirColor}; font-size:13px;">${dirTextRu}</b>` : 
-                    `📈 ANALYSIS COMPLETE. SIGNAL READY<br><b style="color:${dirColor}; font-size:13px;">${dirTextEn}</b>`;
+                    `📈 АНАЛИЗ ЗАВЕРШЕН. СИГНАЛ ГОТОВ<br><b style="color:${dirColor}; font-size:14px;">${dirTextRu}</b>` : 
+                    `📈 ANALYSIS COMPLETE. SIGNAL READY<br><b style="color:${dirColor}; font-size:14px;">${dirTextEn}</b>`;
                 res.style.color = dirColor;
                 btn.disabled = false;
             }, 3000);
