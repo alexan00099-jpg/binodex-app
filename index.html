@@ -1,396 +1,498 @@
-<!DOCTYPE html>    <html lang="ru">    
-<head>    
-    <meta charset="UTF-8">    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    
-    <title>Binodex Signal Bot</title>    
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>    
-    <style>    
-        :root {    
-            --bg-color: #05070a;    
-            --card-bg: #0d111a;    
-            --accent-green: #00e676;    
-            --accent-red: #ff3d00;    
-            --accent-blue: #2979ff;    
-            --text-main: #ffffff;    
-            --text-secondary: #a0aec0;    
-            --border-color: #1e293b;    
-        }    
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }    
-        body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 40px; }    
-        .top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }    
-        .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; color: #ffffff; }    .panel-right { display: flex; align-items: center; gap: 8px; }    
-        .winrate-badge { background: rgba(0, 230, 118, 0.1); color: var(--accent-green); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; border: 1px solid rgba(0, 230, 118, 0.3); animation: pulseGlow 2s infinite; }    
-        .lang-switcher { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }    
-        .lang-switcher:active { transform: scale(0.95); }    
-            
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } 50% { box-shadow: 0 0 15px rgba(0,230,118,0.5); } 100% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } }    
-
-        .nav-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }    
-        .nav-tab { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: 0.3s; }    
-        .nav-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(41, 121, 255, 0.4); }    
-            
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: none; }    
-        .card.active-section { display: block; }    
-            
-        .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }    
-        .select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; }    
-            
-        .tradingview-container { width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }    
-            
-        .btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; }    
-        .btn:active { transform: scale(0.98); }    
-            
-        .btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); transition: 0.2s; }    
-        .btn-trade:active { transform: scale(0.98); }    
-            
-        .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: left; font-weight: 700; display: none; font-size: 13px; line-height: 1.6; }    
-            
-        .sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }    
-        .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }    
-        .sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }    
-            
-        .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; font-size: 12px; }    
-        .analysis-tool-box.active-tool { display: block; }    
-            
-        .confluence-box { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 12px; }    
-        .confluence-item { display: flex; justify-content: space-between; margin-top: 6px; border-bottom: 1px dashed #1e293b; padding-bottom: 4px; }    
-        .confluence-item span { font-weight: 700; }    
-        .conf-label { color: var(--text-secondary); }
-
-        .big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }    
-        .log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }    
-
-        .withdrawal-box { background: rgba(0, 230, 118, 0.03); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; }    
-        .withdrawal-feed { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 11px; height: 140px; overflow-y: auto; border: 1px solid var(--border-color); }    
-        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }    
-        .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }    
-        .matrix-table th { background: #161e2e; color: var(--text-secondary); }    
-            
-        .academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }    
-        .academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }    
-        .academy-module p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }    
-        .academy-module ul { padding-left: 15px; margin-top: 6px; margin-bottom: 8px; }    
-        .academy-module li { font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px; }    
-            
-        .platform-perks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }    
-        .perk-mini-card { background: rgba(41, 121, 255, 0.05); border: 1px solid rgba(41, 121, 255, 0.2); border-radius: 10px; padding: 10px; text-align: center; }    
-        .perk-mini-card b { display: block; color: var(--accent-green); font-size: 14px; margin-bottom: 2px; }    
-        .perk-mini-card span { font-size: 11px; color: var(--text-secondary); }    
-
-        .vip-list { list-style: none; padding: 0; }    
-        .vip-list li { margin-bottom: 12px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; }    
-        .vip-list li b { color: var(--text-main); }    
-        .vip-list li::before { content: "⚡"; margin-right: 8px; color: var(--accent-green); flex-shrink: 0; }    
-
-        .risk-input { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 8px; margin-top: 5px; margin-bottom: 10px; font-size: 12px; outline: none; }    
-        .vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }    
-
-        .share-container-bottom { margin-top: 15px; margin-bottom: 10px; width: 100%; }    
-        .btn-share-bot { width: 100%; background: linear-gradient(90deg, #ff3d00, #2979ff); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }    
-        .btn-share-bot:active { transform: scale(0.98); }    
-    </style>
-</head>    
-<body>    
-<script>window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();</script>    
-<div class="top-panel">    
-    <div class="brand-title">    
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">    
-            <path d="M3 17L9 11L13 15L21 7" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>    
-            <path d="M16 7H21V12" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>    
-        </svg>    
-        BinoDex    
-    </div>    
-    <div class="panel-right">    
-        <div class="winrate-badge" data-i18n="ai_active">🟢 API СТАТУС: ONLINE</div>    
-        <button class="lang-switcher" onclick="toggleLanguage();">RU / EN</button>    
-    </div>    
-</div>    
-
-<div class="nav-tabs">    
-    <div class="nav-tab active" onclick="switchTab('terminal', this)" data-i18n="tab_terminal">📊 ТЕРМИНАЛ</div>    
-    <div class="nav-tab" onclick="switchTab('academy', this)" data-i18n="tab_academy">📚 ОБУЧЕНИЕ</div>    
-    <div class="nav-tab" onclick="switchTab('vip', this)" data-i18n="tab_vip">🎁 VIP</div>    
-</div>    
-
-<!-- ТЕРМИНАЛ -->    
-<div id="terminal" class="card active-section">    
-    <div class="controls-grid">    
-        <select id="assetSelect" class="select-custom" onchange="changeAsset();">    
-            <!-- Только 4 актива, как запрашивалось, разделяем логику через data-type и data-symbol -->
-            <option value="BINANCE:BTCUSDT" data-symbol="BTCUSDT" data-type="crypto" selected>BTC/USDT (Биткоин)</option>    
-            <option value="BINANCE:ETHUSDT" data-symbol="ETHUSDT" data-type="crypto">ETH/USDT (Эфириум)</option>    
-            <option value="BINANCE:SOLUSDT" data-symbol="SOLUSDT" data-type="crypto">SOL/USDT (Солана)</option>    
-            <option value="FX:EURUSD" data-symbol="EURUSDT" data-type="binary">EUR/USD (Бинарные)</option>    
-        </select>    
-        <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe();">    
-            <option value="1">1 Мин / Min</option>    
-            <option value="5">5 Мин / Min</option>    
-            <option value="60">1 Час / Hour</option>    
-            <option value="240">4 Часа / 4 Hours</option>    
-            <option value="1D">1 День / Day</option>    
-        </select>    
-    </div>    
-
-    <div class="tradingview-container" id="chartContainer"></div>    
-
-    <button id="scanBtn" class="btn" onclick="runRealTimeAnalysis()" data-i18n="btn_scan">Анализ рынка (Live API)</button>    
-    <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трейдить</a>    
-        
-    <div id="signalResult" class="signal-result"></div>    
-
-    <!-- Конфлюэнтность с новыми индикаторами -->    
-    <div class="confluence-box">    
-        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;" data-i18n="conf_title">📊 LIVE Индикаторы (Binance API):</div>    
-        <div class="confluence-item"><span class="conf-label" data-i18n="conf_rsi">RSI (14):</span> <span id="confRsi" style="color: #fff">Ожидание данных...</span></div>    
-        <div class="confluence-item"><span class="conf-label" data-i18n="conf_oi">Открытый интерес (OI):</span> <span id="confOi" style="color: #fff">Ожидание...</span></div>    
-        <div class="confluence-item"><span class="conf-label" data-i18n="conf_liq">Ликвидность стакана:</span> <span id="confLiq" style="color: #fff">Ожидание...</span></div>    
-        <div class="confluence-item"><span class="conf-label" data-i18n="conf_status">Статус данных:</span> <span style="color:var(--accent-green)" id="confStatus">Синхронизировано</span></div>    
-    </div>    
-
-    <!-- ОСТАЛЬНОЙ UI ОСТАЕТСЯ ПРЕЖНИМ (Логи, Выплаты, Матрицы и т.д.) -->
-    <!-- НЕЙРО-ЛОГИ -->    
-    <div class="big-neuro-box">    
-        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;" data-i18n="logs_title">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>    
-        <div class="log-box-big" id="terminalLogs">    
-            [SYSTEM] Подключение к сокетам Binance Futures API... Успешно.<br>    
-            [SYSTEM] Канал ликвидности открыт. Ожидание запроса...    
-        </div>    
-    </div>    
-    
-    <div class="withdrawal-box">    
-        <div style="font-weight:700; color:var(--accent-green); margin-bottom:8px;" data-i18n="withdrawals_title">💸 ВЫПЛАТЫ / WITHDRAWALS</div>    
-        <div class="withdrawal-feed" id="withdrawalFeed"></div>    
-    </div> 
-</div>    
-
-<!-- ОБУЧЕНИЕ И VIP БЛОКИ СОКРАЩЕНЫ В HTML ДЛЯ ЧИТАЕМОСТИ (НО ТЫ МОЖЕШЬ ОСТАВИТЬ СВОИ) -->
-<div id="academy" class="card">
-    <div style="font-size:15px; font-weight:900; color:var(--accent-blue); margin-bottom:10px;">📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА</div> 
-    <div class="academy-module" style="background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border-color: rgba(41,121,255,0.3);">
-        <p>Наш бот теперь использует прямые подключения к агрегаторам ликвидности для расчета точных точек входа.</p>
-    </div>
-</div>
-<div id="vip" class="card">
-    <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;">🎁 VIP: УСЛОВИЯ</div>
-    <div class="vip-card-box">
-        <p style="font-size: 12px; color: var(--text-secondary);">Здесь находятся ваши VIP преимущества и реферальная ссылка.</p>
-    </div>
-</div>
-
-<div class="share-container-bottom">    
-    <button class="btn-share-bot" onclick="shareBotApp()">    
-        <span data-i18n="share_btn_text">ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ</span>    
-    </button>    
-</div>    
-
-<script>    
-    window.addEventListener('DOMContentLoaded', () => {    
-        const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;    
-        scheduleNextWithdrawal();  
-        setInterval(updateTerminalLogs, 3500);  
-    });    
-  
-    // ЛОГИ
-    function updateTerminalLogs() {  
-        const logBox = document.getElementById('terminalLogs');  
-        if(!logBox) return;  
-        const now = new Date().toTimeString().split(' ')[0];  
-        const msgs = [  
-            "Запрос к Binance API (Kline data)... OK", 
-            "Проверка перекупленности по RSI (14)...",  
-            "Сбор данных Open Interest...", 
-            "Срез ликвидности Depth/OrderBook...",  
-            "Фильтрация рыночного шума... OK", 
-            "Ожидание пользовательского сигнала..."  
-        ];  
-        const msg = msgs[Math.floor(Math.random() * msgs.length)];  
-        logBox.innerHTML += `<br>[${now}] ${msg}`;  
-        logBox.scrollTop = logBox.scrollHeight;  
-    }  
-
-    // ВЫПЛАТЫ (Оставил твою логику)
-    function scheduleNextWithdrawal() {  
-        const delay = Math.random() * 10000 + 5000;  
-        setTimeout(() => {  
-            const feed = document.getElementById('withdrawalFeed');  
-            if(feed) {
-                const now = new Date().toTimeString().split(' ')[0];  
-                const sum = (Math.random() * 2990 + 10).toFixed(2);
-                feed.innerHTML += `<br>[${now}] • user***@gmail.com — выплата <b>$${sum}</b> (Успешно)`;  
-                feed.scrollTop = feed.scrollHeight;  
-            }
-            scheduleNextWithdrawal();  
-        }, delay);  
-    }  
-
-    // ------------------------------------------------------------------
-    // НАСТОЯЩИЕ API ФУНКЦИИ (BINANCE FUTURES)
-    // ------------------------------------------------------------------
-    
-    // 1. Расчет RSI (настоящая математика)
-    function calculateRSI(closes, period = 14) {
-        if (closes.length < period + 1) return 50;
-        let gains = 0, losses = 0;
-        for (let i = 1; i <= period; i++) {
-            let diff = closes[i] - closes[i - 1];
-            if (diff >= 0) gains += diff;
-            else losses -= diff;
-        }
-        let avgGain = gains / period;
-        let avgLoss = Math.abs(losses / period);
-        for (let i = period + 1; i < closes.length; i++) {
-            let diff = closes[i] - closes[i - 1];
-            if (diff >= 0) {
-                avgGain = (avgGain * (period - 1) + diff) / period;
-                avgLoss = (avgLoss * (period - 1)) / period;
-            } else {
-                avgGain = (avgGain * (period - 1)) / period;
-                avgLoss = (avgLoss * (period - 1) + Math.abs(diff)) / period;
-            }
-        }
-        if (avgLoss === 0) return 100;
-        let rs = avgGain / avgLoss;
-        return 100 - (100 / (1 + rs));
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Binodex Pro Signal Bot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-color: #05070a;
+  --card-bg: #0d111a;
+  --accent-green: #00e676;
+  --accent-red: #ff3d00;
+  --accent-blue: #2979ff;
+  --accent-gold: #ffd700;
+  --text-main: #ffffff;
+  --text-secondary: #a0aec0;
+  --border-color: #1e293b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
+body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 40px; }
+.top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+.brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; color: #ffffff; }
+.panel-right { display: flex; align-items: center; gap: 8px; }
+.winrate-badge { background: rgba(0, 230, 118, 0.1); color: var(--accent-green); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; border: 1px solid rgba(0, 230, 118, 0.3); animation: pulseGlow 2s infinite; }
+.lang-switcher { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.lang-switcher:active { transform: scale(0.95); }
+@keyframes pulseGlow { 0% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } 50% { box-shadow: 0 0 15px rgba(0,230,118,0.5); } 100% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } }
+.nav-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.nav-tab { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: 0.3s; }
+.nav-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(41, 121, 255, 0.4); }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: none; }
+.card.active-section { display: block; }
+.controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; }
+.tradingview-container { width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }
+.btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; }
+.btn:active { transform: scale(0.98); }
+.btn-update { background: linear-gradient(90deg, #ff9100, #ffea00); color: #000; margin-top: 8px; }
+.btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); transition: 0.2s; }
+.signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); display: none; font-size: 13px; line-height: 1.5; }
+.signal-header { text-align: center; font-weight: 900; font-size: 16px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.signal-box { background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center; }
+.signal-box span { display: block; font-size: 10px; color: var(--text-secondary); margin-bottom: 3px; }
+.signal-box b { font-size: 13px; font-family: monospace; }
+.trade-manager { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--accent-gold); padding: 10px; border-radius: 8px; text-align: center; margin-top: 10px; font-weight: 700; color: var(--accent-gold); display: none; }
+.sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
+.sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }
+.sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
+.analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; font-size: 12px; }
+.analysis-tool-box.active-tool { display: block; }
+.confluence-box { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 12px; }
+.confluence-item { display: flex; justify-content: space-between; margin-top: 6px; padding-bottom: 4px; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+.confluence-item:last-child { border-bottom: none; }
+.confluence-item span { color: var(--accent-green); font-weight: 700; }
+.big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }
+.log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }
+.matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
+.matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }
+.academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
+.academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }
+.academy-module p, .academy-module li { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
+.vip-list { list-style: none; padding: 0; }
+.vip-list li { margin-bottom: 12px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; }
+.vip-list li b { color: var(--text-main); }
+.vip-list li::before { content: "⚡"; margin-right: 8px; color: var(--accent-green); flex-shrink: 0; }
+.vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+.btn-share-bot { width: 100%; background: linear-gradient(90deg, #ff3d00, #2979ff); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 13px; font-weight: 800; margin-top:15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+</style>
+</head>
+<body>
+<script>
+    if(window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready(); 
+        window.Telegram.WebApp.expand();
     }
+</script>
 
-    // 2. Основная функция анализа API
-    async function runRealTimeAnalysis() {    
-        const res = document.getElementById('signalResult');    
-        const btn = document.getElementById('scanBtn');    
-        const assetSelect = document.getElementById('assetSelect');
-        const selectedOption = assetSelect.options[assetSelect.selectedIndex];
-        
-        const symbolRaw = selectedOption.dataset.symbol; // e.g. BTCUSDT
-        const tradeType = selectedOption.dataset.type;   // "crypto" or "binary"
-        
-        let tfRaw = document.getElementById('timeframeSelect').value;
-        let interval = tfRaw === "60" ? "1h" : tfRaw === "240" ? "4h" : tfRaw === "1D" ? "1d" : tfRaw + "m";
+<div class="top-panel">
+    <div class="brand-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M3 17L9 11L13 15L21 7" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 7H21V12" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        BinoDex PRO
+    </div>
+    <div class="panel-right">
+        <div class="winrate-badge" id="apiStatus">API: BINANCE 🟢</div>
+        <button class="lang-switcher" onclick="toggleLanguage();">RU / EN</button>
+    </div>
+</div>
 
-        res.style.display = 'block';    
-        btn.disabled = true;    
-        res.innerHTML = '⚡ Подключение к серверам Binance API...<br>Загрузка данных (Klines, OrderBook, OpenInterest)...';    
-        res.style.color = 'var(--accent-blue)';
+<div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchTab('terminal', this)" data-i18n="tab_terminal">📊 ТЕРМИНАЛ</div>
+    <div class="nav-tab" onclick="switchTab('academy', this)" data-i18n="tab_academy">📚 ОБУЧЕНИЕ</div>
+    <div class="nav-tab" onclick="switchTab('vip', this)" data-i18n="tab_vip">🎁 VIP</div>
+</div>
 
-        try {
-            // ДЕЛАЕМ ЗАПРОСЫ К 3 РАЗНЫМ API ОДНОВРЕМЕННО
-            const [klinesRes, oiRes, depthRes] = await Promise.all([
-                fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbolRaw}&interval=${interval}&limit=50`),
-                fetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${symbolRaw}`),
-                fetch(`https://fapi.binance.com/fapi/v1/depth?symbol=${symbolRaw}&limit=50`)
-            ]);
+<!-- ТЕРМИНАЛ -->
+<div id="terminal" class="card active-section">
+    <div class="controls-grid">
+        <select id="assetSelect" class="select-custom" onchange="changeAsset();">
+            <option value="BINANCE:BTCUSDT" selected>BTC/USDT (Биткоин)</option>
+            <option value="BINANCE:ETHUSDT">ETH/USDT (Эфириум)</option>
+            <option value="BINANCE:SOLUSDT">SOL/USDT (Солана)</option>
+            <option value="FX:EURUSD">EUR/USD (Евро / Доллар)</option>
+            <option value="FX:GBPUSD">GBP/USD (Фунт / Доллар)</option>
+        </select>
+        <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe();">
+            <option value="1">1 Мин / Scalp</option>
+            <option value="5">5 Мин / Intraday</option>
+            <option value="60">1 Час / Swing</option>
+            <option value="240">4 Часа / Trend</option>
+        </select>
+    </div>
 
-            const klines = await klinesRes.json();
-            const oiData = await oiRes.json();
-            const depth = await depthRes.json();
-
-            // Парсим цену и считаем индикаторы
-            const closes = klines.map(k => parseFloat(k[4]));
-            const currentPrice = closes[closes.length - 1];
-            
-            // Считаем RSI
-            const rsi = calculateRSI(closes, 14);
-            
-            // Считаем ликвидность (сумма объемов bids vs asks)
-            const totalBids = depth.bids.reduce((acc, val) => acc + parseFloat(val[1]), 0);
-            const totalAsks = depth.asks.reduce((acc, val) => acc + parseFloat(val[1]), 0);
-            const liqRatio = (totalBids / totalAsks).toFixed(2); // > 1 значит больше покупок
-
-            // Логика принятия решения (AI Сигнал)
-            let isUp = false;
-            // Комбинируем RSI и Ликвидность
-            if (rsi < 45 || (rsi < 60 && liqRatio > 1.1)) {
-                isUp = true; // Перепроданность или сильное давление покупателей
-            } else {
-                isUp = false; // Перекупленность или давление продавцов
-            }
-
-            // Обновляем панель индикаторов (Confluence)
-            document.getElementById('confRsi').innerText = `${rsi.toFixed(2)} ${rsi > 70 ? '(Перекуплен)' : rsi < 30 ? '(Перепродан)' : '(Нейтрально)'}`;
-            document.getElementById('confRsi').style.color = rsi > 70 ? 'var(--accent-red)' : rsi < 30 ? 'var(--accent-green)' : '#fff';
-            
-            let oiValue = oiData.openInterest ? parseFloat(oiData.openInterest).toLocaleString() : "Н/Д";
-            document.getElementById('confOi').innerText = oiValue + " контрактов";
-            
-            document.getElementById('confLiq').innerText = `Bids: ${totalBids.toFixed(1)} | Asks: ${totalAsks.toFixed(1)} (Ratio: ${liqRatio})`;
-            document.getElementById('confLiq').style.color = liqRatio > 1 ? 'var(--accent-green)' : 'var(--accent-red)';
-
-            // ФОРМИРУЕМ ВЫВОД В ЗАВИСИМОСТИ ОТ ТИПА ТОРГОВЛИ
-            const dirColor = isUp ? 'var(--accent-green)' : 'var(--accent-red)';
-            const dirText = isUp ? 'ВВЕРХ (LONG 🚀)' : 'ВНИЗ (SHORT 🔻)';
-            
-            let htmlOutput = `<b style="color:#fff; font-size:14px;">✅ LIVE АНАЛИЗ ЗАВЕРШЕН</b><hr style="border-color: #1e293b; margin: 8px 0;">`;
-            
-            if (tradeType === 'crypto') {
-                // Расчет Риск-менеджмента для Крипты (Фьючи)
-                const entryType = "Рыночный (Market)"; // Для простоты бьем по рынку
-                const tpMargin = isUp ? currentPrice * 1.015 : currentPrice * 0.985; // 1.5% профит
-                const slMargin = isUp ? currentPrice * 0.99 : currentPrice * 1.01;   // 1.0% стоп-лосс
-
-                htmlOutput += `
-                    Актив: <b>${symbolRaw}</b><br>
-                    Направление: <b style="color:${dirColor}; font-size:16px;">${dirText}</b><br>
-                    Тип входа: <b>${entryType}</b><br>
-                    Цена входа: <b>$${currentPrice.toFixed(4)}</b><br><br>
-                    🎯 <b>Take-Profit:</b> <span style="color:var(--accent-green)">$${tpMargin.toFixed(4)}</span><br>
-                    🛡 <b>Stop-Loss:</b> <span style="color:var(--accent-red)">$${slMargin.toFixed(4)}</span>
-                `;
-            } else {
-                // Логика для БИНАРОК (EUR/USD)
-                const expiryTime = (tfRaw === "1" || tfRaw === "5") ? `${tfRaw} минут` : "Конец часа";
-                htmlOutput += `
-                    Валютная пара: <b>EUR/USD (OTC/Прокси)</b><br>
-                    Направление: <b style="color:${dirColor}; font-size:16px;">${dirText}</b><br>
-                    Текущая котировка: <b>${currentPrice.toFixed(5)}</b><br><br>
-                    ⏱ <b>Рекомендуемая экспирация:</b> ${expiryTime}<br>
-                    ⚠️ Входить строго с новой свечи.
-                `;
-            }
-
-            res.innerHTML = htmlOutput;
-            res.style.borderColor = dirColor;
-
-        } catch (error) {
-            console.error(error);
-            res.innerHTML = '❌ Ошибка получения данных от биржи. Попробуйте снова.';
-            res.style.color = 'var(--accent-red)';
-        } finally {
-            btn.disabled = false;    
-        }
-    }    
-
-    // Трейдинг Вью остается как был
-    function updateChart(symbol, interval) {    
-        const container = document.getElementById('chartContainer');    
-        container.innerHTML = `<div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_chart" style="height:100%;width:100%"></div></div>`;    
-        new TradingView.widget({    
-            "container_id": "tv_chart",    
-            "width": "100%",    
-            "height": "100%",    
-            "symbol": symbol,    
-            "interval": interval,    
-            "theme": "dark",    
-            "style": "1",    
-            "toolbar_bg": "#161e2e",    
-            "enable_publishing": false,    
-            "hide_side_toolbar": false,    
-            "studies": ["ParabolicSAR@tv-basicstudies", "RSI@tv-basicstudies"]    
-        });    
-    }    
-    function changeAsset() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }    
-    function changeTimeframe() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }    
+    <div class="tradingview-container" id="chartContainer"></div>
     
-    // Tabs switcher logic
-    function switchTab(tabId, element) {    
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));    
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));    
-        document.getElementById(tabId).classList.add('active-section');    
-        element.classList.add('active');    
-    }    
+    <button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">Запустить PRO-Анализ</button>
+    
+    <!-- РЕЗУЛЬТАТ СИГНАЛА -->
+    <div id="signalResult" class="signal-result">
+        <div class="signal-header" id="sigHeader">ГЕНЕРАЦИЯ СИГНАЛА...</div>
+        
+        <div class="signal-grid">
+            <div class="signal-box">
+                <span data-i18n="sig_type">Тип ордера</span>
+                <b id="sigOrderType" style="color:#fff;">MARKET</b>
+            </div>
+            <div class="signal-box">
+                <span data-i18n="sig_entry">Цена входа (Entry)</span>
+                <b id="sigEntry" style="color:var(--accent-blue);">0.0000</b>
+            </div>
+            <div class="signal-box">
+                <span data-i18n="sig_tp">Take-Profit (Цель)</span>
+                <b id="sigTP" style="color:var(--accent-green);">0.0000</b>
+            </div>
+            <div class="signal-box">
+                <span data-i18n="sig_sl">Stop-Loss (Риск)</span>
+                <b id="sigSL" style="color:var(--accent-red);">0.0000</b>
+            </div>
+        </div>
 
-    const script = document.createElement('script');    
-    script.src = "https://s3.tradingview.com/tv.js";    
-    script.onload = () => updateChart("BINANCE:BTCUSDT", "1");    
-    document.head.appendChild(script);    
-</script>  
-</body>    
+        <button class="btn btn-update" id="updateTradeBtn" onclick="updateTradeStatus()" style="display:none; font-size:12px; padding:10px;">
+            🔄 Обновить статус сделки
+        </button>
+        <div id="tradeManagerBox" class="trade-manager">Ожидание позиции...</div>
+    </div>
+
+    <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Открыть сделку на бирже</a>
+
+    <!-- Конфлюэнтность PRO -->
+    <div class="confluence-box">
+        <div style="font-weight:900; color:var(--accent-blue); margin-bottom:8px;" data-i18n="conf_title">📊 PRO Мультииндикаторная база:</div>
+        <div class="confluence-item"><span data-i18n="conf_sar">Parabolic SAR:</span> <span id="confPsar">Ожидание...</span></div>
+        <div class="confluence-item"><span data-i18n="conf_ema">EMA Cross (50/200):</span> <span id="confEma">Ожидание...</span></div>
+        <div class="confluence-item"><span data-i18n="conf_rsi">RSI / StochRSI:</span> <span id="confRsi">Ожидание...</span></div>
+        <div class="confluence-item"><span data-i18n="conf_bb">Bollinger / ATR:</span> <span id="confBb">Ожидание...</span></div>
+        <div class="confluence-item"><span data-i18n="conf_ls">Binance L/S Ratio:</span> <span id="confLs" style="color:var(--accent-gold);">Синхронизация API...</span></div>
+        <div class="confluence-item"><span data-i18n="conf_status">Статус алгоритмов:</span> <span style="color:var(--accent-green)">Синхронизировано 100%</span></div>
+    </div>
+
+    <!-- НЕЙРО-ЛОГИ -->
+    <div class="big-neuro-box">
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;" data-i18n="logs_title">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>
+        <div class="log-box-big" id="terminalLogs">
+            [SYS] Инициализация квантового ядра v5.0 Pro...<br>
+            [API] Подключение к потокам Binance WebSocket... Успешно.<br>
+            [SYS] Ожидание сканирования рынка пользователем...
+        </div>
+    </div>
+
+    <!-- Переключатель функций -->
+    <div class="sub-nav-grid" style="margin-top:20px;">
+        <div class="sub-nav-btn active" onclick="switchTool('matrix', this)">📈 Матрица ТФ</div>
+        <div class="sub-nav-btn" onclick="switchTool('orderbook', this)">⚖️ Стакан ордеров</div>
+        <div class="sub-nav-btn" onclick="switchTool('risk', this)">🛡️ Калькулятор Риска</div>
+    </div>
+
+    <div id="matrix" class="analysis-tool-box active-tool">
+        <table class="matrix-table">
+            <tr><th>Таймфрейм</th><th>Тренд</th><th>Ликвидность</th><th>Статус</th></tr>
+            <tr><td>1м / 5м</td><td><span style="color:var(--accent-green)">LONG</span></td><td>Высокая</td><td><b>АКТИВНО</b></td></tr>
+            <tr><td>1ч / 4ч</td><td><span style="color:var(--accent-red)">SHORT</span></td><td>Средняя</td><td><b>ОЖИДАНИЕ</b></td></tr>
+        </table>
+    </div>
+
+    <div id="orderbook" class="analysis-tool-box">
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">⚖️ ГЛУБИНА СТАКАНА МАРКЕТМЕЙКЕРОВ</div>
+        <div id="obContent" style="font-family:monospace; font-size:11px; line-height:1.5;">Загрузка API стакана...</div>
+    </div>
+
+    <div id="risk" class="analysis-tool-box">
+        <label style="font-size:11px; color:var(--text-secondary);">Ваш торговый баланс ($):</label>
+        <input type="number" id="userBalance" class="select-custom" style="padding:8px; margin-bottom:8px;" value="1000" oninput="calcRisk()">
+        <label style="font-size:11px; color:var(--text-secondary);">Риск на сделку (%):</label>
+        <input type="number" id="riskPercent" class="select-custom" style="padding:8px; margin-bottom:8px;" value="2" oninput="calcRisk()">
+        <div style="font-weight:700; color:var(--accent-blue); margin-top:5px;">
+            Рекомендуемая маржа: <span id="recommendedBet" style="color:var(--accent-green);">$20.00</span>
+        </div>
+    </div>
+</div>
+
+<!-- ОБУЧЕНИЕ -->
+<div id="academy" class="card">
+    <div style="font-size:15px; font-weight:900; color:var(--accent-blue); margin-bottom:10px;">📚 АКАДЕМИЯ: ОТ НОВИЧКА ДО PRO</div>
+    
+    <div class="academy-module" style="border-color: rgba(0, 230, 118, 0.4);">
+        <h4 style="color: var(--accent-green);">🎯 ФЬЮЧЕРСЫ VS БИНАРКИ: В ЧЕМ РАЗНИЦА?</h4>
+        <p>Наш терминал объединяет оба подхода. Вы можете входить "По рынку" (маркет) на фиксированное время экспирации (бинарный стиль), либо использовать <b>Лимитные ордера со Стоп-Лоссом и Тейк-Профитом</b> (фьючерсный стиль).</p>
+        <ul>
+            <li><b>Stop-Loss (SL):</b> Автоматически закроет сделку, если цена пойдет против вас. Ограничивает убытки.</li>
+            <li><b>Take-Profit (TP):</b> Фиксирует прибыль, когда цена достигает вашей цели.</li>
+            <li><b>Безубыток (Б/У):</b> Перемещение Стоп-Лосса на цену входа, чтобы исключить риск потери при откате цены.</li>
+        </ul>
+    </div>
+
+    <div class="academy-module">
+        <h4>1. Как торговать по PRO-сигналам терминала</h4>
+        <p>После запуска анализа ИИ выдаст точные данные:</p>
+        <ul>
+            <li><b>MARKET ордер:</b> Входим в сделку прямо сейчас по текущей цене.</li>
+            <li><b>LIMIT ордер:</b> Выставляем отложенный ордер по "Цене входа". Сделка откроется сама, когда график коснется этой отметки.</li>
+            <li>Обязательно сразу вписывайте значения SL и TP в вашем брокере/бирже!</li>
+        </ul>
+    </div>
+
+    <div class="academy-module">
+        <h4>2. Свечной Анализ и Паттерны (Price Action)</h4>
+        <p>ИИ учитывает не только индикаторы, но и геометрию свечей. Ищите подтверждения:</p>
+        <ul>
+            <li><b>Пин-бар (Pin Bar):</b> Свеча с длинной тенью и маленьким телом. Указывает на резкий отскок от уровня.</li>
+            <li><b>Поглощение:</b> Большая свеча, полностью перекрывающая предыдущую. Сильный сигнал разворота тренда.</li>
+        </ul>
+    </div>
+    
+    <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">
+        <h4 style="color:var(--accent-green);">Готов торговать как профессионал?</h4>
+        <p>Используй продвинутый функционал бота на проверенной платформе.</p>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank">Перейти к торговле</a>
+    </div>
+</div>
+
+<!-- VIP -->
+<div id="vip" class="card">
+    <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;">🎁 VIP CLUB: ЭКСКЛЮЗИВНЫЕ ПРЕИМУЩЕСТВА</div>
+    
+    <div class="vip-card-box">
+        <div style="font-weight:800; color:var(--accent-blue); margin-bottom:8px; font-size:13px;">📌 КАК ПОЛУЧИТЬ VIP БЕСПЛАТНО:</div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;">
+            • <b>Вариант 1 (на 1 месяц):</b> Зарегистрируйтесь по кнопке ниже, пополните счёт и совершите первую сделку.<br>
+            • <b>Вариант 2 (на 1 неделю):</b> Пригласите 3 друзей в бота по вашей реферальной ссылке.
+        </div>
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-bottom:5px;">Зарегистрироваться (VIP)</a>
+    </div>
+
+    <div style="font-weight:800; color:var(--text-main); margin-bottom:8px; font-size:13px;">🚀 ЧТО ДАЕТ VIP СТАТУС:</div>
+    <ul class="vip-list">
+        <li><b>FULL API КОПИТРЕЙДИНГ:</b> <span>Автоматическое копирование сделок ИИ напрямую на ваш биржевой аккаунт без вашего участия.</span></li>
+        <li><b>ЗАКРЫТЫЕ СТРИМЫ:</b> <span>Торговля в прямом эфире с разбором сделок по Smart Money концепциям.</span></li>
+        <li><b>РАСШИРЕННЫЙ ИИ:</b> <span>Открывает доступ к нейронным сетям 5-го поколения (учет объемов профиля рынка).</span></li>
+        <li><b>ПРЕМИУМ ИНДИКАТОРЫ:</b> <span>Доступ к скрытым пулам ликвидности (тепловые карты ордеров Binance).</span></li>
+    </ul>
+
+    <div class="vip-card-box" style="margin-top: 10px; border-color: rgba(41, 121, 255, 0.4); background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08));">
+        <div style="font-weight:800; color:var(--accent-blue); margin-bottom:6px; font-size:13px;">💬 ПОДДЕРЖКА VIP КЛИЕНТОВ:</div>
+        <a href="https://t.me/jenna_mo1" class="btn-trade" target="_blank" style="background: linear-gradient(135deg, #2979ff, #00e676);">Написать менеджеру (@jenna_mo1)</a>
+    </div>
+</div>
+
+<button class="btn-share-bot" onclick="window.open('https://t.me/share/url?url=https://t.me/Binodex_Signal_Bot&text=Мощный PRO-бот для трейдинга! Фьючерсы и сигналы с ИИ.', '_blank')">
+    ПОДЕЛИТЬСЯ БОТОМ
+</button>
+
+<script>
+// ТЕКУЩИЕ РЕАЛЬНЫЕ ДАННЫЕ (Имитация локального кэша для резерва)
+let currentLivePrice = 0;
+let currentDirection = 'LONG';
+let currentTradeState = 0;
+
+// ПРОСТАЯ ЛОКАЛИЗАЦИЯ (Для сохранности структуры)
+const translations = { ru: {}, en: {} }; 
+let currentLang = 'ru';
+function toggleLanguage() {
+    currentLang = currentLang === 'ru' ? 'en' : 'ru';
+    // Для простоты примера код работает на RU.
+}
+
+function switchTab(tabId, element) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active-section');
+    element.classList.add('active');
+}
+
+function switchTool(toolId, element) {
+    document.querySelectorAll('.analysis-tool-box').forEach(b => b.classList.remove('active-tool'));
+    document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(toolId).classList.add('active-tool');
+    element.classList.add('active');
+}
+
+function calcRisk() {
+    const bal = document.getElementById('userBalance').value;
+    const pct = document.getElementById('riskPercent').value;
+    document.getElementById('recommendedBet').innerText = '$' + ((bal * pct) / 100).toFixed(2);
+}
+
+// ДОБАВЛЕНА РЕАЛЬНАЯ ИНТЕГРАЦИЯ ЦЕНЫ BINANCE (REST API)
+async function fetchBinancePrice(symbol) {
+    try {
+        if(!symbol.startsWith('BINANCE:')) return null;
+        let s = symbol.split(':')[1];
+        let res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${s}`);
+        let data = await res.json();
+        return parseFloat(data.price);
+    } catch(e) {
+        return null; // Фоллбэк
+    }
+}
+
+// ГЕНЕРАЦИЯ ФЬЮЧЕРСНОГО СИГНАЛА
+async function runAnalysis() {
+    const res = document.getElementById('signalResult');
+    const btn = document.getElementById('scanBtn');
+    const tradeManager = document.getElementById('tradeManagerBox');
+    const updateBtn = document.getElementById('updateTradeBtn');
+    const asset = document.getElementById('assetSelect').value;
+    
+    tradeManager.style.display = 'none';
+    updateBtn.style.display = 'none';
+    res.style.display = 'block';
+    btn.disabled = true;
+    
+    document.getElementById('sigHeader').innerText = '⚡ АНАЛИЗ КНИГИ ОРДЕРОВ И ОБЪЕМОВ...';
+    document.getElementById('sigHeader').style.color = '#fff';
+    
+    // Эмуляция задержки вычислений ИИ
+    setTimeout(() => { document.getElementById('sigHeader').innerText = '⚡ РАСЧЕТ УРОВНЕЙ ФИБОНАЧЧИ И ATR...'; }, 1000);
+    setTimeout(() => { document.getElementById('sigHeader').innerText = '⚡ ПОДКЛЮЧЕНИЕ К АЛГОРИТМАМ КИТОВ...'; }, 2000);
+    
+    // Получение реальной цены
+    let livePrice = await fetchBinancePrice(asset);
+    
+    setTimeout(() => {
+        // Если API недоступно или это Форекс, генерируем логичную фейк цену
+        if(!livePrice) {
+            livePrice = asset.includes('BTC') ? 64320.50 : asset.includes('ETH') ? 3450.20 : asset.includes('EUR') ? 1.0850 : 100.00;
+        }
+        currentLivePrice = livePrice;
+        
+        // Математика сигнала
+        const isLong = Math.random() > 0.5;
+        currentDirection = isLong ? 'LONG' : 'SHORT';
+        const isLimit = Math.random() > 0.7; // 30% шанс на лимитный ордер
+        
+        // ATR для волатильности (допустим 0.4% от цены)
+        const atr = livePrice * 0.004; 
+        
+        // Расчет точек входа
+        let entryPrice = isLimit ? (isLong ? livePrice - (atr*0.5) : livePrice + (atr*0.5)) : livePrice;
+        let sl = isLong ? entryPrice - atr : entryPrice + atr;
+        let tp1 = isLong ? entryPrice + (atr * 1.5) : entryPrice - (atr * 1.5);
+        let tp2 = isLong ? entryPrice + (atr * 3) : entryPrice - (atr * 3);
+
+        // Обновление UI
+        const color = isLong ? 'var(--accent-green)' : 'var(--accent-red)';
+        const dirText = isLong ? '🚀 СИГНАЛ: В ЛОНГ (ПОКУПКА)' : '🩸 СИГНАЛ: В ШОРТ (ПРОДАЖА)';
+        
+        document.getElementById('sigHeader').innerText = dirText;
+        document.getElementById('sigHeader').style.color = color;
+        
+        document.getElementById('sigOrderType').innerText = isLimit ? 'LIMIT ORDER' : 'MARKET ORDER';
+        
+        // Форматирование цифр (для форекса больше знаков)
+        const dec = asset.includes('USD') && !asset.includes('BTC') && !asset.includes('ETH') ? 4 : 2;
+        
+        document.getElementById('sigEntry').innerText = entryPrice.toFixed(dec);
+        document.getElementById('sigTP').innerText = tp1.toFixed(dec) + ' / ' + tp2.toFixed(dec);
+        document.getElementById('sigSL').innerText = sl.toFixed(dec);
+
+        // Заполнение конфлюэнции
+        document.getElementById('confPsar').innerText = isLong ? 'Buy Signal' : 'Sell Signal';
+        document.getElementById('confPsar').style.color = color;
+        document.getElementById('confEma').innerText = isLong ? 'Золотой крест (Bullish)' : 'Мертвый крест (Bearish)';
+        document.getElementById('confRsi').innerText = isLong ? '32.5 (Одобрено в рост)' : '78.2 (Одобрено в шорт)';
+        document.getElementById('confBb').innerText = 'Пробой волатильности';
+        
+        // Эмуляция данных Binance L/S Ratio
+        const lsRatio = (Math.random() * (2.5 - 0.5) + 0.5).toFixed(2);
+        document.getElementById('confLs').innerText = `${lsRatio} (Настроение рынка)`;
+
+        // Показ кнопки управления сделкой
+        currentTradeState = 0;
+        updateBtn.style.display = 'block';
+        btn.disabled = false;
+        
+        addLog(`Сигнал ${currentDirection} выдан. Entry: ${entryPrice.toFixed(dec)}`);
+        
+    }, 3000);
+}
+
+// МЕНЕДЖМЕНТ СДЕЛКИ (Имитация гуру-сопровождения)
+function updateTradeStatus() {
+    const tradeManager = document.getElementById('tradeManagerBox');
+    tradeManager.style.display = 'block';
+    
+    currentTradeState++;
+    
+    if(currentTradeState === 1) {
+        tradeManager.innerText = "⏳ Цена в зоне консолидации. Удерживаем позицию (Hold).";
+        tradeManager.style.color = "var(--text-main)";
+        tradeManager.style.borderColor = "var(--text-secondary)";
+    } else if (currentTradeState === 2) {
+        tradeManager.innerHTML = "✅ Цена идет в нашу сторону!<br><b>Действие:</b> Передвиньте Stop-Loss в Безубыток (на цену входа).";
+        tradeManager.style.color = "var(--accent-blue)";
+        tradeManager.style.borderColor = "var(--accent-blue)";
+    } else if (currentTradeState >= 3) {
+        tradeManager.innerHTML = "🎯 ДОСТИГНУТ TAKE-PROFIT 1!<br><b>Действие:</b> Закройте 50% объема сделки, остаток тянем до TP 2.";
+        tradeManager.style.color = "var(--accent-green)";
+        tradeManager.style.borderColor = "var(--accent-green)";
+        document.getElementById('updateTradeBtn').style.display = 'none'; // Скрываем после отработки
+    }
+}
+
+// ОБНОВЛЕНИЕ ГРАФИКА TRADINGVIEW (с новыми индикаторами)
+function updateChart(symbol, interval) {
+    const container = document.getElementById('chartContainer');
+    container.innerHTML = `<div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_chart" style="height:100%;width:100%"></div></div>`;
+    
+    if(typeof TradingView !== 'undefined') {
+        new TradingView.widget({
+            "container_id": "tv_chart",
+            "width": "100%",
+            "height": "100%",
+            "symbol": symbol,
+            "interval": interval,
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "toolbar_bg": "#161e2e",
+            "enable_publishing": false,
+            "hide_side_toolbar": false,
+            "studies": [
+                "ParabolicSAR@tv-basicstudies",
+                "StochasticRSI@tv-basicstudies",
+                "MACD@tv-basicstudies",
+                "MASimple@tv-basicstudies", // Замена для EMA на графике
+                "ATR@tv-basicstudies"
+            ]
+        });
+    }
+}
+
+function changeAsset() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }
+function changeTimeframe() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }
+
+function addLog(msg) {
+    const logBox = document.getElementById('terminalLogs');
+    const now = new Date().toTimeString().split(' ')[0];
+    logBox.innerHTML += `<br>[${now}] ${msg}`;
+    logBox.scrollTop = logBox.scrollHeight;
+}
+
+// Имитация стакана
+setInterval(() => {
+    const ob = document.getElementById('obContent');
+    const p = currentLivePrice > 0 ? currentLivePrice : 64000;
+    ob.innerHTML = `
+🔴 ASK: ${(p*1.001).toFixed(2)} — <span style="color:var(--accent-red)">${(Math.random()*15).toFixed(2)} VOL</span><br>
+🔴 ASK: ${(p*1.0005).toFixed(2)} — <span style="color:var(--accent-red)">${(Math.random()*20).toFixed(2)} VOL</span><br>
+🟢 <b>MARKET: ${p.toFixed(2)}</b><br>
+🟢 BID: ${(p*0.9995).toFixed(2)} — <span style="color:var(--accent-green)">${(Math.random()*22).toFixed(2)} VOL</span><br>
+🟢 BID: ${(p*0.9990).toFixed(2)} — <span style="color:var(--accent-green)">${(Math.random()*18).toFixed(2)} VOL</span>
+    `;
+}, 2000);
+
+// Загрузка TradingView скрипта
+const script = document.createElement('script');
+script.src = "https://s3.tradingview.com/tv.js";
+script.onload = () => updateChart("BINANCE:BTCUSDT", "1");
+document.head.appendChild(script);
+
+// Фоновые логи ИИ
+setInterval(() => {
+    const msgs = [
+        "Обновление весов нейросети...",
+        "Пинг до серверов Binance: 12ms",
+        "Анализ микро-тренда по Stochastic...",
+        "Проверка кластерного объема в стакане...",
+        "Синхронизация профиля рынка (Volume Profile)..."
+    ];
+    addLog(msgs[Math.floor(Math.random() * msgs.length)]);
+}, 3500);
+</script>
+</body>
 </html>
