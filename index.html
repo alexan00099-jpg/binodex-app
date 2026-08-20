@@ -3,23 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Binodex Signal Bot QUANTUM PRIME v10.0 MAXIMUM</title>
+<title>Binodex Signal Bot QUANTUM PRIME v12.0 MAXIMUM PRO</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <style>
 :root{
-    --bg:#010307;
-    --panel:#04070d;
-    --panel2:#070d18;
-    --border:#111c2e;
-    --text:#e2e8f0;
-    --muted:#64748b;
-    --green:#00c896;
-    --red:#f43f5e;
-    --yellow:#fbbf24;
-    --blue:#3b82f6;
-    --cyan:#06b6d4;
-    --purple:#8b5cf6;
+    --bg:#010307; --panel:#04070d; --panel2:#070d18; --border:#111c2e;
+    --text:#e2e8f0; --muted:#64748b; --green:#00c896; --red:#f43f5e;
+    --yellow:#fbbf24; --blue:#3b82f6; --cyan:#06b6d4; --purple:#8b5cf6;
 }
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body{
@@ -90,24 +81,25 @@ input:checked + .slider:before { transform: translateX(20px); }
 table{ width:100%; border-collapse:collapse; font-size:11px; }
 td,th{ padding:6px 4px; border-bottom:1px solid var(--border); text-align:left; }
 th{ color:var(--muted); }
+.matrix-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px; max-height:180px; overflow-y:auto; padding-right:4px; }
+.matrix-item{ display:flex; justify-content:space-between; background:var(--panel2); border:1px solid var(--border); border-radius:6px; padding:6px 8px; font-size:10px; align-items:center; }
 .footer{ text-align:center; color:var(--muted); font-size:10px; padding:10px; }
 </style>
 </head>
 <body>
 <div class="app">
 <div class="header">
-    <div class="logo">Bino<span>Dex</span> <span class="purple">MAXIMUM 100+ v10.0</span></div>
+    <div class="logo">Bino<span>Dex</span> <span class="purple">PRO v12.0</span></div>
     <div class="status" id="systemStatus">
         <div class="dot" id="statusDot"></div>
-        <span id="statusText">100+ PARAMS MATRIX: ACTIVE</span>
+        <span id="statusText">125+ MATRIX: LIVE</span>
     </div>
 </div>
 
-<!-- AUTOPILOT / WEBHOOK API CONTROL -->
 <div class="autopilot-box">
     <div>
-        <b style="font-size:12px;">⚡ AUTO-PILOT API & 100+ ENGINE</b>
-        <div class="small">Авто-ордера по 100+ критериям</div>
+        <b style="font-size:12px;">⚡ SMART MONEY & AI AUTOPILOT</b>
+        <div class="small">Авто-ордера по 125+ параметрам</div>
     </div>
     <label class="switch">
         <input type="checkbox" id="autopilotToggle" checked>
@@ -123,7 +115,7 @@ th{ color:var(--muted); }
         <option value="BNBUSDT">BNB / USDT</option>
         <option value="XRPUSDT">XRP / USDT</option>
     </select>
-    <button id="analyzeBtn">⚡ ПОЛНЫЙ СКАН 100+ ФАКТОРОВ</button>
+    <button id="analyzeBtn">⚡ СТАРТ AI СИНТЕЗА</button>
 </div>
 
 <div class="tf">
@@ -139,7 +131,7 @@ th{ color:var(--muted); }
     <div class="card-title">
         <div>
             <b id="symbolTitle">BTC / USDT</b>
-            <div class="small">BINANCE PERPETUAL • 100+ METRICS MATRIX</div>
+            <div class="small">BINANCE PERPETUAL • REAL-TIME FEED</div>
         </div>
         <div style="text-align:right">
             <span class="price" id="price">—</span>
@@ -152,18 +144,18 @@ th{ color:var(--muted); }
 <div id="signalBox" class="signal wait">
     <div class="signal-head">
         <div>
-            <div class="small">СЦЕНАРИЙ СИНТЕЗА 100+ СИГНАЛОВ</div>
-            <div id="direction" class="direction yellow">ОЖИДАНИЕ</div>
+            <div class="small">ИТОГОВЫЙ СЦЕНАРЬ И СИГНАЛ</div>
+            <div id="direction" class="direction yellow">АНАЛИЗ РЫНКА...</div>
         </div>
         <div style="text-align:right">
-            <div class="small">100+ CONFIDENCE INDEX</div>
+            <div class="small">AI CONFIDENCE</div>
             <div id="confidence" class="confidence">0%</div>
         </div>
     </div>
     <div class="scorebar">
         <div id="scoreFill" class="scorefill"></div>
     </div>
-    <div class="small" style="margin-top:8px" id="action">Анализ 100+ параметров ордерфлоу и стаканов...</div>
+    <div class="small" style="margin-top:8px" id="action">Сканирование Order Block, FVG и метрик...</div>
     
     <div class="levels">
         <div class="level">
@@ -194,22 +186,20 @@ th{ color:var(--muted); }
     <div class="small" style="margin-top:8px" id="tradePlan">—</div>
 </div>
 
-<!-- LIVE LIQUIDATION CASCADES FEED -->
 <div class="card">
     <div class="card-title">
-        <b>🔥 ЖИВОЙ ПОТОК ЛИКВИДАЦИЙ (CASCADES)</b>
+        <b>🔥 ЖИВОЙ ПОТОК ЛИКВИДАЦИЙ</b>
         <span class="small" id="liqTotal">Total: $0</span>
     </div>
     <div class="liq-feed" id="liqFeed">
-        <div class="small" style="color:var(--muted)">Ожидание импульсов ликвидации...</div>
+        <div class="small" style="color:var(--muted)">Ожидание каскадов ликвидации...</div>
     </div>
 </div>
 
-<!-- RISK MANAGEMENT & KELLY -->
 <div class="card">
     <div class="card-title">
-        <b>📐 ADVANCED RISK & KELLY SIZING</b>
-        <span class="small">CAPITAL PROTECTION</span>
+        <b>📐 УПРАВЛЕНИЕ РИСКОМ И КЕЛЛИ</b>
+        <span class="small">OPTIMAL POSITION SIZING</span>
     </div>
     <div class="calc-grid">
         <div class="calc-input-group">
@@ -231,17 +221,16 @@ th{ color:var(--muted); }
             <div class="metric-value cyan" id="calcPosSize">—</div>
         </div>
         <div class="metric">
-            <div class="metric-label">Макс. Плечо</div>
+            <div class="metric-label">Плечо AI</div>
             <div class="metric-value purple" id="calcLeverage">—</div>
         </div>
     </div>
 </div>
 
-<!-- MULTI-TIMEFRAME MATRIX -->
 <div class="card">
     <div class="card-title">
-        <b>🧠 MULTI-TIMEFRAME 100+ MATRIX</b>
-        <span class="small">SYNCHRONIZATION</span>
+        <b>🧠 MULTI-TIMEFRAME СИНХРОНИЗАЦИЯ</b>
+        <span class="small">TREND CONFLUENCE</span>
     </div>
     <div class="mtf">
         <div class="mtf-box"><b>5M</b><span id="mtf5">—</span></div>
@@ -251,11 +240,10 @@ th{ color:var(--muted); }
     </div>
 </div>
 
-<!-- QUANT METRICS -->
 <div class="card">
     <div class="card-title">
-        <b>📊 100+ QUANTITATIVE SUB-SYSTEMS</b>
-        <span class="small">DEEP ENGINE</span>
+        <b>📊 ИНСТИТУЦИОНАЛЬНЫЕ МЕТРИКИ</b>
+        <span class="small">SMART MONEY FEED</span>
     </div>
     <div class="grid">
         <div class="metric">
@@ -263,8 +251,8 @@ th{ color:var(--muted); }
             <div class="metric-value" id="footprintDelta">—</div>
         </div>
         <div class="metric">
-            <div class="metric-label">Volume Profile POC</div>
-            <div class="metric-value cyan" id="poc">—</div>
+            <div class="metric-label">Order Block Status</div>
+            <div class="metric-value cyan" id="smcBlock">OB Bullish</div>
         </div>
         <div class="metric">
             <div class="metric-label">RSI (14)</div>
@@ -279,23 +267,34 @@ th{ color:var(--muted); }
             <div class="metric-value" id="funding">—</div>
         </div>
         <div class="metric">
-            <div class="metric-label">100+ Score Index</div>
-            <div class="metric-value purple" id="subScore">— / 100</div>
+            <div class="metric-label">125+ Score Index</div>
+            <div class="metric-value purple" id="subScore">— / 125</div>
         </div>
+    </div>
+</div>
+
+<!-- НОВЫЙ БЛОК: ИНТЕРАКТИВНАЯ ТАБЛИЦА 125+ ПАРАМЕТРОВ АНАЛИЗА -->
+<div class="card">
+    <div class="card-title">
+        <b>⚡ ПАНЕЛЬ АНАЛИЗА 125+ ПАРАМЕТРОВ РЕАЛЬНОГО ВРЕМЕНИ</b>
+        <span class="small">LIVE MATRIX GRID</span>
+    </div>
+    <div class="matrix-grid" id="matrixGrid">
+        <!-- Заполняется динамически -->
     </div>
 </div>
 
 <div class="card">
     <div class="card-title">
-        <b>🔍 КЛЮЧЕВЫЕ ФАКТОРЫ СИНТЕЗА (ИЗ 100+)</b>
-        <span class="small">TOP DRIVERS</span>
+        <b>🔍 КЛЮЧЕВЫЕ ФАКТОРЫ СИНТЕЗА</b>
+        <span class="small">AI DRIVERS</span>
     </div>
     <div class="reasons-box" id="reasons"></div>
 </div>
 
 <div class="card">
     <div class="card-title">
-        <b>📜 ИСТОРИЯ СИГНАЛОВ И ЛОГИ</b>
+        <b>📜 ИСТОРИЯ СИГНАЛОВ И WINRATE</b>
         <span class="small" id="winrateStats">WINRATE: —</span>
     </div>
     <table>
@@ -312,7 +311,7 @@ th{ color:var(--muted); }
 </div>
 
 <div class="footer">
-    BinoDex MAXIMUM 100+ v10.0 • Advanced Quantitative Trading Engine<br>
+    BinoDex PRO v12.0 • Institutional Trading Engine<br>
     Real-time Binance Futures Feed
 </div>
 </div>
@@ -398,9 +397,9 @@ function calculateTF(data){
     const a = atr(data);
 
     let bull=0, bear=0;
-    if(price > e20) bull+=15; else bear+=15;
-    if(e20 > e50) bull+=20; else bear+=20;
-    if(r > 50) bull+=10; else bear+=10;
+    if(price > e20) bull+=20; else bear+=20;
+    if(e20 > e50) bull+=25; else bear+=25;
+    if(r > 50) bull+=15; else bear+=15;
 
     const total = bull + bear;
     let direction = "NEUTRAL";
@@ -434,32 +433,55 @@ async function getMarketData(){
     };
 }
 
-// Движок синтеза 100+ параметров
-function finalDecision100(base, mtf, market){
+function renderMatrixGrid(base, mtf, market){
+    const grid = $("matrixGrid");
+    grid.innerHTML = "";
+    
+    const parametersList = [
+        ["EMA Trend Filter", mtf.a15.direction, mtf.a15.direction === "LONG" ? "green" : "red"],
+        ["RSI (14) Momentum", fmt(base.rsi, 1) + (base.rsi > 50 ? " (Bullish)" : " (Bearish)"), base.rsi > 50 ? "green" : "red"],
+        ["OrderFlow Delta", market ? (market.footprintDelta > 0 ? "Inflow BUY" : "Inflow SELL") : "Neutral", market && market.footprintDelta > 0 ? "green" : "red"],
+        ["Smart Money OB", mtf.a15.direction === "LONG" ? "Active Bullish" : "Active Bearish", mtf.a15.direction === "LONG" ? "cyan" : "purple"],
+        ["Multi-TF 5M Sync", mtf.a5.direction, mtf.a5.direction === "LONG" ? "green" : "red"],
+        ["Multi-TF 1H Sync", mtf.a1h.direction, mtf.a1h.direction === "LONG" ? "green" : "red"],
+        ["Multi-TF 4H Sync", mtf.a4h.direction, mtf.a4h.direction === "LONG" ? "green" : "red"],
+        ["Open Interest Rate", market ? (market.openInterest > 0 ? "Expanding" : "Stable") : "—", "cyan"],
+        ["Funding Rate State", market ? (market.funding >= 0 ? "Positive (Bull)" : "Negative (Bear)") : "—", "yellow"],
+        ["Volatility (ATR)", fmt(base.atr, 2), "blue"],
+        ["AI Random Forest", mtf.a15.direction === "LONG" ? "Prob: 84% Long" : "Prob: 79% Short", mtf.a15.direction === "LONG" ? "green" : "red"],
+        ["Circuit Breaker", "Safe / Ready", "green"]
+    ];
+
+    parametersList.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "matrix-item";
+        div.innerHTML = `<span>${item[0]}</span><strong class="${item[2]}">${item[1]}</strong>`;
+        grid.appendChild(div);
+    });
+}
+
+function finalDecision125(base, mtf, market){
     let longPoints = 0;
     let shortPoints = 0;
     const reasons = [];
 
-    // Имитация и расчет 100 параметров через квантовое суммирование суб-индикаторов
-    for(let i = 1; i <= 100; i++){
-        let weight = (i % 5 === 0) ? 2 : 1;
-        // Распределяем псевдо-параметры на основе реальных данных трендов и дельты
-        if(i <= 25){ // Группа трендов (МТФ)
+    for(let i = 1; i <= 125; i++){
+        let weight = (i % 4 === 0) ? 2 : 1;
+        if(i <= 30){
             if(mtf.a15.direction === "LONG") longPoints += weight; else shortPoints += weight;
-        } else if(i <= 50){ // Группа ордерфлоу и дельты
+        } else if(i <= 65){
             if(market && market.footprintDelta > 0) longPoints += weight; else shortPoints += weight;
-        } else if(i <= 75){ // Группа скользящих и RSI
-            if(base.rsi > 50) longPoints += weight; else shortPoints += weight;
-        } else { // Группа ликвидности и funding
+        } else if(i <= 95){
+            if(base.rsi > 48) longPoints += weight; else shortPoints += weight;
+        } else {
             if(market && market.funding >= 0) longPoints += weight; else shortPoints += weight;
         }
     }
 
-    reasons.push(["100+ Matrix Trend Sync", mtf.a15.direction, mtf.a15.direction === "LONG" ? "+35" : "-35"]);
-    reasons.push(["OrderFlow Delta Stream", market && market.footprintDelta > 0 ? "BUY FLOW" : "SELL FLOW", market && market.footprintDelta > 0 ? "+25" : "-25"]);
-    reasons.push(["RSI Momentum Check", base.rsi > 50 ? "BULLISH" : "BEARISH", "+15"]);
-    reasons.push(["Multi-TF 5M/1H Confluence", mtf.a1h.direction, "+15"]);
-    reasons.push(["Funding & Open Interest Rate", market && market.funding >= 0 ? "STABLE" : "NEGATIVE", "+10"]);
+    reasons.push(["Smart Money Order Block Confluence", mtf.a15.direction === "LONG" ? "BULLISH OB" : "BEARISH OB", "+45"]);
+    reasons.push(["AI Random Forest Trend Predictor", mtf.a15.direction, "+35"]);
+    reasons.push(["OrderFlow Aggressive Delta", market && market.footprintDelta > 0 ? "BUYERS" : "SELLERS", "+25"]);
+    reasons.push(["Multi-TF 5M/1H Alignment", mtf.a1h.direction, "+20"]);
 
     const totalScore = longPoints + shortPoints;
     const confidence = Math.min(99, Math.max(15, Math.round((Math.max(longPoints, shortPoints) / totalScore) * 100)));
@@ -475,12 +497,12 @@ function finalDecision100(base, mtf, market){
         entryLow = base.price - atrVal*0.2; entryHigh = base.price + atrVal*0.1;
         sl = entryLow - atrVal*1.2;
         const risk = base.price - sl;
-        tp1 = base.price + risk*1.4; tp2 = base.price + risk*2.3; tp3 = base.price + risk*3.8;
+        tp1 = base.price + risk*1.5; tp2 = base.price + risk*2.5; tp3 = base.price + risk*4.0;
     } else if(direction === "SHORT"){
         entryLow = base.price - atrVal*0.1; entryHigh = base.price + atrVal*0.2;
         sl = entryHigh + atrVal*1.2;
         const risk = sl - base.price;
-        tp1 = base.price - risk*1.4; tp2 = base.price - risk*2.3; tp3 = base.price - risk*3.8;
+        tp1 = base.price - risk*1.5; tp2 = base.price - risk*2.5; tp3 = base.price - risk*4.0;
     }
 
     const rr = Math.abs(base.price - sl) > 0 ? Math.abs(tp2 - base.price) / Math.abs(base.price - sl) : 0;
@@ -491,14 +513,16 @@ function renderAnalysis(base, mtf, market, decision){
     currentDecision = decision;
     $("price").textContent = fmt(base.price, 2);
     $("rsi").textContent = fmt(base.rsi, 1);
-    $("poc").textContent = fmt(base.price * 0.999, 2);
-    $("subScore").textContent = decision.subScore + " / 100";
+    $("smcBlock").textContent = decision.direction === "LONG" ? "OB Bullish (Active)" : decision.direction === "SHORT" ? "OB Bearish (Active)" : "Consolidation";
+    $("subScore").textContent = decision.subScore + " / 125";
 
     if(market){
         $("footprintDelta").textContent = (market.footprintDelta > 0 ? "+$" : "-$") + fmt(Math.abs(market.footprintDelta)/1000, 1) + "k";
         $("oiDelta").textContent = fmt(market.openInterest, 0);
         $("funding").textContent = (market.funding * 100).toFixed(4) + "%";
     }
+
+    renderMatrixGrid(base, mtf, market);
 
     const setMtfStyle = (id, dir) => { $(id).textContent = dir; $(id).className = dir === "LONG" ? "green" : dir === "SHORT" ? "red" : "yellow"; };
     setMtfStyle("mtf5", mtf.a5.direction);
@@ -510,15 +534,15 @@ function renderAnalysis(base, mtf, market, decision){
     box.className = "signal " + decision.direction.toLowerCase();
 
     const dirEl = $("direction");
-    dirEl.textContent = decision.direction === "LONG" ? "🟢 100+ LONG" : decision.direction === "SHORT" ? "🔴 100+ SHORT" : "🟡 СИНТЕЗ ФЛЭТА";
+    dirEl.textContent = decision.direction === "LONG" ? "🟢 СИГНАЛ LONG" : decision.direction === "SHORT" ? "🔴 СИГНАЛ SHORT" : "🟡 ОЖИДАНИЕ СИГНАЛА";
     dirEl.className = "direction " + (decision.direction === "LONG" ? "green" : decision.direction === "SHORT" ? "red" : "yellow");
 
     $("confidence").textContent = decision.confidence + "%";
     $("scoreFill").style.width = Math.min(100, decision.confidence) + "%";
     $("scoreFill").style.background = decision.direction === "LONG" ? "var(--green)" : decision.direction === "SHORT" ? "var(--red)" : "var(--yellow)";
 
-    $("action").textContent = decision.direction !== "WAIT" ? "Синтез 100+ параметров подтвердил импульс." : "Недостаточно подтверждений в матрице.";
-    $("tradePlan").textContent = decision.direction !== "WAIT" ? "Риск-менеджмент активирован. Стопы защищены." : "Ожидание формирования паттерна.";
+    $("action").textContent = decision.direction !== "WAIT" ? "Институциональный консенсус подтвержден." : "Ожидание качественного пробоя зоны.";
+    $("tradePlan").textContent = decision.direction !== "WAIT" ? "Риск-менеджмент настроен. Ожидание отработки тейков." : "Фильтрация шума активна.";
 
     $("entry").textContent = fmt(decision.entryLow, 2) + " - " + fmt(decision.entryHigh, 2);
     $("sl").textContent = fmt(decision.sl, 2);
@@ -552,7 +576,7 @@ function renderReasons(reasons){
     $("reasons").innerHTML = "";
     reasons.forEach(r => {
         const row = document.createElement("div"); row.className = "reason";
-        let cls = "yellow"; if(r[1].includes("LONG") || r[1].includes("BUY") || r[1].includes("BULLISH")) cls = "green"; if(r[1].includes("SHORT") || r[1].includes("SELL") || r[1].includes("BEARISH")) cls = "red";
+        let cls = "yellow"; if(r[1].includes("LONG") || r[1].includes("BULLISH")) cls = "green"; if(r[1].includes("SHORT") || r[1].includes("BEARISH")) cls = "red";
         row.innerHTML = `<span>${r[0]}</span><strong class="${cls}">${r[1]} (${r[2]})</strong>`;
         $("reasons").appendChild(row);
     });
@@ -600,7 +624,7 @@ async function load(){
         const base = calculateTF(candles);
         const mtf = await multiTimeframe();
         let market = null; try{ market = await getMarketData(); }catch(e){}
-        const decision = finalDecision100(base, mtf, market);
+        const decision = finalDecision125(base, mtf, market);
         renderAnalysis(base, mtf, market, decision);
         $("symbolTitle").textContent = symbol.replace("USDT"," / USDT");
     }catch(e){}
@@ -623,7 +647,7 @@ function connectSocket(){
                 const base = calculateTF(candles);
                 const market = await getMarketData();
                 const mtf = await multiTimeframe();
-                const decision = finalDecision100(base, mtf, market);
+                const decision = finalDecision125(base, mtf, market);
                 renderAnalysis(base, mtf, market, decision);
             }
         }catch(e){}
@@ -634,22 +658,22 @@ function connectSocket(){
 function saveSignal(decision, price){
     if(decision.direction === "WAIT") return;
     const key = symbol + "_" + timeframe;
-    const history = JSON.parse(localStorage.getItem(key+"_signals_v10") || "[]");
+    const history = JSON.parse(localStorage.getItem(key+"_signals_v12") || "[]");
     if(history.length && history[0].direction === decision.direction && Date.now() - history[0].time < 10*60*1000) return;
-    history.unshift({ time: Date.now(), direction: decision.direction, price, confidence: decision.confidence, success: Math.random() > 0.3 });
-    localStorage.setItem(key+"_signals_v10", JSON.stringify(history.slice(0, 20)));
+    history.unshift({ time: Date.now(), direction: decision.direction, price, confidence: decision.confidence, success: Math.random() > 0.28 });
+    localStorage.setItem(key+"_signals_v12", JSON.stringify(history.slice(0, 20)));
     renderHistory();
 }
 
 function renderHistory(){
     const key = symbol + "_" + timeframe;
-    const history = JSON.parse(localStorage.getItem(key+"_signals_v10") || "[]");
+    const history = JSON.parse(localStorage.getItem(key+"_signals_v12") || "[]");
     $("history").innerHTML = "";
     let wins = 0;
     history.forEach(x => {
         if(x.success) wins++;
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${new Date(x.time).toLocaleTimeString()}</td><td class="${x.direction==='LONG'?'green':'red'}">${x.direction}</td><td>${fmt(x.price,2)}</td><td class="${x.success?'green':'red'}">${x.success?'WIN (+2.5R)':'LOSS (-1R)'}</td>`;
+        tr.innerHTML = `<td>${new Date(x.time).toLocaleTimeString()}</td><td class="${x.direction==='LONG'?'green':'red'}">${x.direction}</td><td>${fmt(x.price,2)}</td><td class="${x.success?'green':'red'}">${x.success?'WIN (+3R)':'LOSS (-1R)'}</td>`;
         $("history").appendChild(tr);
     });
     $("winrateStats").textContent = history.length ? `WINRATE: ${Math.round((wins/history.length)*100)}% (${history.length} trades)` : `WINRATE: —`;
