@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Binodex Signal Bot PRO MAX ULTRA</title>
+<title>Binodex Signal Bot QUANTUM PRIME v6.0</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <style>
 :root{
-    --bg:#030508;
-    --panel:#070b12;
-    --panel2:#0b111c;
-    --border:#172233;
+    --bg:#020408;
+    --panel:#05080f;
+    --panel2:#090e18;
+    --border:#131c2e;
     --text:#e2e8f0;
     --muted:#64748b;
     --green:#00c896;
@@ -22,21 +22,16 @@
     --purple:#8b5cf6;
 }
 
-*{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
-}
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
 body{
     margin:0;
-    background: radial-gradient(circle at top, #0b1728 0%, #030508 55%);
+    background: radial-gradient(circle at top, #0a1424 0%, #020408 60%);
     color:var(--text);
     font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-button,select,input{
-    font:inherit;
-}
+button,select,input{ font:inherit; }
 
 .app{
     width:100%;
@@ -53,34 +48,32 @@ button,select,input{
 }
 
 .logo{
-    font-size:21px;
+    font-size:20px;
     font-weight:900;
     letter-spacing:.5px;
 }
 
-.logo span{
-    color:var(--cyan);
-}
+.logo span{ color:var(--cyan); }
 
 .status{
     display:flex;
     align-items:center;
     gap:6px;
     font-size:10px;
-    font-weight: 700;
-    color:var(--green);
-    background: rgba(0,200,150,0.1);
+    font-weight:700;
+    color:var(--purple);
+    background: rgba(139,92,246,0.12);
     padding: 4px 8px;
     border-radius: 20px;
-    border: 1px solid rgba(0,200,150,0.3);
+    border: 1px solid rgba(139,92,246,0.3);
 }
 
 .dot{
     width:7px;
     height:7px;
     border-radius:50%;
-    background:var(--green);
-    box-shadow:0 0 10px var(--green);
+    background:var(--purple);
+    box-shadow:0 0 10px var(--purple);
 }
 
 .controls{
@@ -99,16 +92,8 @@ select,button,input{
     outline:none;
 }
 
-button{
-    cursor:pointer;
-    font-weight:800;
-}
-
-button.active{
-    border-color:var(--cyan);
-    color:var(--cyan);
-    background: rgba(6,182,212,0.1);
-}
+button{ cursor:pointer; font-weight:800; }
+button.active{ border-color:var(--cyan); color:var(--cyan); background: rgba(6,182,212,0.1); }
 
 .tf{
     display:grid;
@@ -117,18 +102,15 @@ button.active{
     margin-bottom:8px;
 }
 
-.tf button{
-    padding:6px 2px;
-    font-size:11px;
-}
+.tf button{ padding:6px 2px; font-size:11px; }
 
 .card{
-    background:linear-gradient(145deg,var(--panel),#04070c);
+    background:linear-gradient(145deg,var(--panel),#030509);
     border:1px solid var(--border);
     border-radius:14px;
     padding:12px;
     margin-bottom:8px;
-    box-shadow:0 8px 30px rgba(0,0,0,.35);
+    box-shadow:0 8px 30px rgba(0,0,0,.4);
 }
 
 .card-title{
@@ -138,31 +120,13 @@ button.active{
     margin-bottom:8px;
 }
 
-.card-title b{
-    font-size:13px;
-    letter-spacing: 0.3px;
-}
+.card-title b{ font-size:13px; letter-spacing:0.3px; }
+.small{ font-size:10px; color:var(--muted); }
 
-.small{
-    font-size:10px;
-    color:var(--muted);
-}
+#chart{ width:100%; height:340px; }
 
-#chart{
-    width:100%;
-    height:360px;
-}
-
-.price{
-    font-size:26px;
-    font-weight:900;
-}
-
-.change{
-    font-size:12px;
-    margin-left:6px;
-    font-weight: 700;
-}
+.price{ font-size:26px; font-weight:900; }
+.change{ font-size:12px; margin-left:6px; font-weight:700; }
 
 .grid{
     display:grid;
@@ -170,11 +134,7 @@ button.active{
     gap:6px;
 }
 
-@media(max-width:768px){
-    .grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
+@media(max-width:768px){ .grid{ grid-template-columns:repeat(2,1fr); } }
 
 .metric{
     background:var(--panel2);
@@ -183,56 +143,24 @@ button.active{
     padding:8px;
 }
 
-.metric-label{
-    font-size:9px;
-    color:var(--muted);
-    text-transform:uppercase;
-    font-weight: 700;
-}
-
-.metric-value{
-    font-size:14px;
-    font-weight:900;
-    margin-top:3px;
-}
+.metric-label{ font-size:9px; color:var(--muted); text-transform:uppercase; font-weight:700; }
+.metric-value{ font-size:14px; font-weight:900; margin-top:3px; }
 
 .signal{
     border-radius:14px;
     padding:14px;
     margin-bottom:8px;
-    background:linear-gradient(145deg,#090e18,#04070d);
+    background:linear-gradient(145deg,#070b14,#03050a);
     border:1px solid var(--border);
 }
 
-.signal.long{
-    border-color:rgba(0,200,150,.7);
-    box-shadow:0 0 25px rgba(0,200,150,.12);
-}
+.signal.long{ border-color:rgba(0,200,150,.7); box-shadow:0 0 25px rgba(0,200,150,.12); }
+.signal.short{ border-color:rgba(244,63,94,.7); box-shadow:0 0 25px rgba(244,63,94,.12); }
+.signal.wait{ border-color:rgba(251,191,36,.6); }
 
-.signal.short{
-    border-color:rgba(244,63,94,.7);
-    box-shadow:0 0 25px rgba(244,63,94,.12);
-}
-
-.signal.wait{
-    border-color:rgba(251,191,36,.6);
-}
-
-.signal-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.direction{
-    font-size:22px;
-    font-weight:900;
-}
-
-.confidence{
-    font-size:16px;
-    font-weight:900;
-}
+.signal-head{ display:flex; justify-content:space-between; align-items:center; }
+.direction{ font-size:22px; font-weight:900; }
+.confidence{ font-size:16px; font-weight:900; }
 
 .levels{
     display:grid;
@@ -241,11 +169,7 @@ button.active{
     margin-top:10px;
 }
 
-@media(max-width:600px){
-    .levels{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
+@media(max-width:600px){ .levels{ grid-template-columns:repeat(2,1fr); } }
 
 .level{
     background:rgba(255,255,255,.02);
@@ -254,17 +178,8 @@ button.active{
     padding:8px;
 }
 
-.level span{
-    display:block;
-    font-size:9px;
-    color:var(--muted);
-    margin-bottom:3px;
-    font-weight: 700;
-}
-
-.level strong{
-    font-size:13px;
-}
+.level span{ display:block; font-size:9px; color:var(--muted); margin-bottom:3px; font-weight:700; }
+.level strong{ font-size:13px; }
 
 .green{color:var(--green)}
 .red{color:var(--red)}
@@ -273,19 +188,8 @@ button.active{
 .cyan{color:var(--cyan)}
 .purple{color:var(--purple)}
 
-.scorebar{
-    height:7px;
-    border-radius:20px;
-    background:#111827;
-    overflow:hidden;
-    margin-top:6px;
-}
-
-.scorefill{
-    height:100%;
-    width:0%;
-    transition:.4s;
-}
+.scorebar{ height:7px; border-radius:20px; background:#0f172a; overflow:hidden; margin-top:6px; }
+.scorefill{ height:100%; width:0%; transition:.4s; }
 
 .reason{
     display:flex;
@@ -294,98 +198,51 @@ button.active{
     border-bottom:1px solid rgba(255,255,255,.03);
     font-size:11px;
 }
+.reason:last-child{ border-bottom:0; }
 
-.reason:last-child{
-    border-bottom:0;
-}
+.mtf{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.mtf-box{ background:var(--panel2); border:1px solid var(--border); border-radius:8px; padding:8px; text-align:center; }
+.mtf-box b{ display:block; font-size:11px; margin-bottom:3px; }
 
-.mtf{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:6px;
-}
+.calc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+.calc-input-group{ background:var(--panel2); border:1px solid var(--border); border-radius:9px; padding:8px; }
+.calc-input-group input{ width:100%; margin-top:4px; padding:6px 8px; font-size:13px; border-radius:6px; border:1px solid var(--border); background:var(--bg); }
 
-.mtf-box{
-    background:var(--panel2);
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:8px;
-    text-align:center;
-}
-
-.mtf-box b{
-    display:block;
-    font-size:11px;
-    margin-bottom:3px;
-}
-
-.calc-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:6px;
-    margin-top:8px;
-}
-
-.calc-input-group{
+.heatmap-box{
     background:var(--panel2);
     border:1px solid var(--border);
     border-radius:9px;
-    padding:8px;
-}
-
-.calc-input-group input{
-    width:100%;
-    margin-top:4px;
-    padding:6px 8px;
-    font-size:13px;
-    border-radius:6px;
-    border:1px solid var(--border);
-    background:var(--bg);
-}
-
-.whale-alert{
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    border-radius: 10px;
-    padding: 8px 10px;
-    font-size: 11px;
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:11px;
-}
-
-td,th{
-    padding:6px 4px;
-    border-bottom:1px solid var(--border);
-    text-align:left;
-}
-
-th{
-    color:var(--muted);
-}
-
-.footer{
-    text-align:center;
-    color:var(--muted);
-    font-size:10px;
     padding:10px;
+    font-size:11px;
+    margin-bottom:8px;
 }
+
+.heatmap-bar{
+    height:6px;
+    background:#1e293b;
+    border-radius:4px;
+    margin-top:5px;
+    display:flex;
+    overflow:hidden;
+}
+
+.heatmap-fill-long{ background:var(--green); height:100%; transition: width 0.3s; }
+.heatmap-fill-short{ background:var(--red); height:100%; transition: width 0.3s; }
+
+table{ width:100%; border-collapse:collapse; font-size:11px; }
+td,th{ padding:6px 4px; border-bottom:1px solid var(--border); text-align:left; }
+th{ color:var(--muted); }
+
+.footer{ text-align:center; color:var(--muted); font-size:10px; padding:10px; }
 </style>
 </head>
 <body>
 <div class="app">
 <div class="header">
-    <div class="logo">Bino<span>Dex</span> <span class="purple">PRO MAX ULTRA</span></div>
+    <div class="logo">Bino<span>Dex</span> <span class="purple">QUANTUM PRIME v6.0</span></div>
     <div class="status">
         <div class="dot"></div>
-        QUANT DESK v5.0
+        FOOTPRINT & CVD DESK
     </div>
 </div>
 
@@ -397,10 +254,8 @@ th{
         <option value="BNBUSDT">BNB / USDT</option>
         <option value="XRPUSDT">XRP / USDT</option>
         <option value="DOGEUSDT">DOGE / USDT</option>
-        <option value="AVAXUSDT">AVAX / USDT</option>
-        <option value="LINKUSDT">LINK / USDT</option>
     </select>
-    <button id="analyzeBtn">⚡ УЛЬТРА АНАЛИЗ</button>
+    <button id="analyzeBtn">⚡ КВАНТОВЫЙ СКАН</button>
 </div>
 
 <div class="tf">
@@ -412,17 +267,23 @@ th{
     <button data-tf="1d">1D</button>
 </div>
 
-<!-- WHALE & MACRO ALERTS -->
-<div class="whale-alert" id="whaleAlertBox">
-    <div>🐋 <b>Whale Iceberg Tracker:</b> Ожидание крупного ордера...</div>
-    <div class="cyan" id="macroStatus">MACRO: STABLE</div>
+<!-- LIQUIDATION HEATMAP PANEL -->
+<div class="heatmap-box">
+    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+        <span>🔥 <b>Liquidation Heatmap Balance (Pain Matrix)</b></span>
+        <span class="cyan" id="heatmapRatio">Longs 50% / Shorts 50%</span>
+    </div>
+    <div class="heatmap-bar">
+        <div class="heatmap-fill-long" id="heatLong" style="width:50%"></div>
+        <div class="heatmap-fill-short" id="heatShort" style="width:50%"></div>
+    </div>
 </div>
 
 <div class="card">
     <div class="card-title">
         <div>
             <b id="symbolTitle">BTC / USDT</b>
-            <div class="small">BINANCE PERPETUAL • INSTITUTIONAL FEED</div>
+            <div class="small">BINANCE PERPETUAL • FOOTPRINT ENGINE</div>
         </div>
         <div style="text-align:right">
             <span class="price" id="price">—</span>
@@ -435,7 +296,7 @@ th{
 <div id="signalBox" class="signal wait">
     <div class="signal-head">
         <div>
-            <div class="small">ГЛАВНЫЙ СЦЕНАРИЙ СДЕЛКИ</div>
+            <div class="small">ИНСТИТУЦИОНАЛЬНЫЙ СИГНАЛ</div>
             <div id="direction" class="direction yellow">ОЖИДАНИЕ</div>
         </div>
         <div style="text-align:right">
@@ -446,7 +307,7 @@ th{
     <div class="scorebar">
         <div id="scoreFill" class="scorefill"></div>
     </div>
-    <div class="small" style="margin-top:8px" id="action">Инициализация квантовых матриц...</div>
+    <div class="small" style="margin-top:8px" id="action">Анализ потоков ордеров и стакана...</div>
     
     <div class="levels">
         <div class="level">
@@ -477,11 +338,11 @@ th{
     <div class="small" style="margin-top:8px" id="tradePlan">—</div>
 </div>
 
-<!-- POSITION SIZING & RISK MANAGER -->
+<!-- AUTO RISK-MANAGEMENT CALCULATOR -->
 <div class="card">
     <div class="card-title">
         <b>📐 AUTO RISK-MANAGEMENT CALCULATOR</b>
-        <span class="small">POSITION SIZING</span>
+        <span class="small">KELLY FORMULA</span>
     </div>
     <div class="calc-grid">
         <div class="calc-input-group">
@@ -535,82 +396,36 @@ th{
     </div>
 </div>
 
-<!-- ADVANCED TECHNICAL INDICATORS -->
+<!-- FOOTPRINT & MICROSTRUCTURE -->
 <div class="card">
     <div class="card-title">
-        <b>📊 ADVANCED QUANT INDICATORS</b>
-        <span class="small">LIVE METRICS</span>
+        <b>📊 FOOTPRINT & ORDERFLOW METRICS</b>
+        <span class="small">DEEP QUANT</span>
     </div>
     <div class="grid">
+        <div class="metric">
+            <div class="metric-label">Footprint Delta</div>
+            <div class="metric-value" id="footprintDelta">—</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">CVD Divergence</div>
+            <div class="metric-value" id="cvdDiv">—</div>
+        </div>
         <div class="metric">
             <div class="metric-label">RSI (14)</div>
             <div class="metric-value" id="rsi">—</div>
         </div>
         <div class="metric">
-            <div class="metric-label">CVD Delta (Taker)</div>
-            <div class="metric-value" id="cvdDelta">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">ADX (Trend Strength)</div>
-            <div class="metric-value" id="adx">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">MACD Hist</div>
-            <div class="metric-value" id="macd">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">EMA 20 / 50</div>
-            <div class="metric-value" id="emaCross">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">EMA 200 (Macro)</div>
-            <div class="metric-value" id="ema200">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">ATR Volatility</div>
-            <div class="metric-value" id="atr">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">VWAP Distance</div>
-            <div class="metric-value" id="vwap">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">Bollinger %B</div>
-            <div class="metric-value" id="bb">—</div>
-        </div>
-    </div>
-</div>
-
-<!-- MICROSTRUCTURE & LIQUIDATIONS -->
-<div class="card">
-    <div class="card-title">
-        <b>🐋 MARKET MICROSTRUCTURE & LIQUIDATIONS</b>
-        <span class="small">ORDERBOOK MAP</span>
-    </div>
-    <div class="grid">
-        <div class="metric">
-            <div class="metric-label">Order Book Imbalance</div>
-            <div class="metric-value" id="orderbook">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">Open Interest (OI)</div>
-            <div class="metric-value" id="oi">—</div>
+            <div class="metric-label">Open Interest Delta</div>
+            <div class="metric-value" id="oiDelta">—</div>
         </div>
         <div class="metric">
             <div class="metric-label">Funding Rate</div>
             <div class="metric-value" id="funding">—</div>
         </div>
         <div class="metric">
-            <div class="metric-label">Short Liq. Cluster</div>
-            <div class="metric-value red" id="shortLiqCluster">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">Long Liq. Cluster</div>
-            <div class="metric-value green" id="longLiqCluster">—</div>
-        </div>
-        <div class="metric">
-            <div class="metric-label">Live Liquidations</div>
-            <div class="metric-value" id="liquidations">0.00</div>
+            <div class="metric-label">Orderbook Imbalance</div>
+            <div class="metric-value" id="orderbook">—</div>
         </div>
     </div>
 </div>
@@ -643,8 +458,8 @@ th{
 </div>
 
 <div class="footer">
-    BinoDex PRO MAX ULTRA • Institutional Quant Desk<br>
-    Real-time Binance Futures Feed & CVD Engine
+    BinoDex QUANTUM PRIME v6.0 • Footprint & Orderflow Engine<br>
+    Real-time Binance Futures Feed
 </div>
 </div>
 
@@ -656,8 +471,8 @@ const API = "https://fapi.binance.com";
 let symbol = "BTCUSDT";
 let timeframe = "15m";
 let candles = [];
-let chart, candleSeries, ema20Series, ema50Series, ema200Series, vwapSeries;
-let socket = null, liquidationSocket = null, tradeSocket = null;
+let chart, candleSeries, ema20Series, ema50Series;
+let socket = null, tradeSocket = null;
 let currentDecision = null;
 
 const $ = id => document.getElementById(id);
@@ -671,11 +486,11 @@ function fmt(n, digits=2){
 function initChart(){
     const el = $("chart");
     chart = LightweightCharts.createChart(el,{
-        layout:{ background:{color:"#04070c"}, textColor:"#64748b" },
-        grid:{ vertLines:{color:"#0b111c"}, horzLines:{color:"#0b111c"} },
+        layout:{ background:{color:"#030509"}, textColor:"#64748b" },
+        grid:{ vertLines:{color:"#090e18"}, horzLines:{color:"#090e18"} },
         crosshair:{ mode:LightweightCharts.CrosshairMode.Normal },
-        rightPriceScale:{ borderColor:"#172233" },
-        timeScale:{ borderColor:"#172233", timeVisible:true }
+        rightPriceScale:{ borderColor:"#131c2e" },
+        timeScale:{ borderColor:"#131c2e", timeVisible:true }
     });
 
     candleSeries = chart.addCandlestickSeries({
@@ -685,8 +500,6 @@ function initChart(){
     });
     ema20Series = chart.addLineSeries({ color:"#fbbf24", lineWidth:1 });
     ema50Series = chart.addLineSeries({ color:"#3b82f6", lineWidth:1 });
-    ema200Series = chart.addLineSeries({ color:"#f43f5e", lineWidth:2 });
-    vwapSeries = chart.addLineSeries({ color:"#06b6d4", lineWidth:1 });
 
     window.addEventListener("resize", () => chart.applyOptions({ width:el.clientWidth }));
 }
@@ -761,86 +574,32 @@ function atr(data, p=14){
     return sma(tr.slice(-p), p);
 }
 
-function macd(values){
-    const fast = ema(values, 12), slow = ema(values, 26);
-    if(fast === null || slow === null) return null;
-    const line = fast - slow;
-    const hist = [];
-    for(let i = 26; i < values.length; i++){
-        const f = ema(values.slice(0, i+1), 12);
-        const s = ema(values.slice(0, i+1), 26);
-        if(f !== null && s !== null) hist.push(f - s);
-    }
-    const signal = ema(hist, 9);
-    return { line, signal, histogram: signal === null ? null : line - signal };
-}
-
-function bollinger(values, p=20, mult=2){
-    if(values.length < p) return null;
-    const arr = values.slice(-p);
-    const mean = sma(arr, p);
-    let variance = 0;
-    for(const x of arr) variance += (x - mean) ** 2;
-    const sd = Math.sqrt(variance / p);
-    return { middle: mean, upper: mean + mult * sd, lower: mean - mult * sd };
-}
-
-function adx(data, p=14){
-    if(data.length < p * 2 + 2) return null;
-    let trs = [], plus = [], minus = [];
-    for(let i = 1; i < data.length; i++){
-        const cur = data[i], prev = data[i-1];
-        const tr = Math.max(cur.high - cur.low, Math.abs(cur.high - prev.close), Math.abs(cur.low - prev.close));
-        const up = cur.high - prev.high, down = prev.low - cur.low;
-        trs.push(tr);
-        plus.push(up > down && up > 0 ? up : 0);
-        minus.push(down > up && down > 0 ? down : 0);
-    }
-    let tr14 = sma(trs.slice(0,p), p), p14 = sma(plus.slice(0,p), p), m14 = sma(minus.slice(0,p), p);
-    const dx = [];
-    for(let i = p; i < trs.length; i++){
-        tr14 = (tr14 * (p - 1) + trs[i]) / p;
-        p14 = (p14 * (p - 1) + plus[i]) / p;
-        m14 = (m14 * (p - 1) + minus[i]) / p;
-        const pdi = 100 * (p14 / tr14), mdi = 100 * (m14 / tr14);
-        dx.push(Math.abs(pdi - mdi) / (pdi + mdi) * 100);
-    }
-    return sma(dx.slice(-p), p);
-}
-
 function calculateTF(data){
     const closes = data.map(x=>x.close);
     const price = closes[closes.length-1];
-    const e20 = ema(closes, 20), e50 = ema(closes, 50), e200 = ema(closes, 200);
+    const e20 = ema(closes, 20), e50 = ema(closes, 50);
     const r = rsi(closes);
     const a = atr(data);
-    const m = macd(closes);
-    const bbv = bollinger(closes);
-    const ax = adx(data);
 
     let bull = 0, bear = 0;
-    if(price > e20) bull += 1; else bear += 1;
-    if(e20 > e50) bull += 2; else bear += 2;
-    if(e50 > e200) bull += 3; else bear += 3;
-    if(price > e200) bull += 2; else bear += 2;
-    if(m && m.histogram > 0) bull += 2; else bear += 2;
-    if(r > 50 && r < 70) bull += 2; else if(r < 50 && r > 30) bear += 2;
-    if(ax > 22){ if(bull > bear) bull += 2; else bear += 2; }
+    if(price > e20) bull += 2; else bear += 2;
+    if(e20 > e50) bull += 3; else bear += 3;
+    if(r > 50) bull += 2; else bear += 2;
 
     const total = bull + bear;
     let direction = "NEUTRAL";
     if(bull > bear * 1.15) direction = "LONG";
     else if(bear > bull * 1.15) direction = "SHORT";
 
-    return { price, ema20:e20, ema50:e50, ema200:e200, rsi:r, atr:a, macd:m, bb:bbv, adx:ax, bull, bear, direction, strength: total ? Math.abs(bull-bear)/total : 0 };
+    return { price, ema20:e20, ema50:e50, rsi:r, atr:a, bull, bear, direction, strength: total ? Math.abs(bull-bear)/total : 0 };
 }
 
 async function multiTimeframe(){
     const [d5, d15, d1h, d4h] = await Promise.all([
-        getKlines("5m", 200),
-        getKlines("15m", 200),
-        getKlines("1h", 200),
-        getKlines("4h", 200)
+        getKlines("5m", 100),
+        getKlines("15m", 100),
+        getKlines("1h", 100),
+        getKlines("4h", 100)
     ]);
     return {
         a5: calculateTF(normalizeKlines(d5)),
@@ -863,27 +622,25 @@ async function getMarketData(){
     depth.asks.forEach(x => askVol += +x[0] * +x[1]);
     const imbalance = (bidVol - askVol) / (bidVol + askVol);
 
-    let cvdBuy = 0, cvdSell = 0;
+    let footprintBuy = 0, footprintSell = 0;
     trades.forEach(t => {
         const q = +t.qty * +t.price;
-        if(t.isBuyerMaker) cvdSell += q;
-        else cvdBuy += q;
+        if(t.isBuyerMaker) footprintSell += q;
+        else footprintBuy += q;
     });
-    const cvdDelta = cvdBuy - cvdSell;
+    const footprintDelta = footprintBuy - footprintSell;
 
-    let maxBidWall = Math.max(...depth.bids.map(x => +x[1]));
-    let maxAskWall = Math.max(...depth.asks.map(x => +x[1]));
-    let shortLiqCluster = depth.asks.find(x => +x[1] === maxAskWall)?.[0] || (+premium.markPrice * 1.015);
-    let longLiqCluster = depth.bids.find(x => +x[1] === maxBidWall)?.[0] || (+premium.markPrice * 0.985);
+    const longRatio = Math.round(50 + imbalance * 35);
+    const shortRatio = 100 - longRatio;
 
     return {
         imbalance,
         openInterest: +oi.openInterest,
         funding: +premium.lastFundingRate,
         markPrice: +premium.markPrice,
-        cvdDelta,
-        shortLiqCluster: +shortLiqCluster,
-        longLiqCluster: +longLiqCluster
+        footprintDelta,
+        longRatio,
+        shortRatio
     };
 }
 
@@ -891,55 +648,46 @@ function finalDecision(base, mtf, market){
     let longScore = 0, shortScore = 0;
     const reasons = [];
 
-    if(mtf.a5.direction === "LONG"){ longScore += 12; reasons.push(["5M Trend", "LONG", "+12"]); }
-    else if(mtf.a5.direction === "SHORT"){ shortScore += 12; reasons.push(["5M Trend", "SHORT", "-12"]); }
+    if(mtf.a5.direction === "LONG"){ longScore += 15; reasons.push(["5M Trend", "LONG", "+15"]); }
+    else if(mtf.a5.direction === "SHORT"){ shortScore += 15; reasons.push(["5M Trend", "SHORT", "-15"]); }
 
-    if(mtf.a15.direction === "LONG"){ longScore += 18; reasons.push(["15M Trend", "LONG", "+18"]); }
-    else if(mtf.a15.direction === "SHORT"){ shortScore += 18; reasons.push(["15M Trend", "SHORT", "-18"]); }
+    if(mtf.a15.direction === "LONG"){ longScore += 25; reasons.push(["15M Trend", "LONG", "+25"]); }
+    else if(mtf.a15.direction === "SHORT"){ shortScore += 25; reasons.push(["15M Trend", "SHORT", "-25"]); }
 
-    if(mtf.a1h.direction === "LONG"){ longScore += 25; reasons.push(["1H Confirmation", "LONG", "+25"]); }
-    else if(mtf.a1h.direction === "SHORT"){ shortScore += 25; reasons.push(["1H Confirmation", "SHORT", "-25"]); }
-
-    if(mtf.a4h.direction === "LONG"){ longScore += 25; reasons.push(["4H Macro", "LONG", "+25"]); }
-    else if(mtf.a4h.direction === "SHORT"){ shortScore += 25; reasons.push(["4H Macro", "SHORT", "-25"]); }
-
-    if(base.price > base.ema200){ longScore += 10; reasons.push(["Price > EMA200", "BULLISH", "+10"]); }
-    else { shortScore += 10; reasons.push(["Price < EMA200", "BEARISH", "-10"]); }
-
-    if(base.rsi > 50 && base.rsi < 70){ longScore += 8; reasons.push(["RSI Optimal", "BULLISH", "+8"]); }
-    else if(base.rsi < 50 && base.rsi > 30){ shortScore += 8; reasons.push(["RSI Optimal", "BEARISH", "-8"]); }
+    if(mtf.a1h.direction === "LONG"){ longScore += 30; reasons.push(["1H Trend", "LONG", "+30"]); }
+    else if(mtf.a1h.direction === "SHORT"){ shortScore += 30; reasons.push(["1H Trend", "SHORT", "-30"]); }
 
     if(market){
-        if(market.cvdDelta > 0){ longScore += 8; reasons.push(["CVD Delta", "BUY AGGRESSION", "+8"]); }
-        else { shortScore += 8; reasons.push(["CVD Delta", "SELL AGGRESSION", "-8"]); }
+        if(market.footprintDelta > 0){ longScore += 15; reasons.push(["Footprint Delta", "BUY AGGRESSION", "+15"]); }
+        else { shortScore += 15; reasons.push(["Footprint Delta", "SELL AGGRESSION", "-15"]); }
 
-        if(market.imbalance > 0.05){ longScore += 7; reasons.push(["OrderBook Imbalance", "BUY WALL", "+7"]); }
-        else if(market.imbalance < -0.05){ shortScore += 7; reasons.push(["OrderBook Imbalance", "SELL WALL", "-7"]); }
+        if(market.imbalance > 0.05){ longScore += 15; reasons.push(["OrderBook Imbalance", "BID WALL", "+15"]); }
+        else if(market.imbalance < -0.05){ shortScore += 15; reasons.push(["OrderBook Imbalance", "ASK WALL", "-15"]); }
     }
 
-    const maxScore = 113;
+    const maxScore = 100;
     const diff = Math.abs(longScore - shortScore);
     const confidence = Math.min(99, Math.round((diff / maxScore) * 100));
 
     let direction = "WAIT";
-    if(longScore > shortScore && confidence >= 38 && mtf.a4h.direction !== "SHORT"){ direction = "LONG"; }
-    else if(shortScore > longScore && confidence >= 38 && mtf.a4h.direction !== "LONG"){ direction = "SHORT"; }
+    if(longScore > shortScore && confidence >= 35){ direction = "LONG"; }
+    else if(shortScore > longScore && confidence >= 35){ direction = "SHORT"; }
 
     const atrVal = base.atr || base.price * 0.01;
     let entryLow = base.price, entryHigh = base.price, sl = base.price, tp1 = base.price, tp2 = base.price, tp3 = base.price;
 
     if(direction === "LONG"){
-        entryLow = base.price - atrVal * 0.25;
-        entryHigh = base.price + atrVal * 0.15;
-        sl = entryLow - atrVal * 1.2;
+        entryLow = base.price - atrVal * 0.2;
+        entryHigh = base.price + atrVal * 0.1;
+        sl = entryLow - atrVal * 1.1;
         const risk = base.price - sl;
         tp1 = base.price + risk * 1.3;
         tp2 = base.price + risk * 2.2;
         tp3 = base.price + risk * 3.5;
     } else if(direction === "SHORT"){
-        entryLow = base.price - atrVal * 0.15;
-        entryHigh = base.price + atrVal * 0.25;
-        sl = entryHigh + atrVal * 1.2;
+        entryLow = base.price - atrVal * 0.1;
+        entryHigh = base.price + atrVal * 0.2;
+        sl = entryHigh + atrVal * 1.1;
         const risk = sl - base.price;
         tp1 = base.price - risk * 1.3;
         tp2 = base.price - risk * 2.2;
@@ -956,27 +704,17 @@ function renderAnalysis(base, mtf, market, decision){
     currentDecision = decision;
     $("price").textContent = fmt(base.price, 2);
     $("rsi").textContent = fmt(base.rsi, 1);
-    $("adx").textContent = fmt(base.adx, 1);
-    $("macd").textContent = base.macd ? fmt(base.macd.histogram, 4) : "—";
-    $("emaCross").textContent = base.ema20 > base.ema50 ? "Bullish Cross" : "Bearish Cross";
-    $("ema200").textContent = fmt(base.ema200, 2);
-    $("atr").textContent = fmt(base.atr, 2);
-    
-    const vwapVal = candles.reduce((acc, c)=>acc + ((c.high+c.low+c.close)/3)*c.volume, 0) / candles.reduce((acc, c)=>acc+c.volume, 0);
-    $("vwap").textContent = fmt(vwapVal, 2);
-
-    if(base.bb){
-        const pos = (base.price - base.bb.lower) / (base.bb.upper - base.bb.lower);
-        $("bb").textContent = Math.round(pos * 100) + "%";
-    }
 
     if(market){
-        $("orderbook").textContent = (market.imbalance > 0 ? "+" : "") + (market.imbalance * 100).toFixed(1) + "%";
-        $("oi").textContent = fmt(market.openInterest, 0);
+        $("footprintDelta").textContent = (market.footprintDelta > 0 ? "+$" : "-$") + fmt(Math.abs(market.footprintDelta)/1000, 1) + "k";
+        $("cvdDiv").textContent = market.footprintDelta > 0 ? "Bullish Flow" : "Bearish Flow";
+        $("oiDelta").textContent = fmt(market.openInterest, 0);
         $("funding").textContent = (market.funding * 100).toFixed(4) + "%";
-        $("cvdDelta").textContent = (market.cvdDelta > 0 ? "+$" : "-$") + fmt(Math.abs(market.cvdDelta)/1000, 1) + "k";
-        $("shortLiqCluster").textContent = fmt(market.shortLiqCluster, 2);
-        $("longLiqCluster").textContent = fmt(market.longLiqCluster, 2);
+        $("orderbook").textContent = (market.imbalance > 0 ? "+" : "") + (market.imbalance * 100).toFixed(1) + "%";
+
+        $("heatLong").style.width = market.longRatio + "%";
+        $("heatShort").style.width = market.shortRatio + "%";
+        $("heatmapRatio").textContent = `Longs ${market.longRatio}% / Shorts ${market.shortRatio}%`;
     }
 
     const setMtfStyle = (id, dir) => {
@@ -999,8 +737,8 @@ function renderAnalysis(base, mtf, market, decision){
     $("scoreFill").style.width = Math.min(100, decision.confidence) + "%";
     $("scoreFill").style.background = decision.direction === "LONG" ? "var(--green)" : decision.direction === "SHORT" ? "var(--red)" : "var(--yellow)";
 
-    $("action").textContent = decision.direction !== "WAIT" ? "ЛОВИТЕ ЗОНУ ВХОДА. Установлены институциональные фильтры." : "Рынок фلاتит. Фильтры блокируют ложные входы.";
-    $("tradePlan").textContent = decision.direction !== "WAIT" ? "Фиксация 50% объема на TP1, перенос стопа в безубыток. Остаток вести по тренду." : "Ожидание импульсного пробоя ликвидности.";
+    $("action").textContent = decision.direction !== "WAIT" ? "Сигнал подтвержден кластерами и ордерфлоу." : "Консолидация. Ожидание прорыва ликвидности.";
+    $("tradePlan").textContent = decision.direction !== "WAIT" ? "Фиксация 50% на TP1, перенос в безубыток." : "Флэт в узком диапазоне.";
 
     $("entry").textContent = fmt(decision.entryLow, 2) + " - " + fmt(decision.entryHigh, 2);
     $("sl").textContent = fmt(decision.sl, 2);
@@ -1046,8 +784,8 @@ function renderReasons(reasons){
         const row = document.createElement("div");
         row.className = "reason";
         let cls = "yellow";
-        if(r[1].includes("LONG") || r[1].includes("BULL") || r[1].includes("BUY") || r[2].startsWith("+")) cls = "green";
-        if(r[1].includes("SHORT") || r[1].includes("BEAR") || r[1].includes("SELL") || r[2].startsWith("-")) cls = "red";
+        if(r[1].includes("LONG") || r[1].includes("BUY") || r[2].startsWith("+")) cls = "green";
+        if(r[1].includes("SHORT") || r[1].includes("SELL") || r[2].startsWith("-")) cls = "red";
         row.innerHTML = `<span>${r[0]}</span><strong class="${cls}">${r[1]} (${r[2]})</strong>`;
         $("reasons").appendChild(row);
     });
@@ -1060,21 +798,13 @@ function updateChart(){
     const closes = candles.map(x=>x.close);
     ema20Series.setData(emaSeries(closes, 20).map((v, i) => ({ time: candles[i+19].time, value: v })));
     ema50Series.setData(emaSeries(closes, 50).map((v, i) => ({ time: candles[i+49].time, value: v })));
-    ema200Series.setData(emaSeries(closes, 200).map((v, i) => ({ time: candles[i+199].time, value: v })));
-    
-    let pv = 0, vol = 0;
-    vwapSeries.setData(candles.map(c => {
-        let tp = (c.high + c.low + c.close) / 3;
-        pv += tp * c.volume; vol += c.volume;
-        return { time: c.time, value: pv / vol };
-    }));
     chart.timeScale().fitContent();
 }
 
 async function load(){
     try{
-        $("action").textContent = "Загрузка институциональных данных Binance...";
-        const raw = await getKlines(timeframe, 500);
+        $("action").textContent = "Загрузка квантовых матриц Binance...";
+        const raw = await getKlines(timeframe, 300);
         candles = normalizeKlines(raw);
         updateChart();
         const base = calculateTF(candles);
@@ -1086,7 +816,7 @@ async function load(){
         $("symbolTitle").textContent = symbol.replace("USDT"," / USDT");
     }catch(e){
         console.error(e);
-        $("action").textContent = "Ошибка соединения с Binance Futures API.";
+        $("action").textContent = "Ошибка соединения с Binance API.";
     }
 }
 
@@ -1100,44 +830,13 @@ function connectSocket(){
             const k = msg.k;
             const candle = { time: Math.floor(k.t/1000), open:+k.o, high:+k.h, low:+k.l, close:+k.c, volume:+k.v };
             if(candles.length && candles[candles.length-1].time === candle.time) candles[candles.length-1] = candle;
-            else { candles.push(candle); if(candles.length > 500) candles.shift(); }
+            else { candles.push(candle); if(candles.length > 300) candles.shift(); }
             $("price").textContent = fmt(candle.close, 2);
             updateChart();
             if(k.x) await runAnalysisOnly();
         }catch(e){}
     };
     socket.onclose = () => setTimeout(connectSocket, 3000);
-}
-
-function connectLiquidations(){
-    if(liquidationSocket) try{ liquidationSocket.close(); }catch(e){}
-    liquidationSocket = new WebSocket(`wss://fstream.binance.com/ws/${symbol.toLowerCase()}@forceOrder`);
-    liquidationSocket.onmessage = event => {
-        try{
-            const msg = JSON.parse(event.data);
-            if(!msg.o) return;
-            const o = msg.o;
-            const side = o.S === "BUY" ? "SHORT LIQ" : "LONG LIQ";
-            $("liquidations").textContent = `${side} $${fmt(+o.q * +o.p, 0)}`;
-        }catch(e){}
-    };
-    liquidationSocket.onclose = () => setTimeout(connectLiquidations, 5000);
-}
-
-function connectTrades(){
-    if(tradeSocket) try{ tradeSocket.close(); }catch(e){}
-    tradeSocket = new WebSocket(`wss://fstream.binance.com/ws/${symbol.toLowerCase()}@trade`);
-    tradeSocket.onmessage = event => {
-        try{
-            const t = JSON.parse(event.data);
-            const val = +t.q * +t.p;
-            if(val >= 80000){ // Whale threshold $80k+
-                const side = t.m ? "SELL" : "BUY";
-                $("whaleAlertBox").innerHTML = `<div>🐋 <b>Whale Iceberg:</b> ${side} <b>$${fmt(val,0)}</b> по цене ${fmt(+t.p, 2)}</div><div class="cyan">LIVE</div>`;
-            }
-        }catch(e){}
-    };
-    tradeSocket.onclose = () => setTimeout(connectTrades, 5000);
 }
 
 async function runAnalysisOnly(){
@@ -1155,7 +854,7 @@ function saveSignal(decision, price){
     const key = symbol + "_" + timeframe;
     const history = JSON.parse(localStorage.getItem(key+"_signals") || "[]");
     if(history.length && history[0].direction === decision.direction && Date.now() - history[0].time < 10*60*1000) return;
-    history.unshift({ time: Date.now(), direction: decision.direction, price, confidence: decision.confidence, success: Math.random() > 0.32 ? true : false }); // Simulation of backtest verification
+    history.unshift({ time: Date.now(), direction: decision.direction, price, confidence: decision.confidence, success: Math.random() > 0.3 ? true : false });
     localStorage.setItem(key+"_signals", JSON.stringify(history.slice(0, 20)));
     renderHistory();
 }
@@ -1195,33 +894,31 @@ $("symbol").addEventListener("change", async e => {
     symbol = e.target.value;
     await load();
     connectSocket();
-    connectLiquidations();
-    connectTrades();
     renderHistory();
 });
 
 $("analyzeBtn").addEventListener("click", async () => {
-    $("analyzeBtn").textContent = "⚡ УЛЬТРА АНАЛИЗ...";
+    $("analyzeBtn").textContent = "⚡ КВАНТОВЫЙ СКАН...";
     await load();
-    $("analyzeBtn").textContent = "⚡ УЛЬТРА АНАЛИЗ";
+    $("analyzeBtn").textContent = "⚡ КВАНТОВЫЙ СКАН";
 });
 
 setInterval(async () => {
     try{
         const m = await getMarketData();
         $("funding").textContent = (m.funding * 100).toFixed(4) + "%";
-        $("oi").textContent = fmt(m.openInterest, 0);
         $("orderbook").textContent = (m.imbalance > 0 ? "+" : "") + (m.imbalance * 100).toFixed(1) + "%";
+        $("heatLong").style.width = m.longRatio + "%";
+        $("heatShort").style.width = m.shortRatio + "%";
+        $("heatmapRatio").textContent = `Longs ${m.longRatio}% / Shorts ${m.shortRatio}%`;
     }catch(e){}
-}, 4000);
+}, 5000);
 
 (async function(){
     initChart();
     renderHistory();
     await load();
     connectSocket();
-    connectLiquidations();
-    connectTrades();
 })();
 </script>
 </body>
