@@ -1,410 +1,222 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binodex Signal Bot</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --bg-color: #05070a;
-            --card-bg: #0d111a;
-            --accent-green: #00e676;
-            --accent-red: #ff3d00;
-            --accent-blue: #2979ff;
-            --text-main: #ffffff;
-            --text-secondary: #a0aec0;
-            --border-color: #1e293b;
+import ccxt
+import pandas as pd
+import numpy as np
+import time
+import logging
+import requests
+
+# НАСТРОЙКА ЛОГИРОВАНИЯ И ПАРАМЕТРОВ БОТА
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[logging.FileHandler("trading_bot.log"), logging.StreamHandler()]
+)
+
+# НАСТРОЙКА TELEGRAM (вставь свои данные для отправки точных сигналов)
+TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN"
+TELEGRAM_CHAT_ID = "YOUR_CHAT_ID"
+
+def send_telegram_alert(message):
+    if TELEGRAM_BOT_TOKEN == "YOUR_BOT_TOKEN":
+        return
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    payload = {
+        'chat_id': TELEGRAM_CHAT_ID,
+        'text': message,
+        'parse_mode': 'Markdown'
+    }
+    try:
+        requests.post(url, json=payload, timeout=5)
+    except Exception as e:
+        logging.error(f"Ошибка отправки в Telegram: {e}")
+
+# ИНИЦИАЛИЗАЦИЯ БИРЖИ (Binance Futures для торговли в лонг и шорт)
+exchange = ccxt.binance({
+    'enableRateLimit': True,
+    'options': {'defaultType': 'swap'}
+})
+
+# 6 ВАЛЮТНЫХ ПАР
+PAIRS = [
+    'BTC/USDT', 
+    'ETH/USDT', 
+    'SOL/USDT', 
+    'BNB/USDT', 
+    'XRP/USDT', 
+    'ADA/USDT'
+]
+
+# 5 ТАЙМФРЕЙМОВ: минута, 5 минут, час, 4 часа, дневка
+TIMEFRAMES = {
+    '1m': '1 минута',
+    '5m': '5 минут',
+    '1h': '1 час',
+    '4h': '4 часа',
+    '1d': 'дневка'
+}
+
+# Кэш для предотвращения повторной отправки сигналов по одной и той же свече
+last_signal_timestamps = {}
+
+def fetch_ohlcv_data(symbol, timeframe, limit=300):
+    try:
+        ohlcv = exchange.fetch_ohlcv(symbol, timeframe, limit=limit)
+        df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+        df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+        return df
+    except Exception as e:
+        logging.error(f"Ошибка загрузки данных {symbol} ({timeframe}): {e}")
+        return None
+
+def calculate_all_indicators(df):
+    # 1. Трендовые EMA (50 и 200)
+    df['ema_50'] = df['close'].ewm(span=50, adjust=False).mean()
+    df['ema_200'] = df['close'].ewm(span=200, adjust=False).mean()
+
+    # 2. Осциллятор RSI (14)
+    delta = df['close'].diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
+    rs = gain / loss
+    df['rsi'] = 100 - (100 / (1 + rs))
+
+    # 3. MACD (12, 26, 9)
+    exp1 = df['close'].ewm(span=12, adjust=False).mean()
+    exp2 = df['close'].ewm(span=26, adjust=False).mean()
+    df['macd'] = exp1 - exp2
+    df['macd_signal'] = df['macd'].ewm(span=9, adjust=False).mean()
+    df['macd_hist'] = df['macd'] - df['macd_signal']
+
+    # 4. Полосы Боллинджера (20, 2)
+    df['bb_middle'] = df['close'].rolling(window=20).mean()
+    std = df['close'].rolling(window=20).std()
+    df['bb_upper'] = df['bb_middle'] + (std * 2)
+    df['bb_lower'] = df['bb_middle'] - (std * 2)
+
+    # 5. Stochastic Oscillator (14, 3, 3) для отсечения ложных точек
+    low_min = df['low'].rolling(window=14).min()
+    high_max = df['high'].rolling(window=14).max()
+    df['stoch_k'] = ((df['close'] - low_min) / (high_max - low_min)) * 100
+    df['stoch_d'] = df['stoch_k'].rolling(window=3).mean()
+
+    # 6. ATR (Average True Range) для точного расчета Stop Loss и Take Profit
+    df['tr1'] = abs(df['high'] - df['low'])
+    df['tr2'] = abs(df['high'] - df['close'].shift())
+    df['tr3'] = abs(df['low'] - df['close'].shift())
+    df['tr'] = pd.concat([df['tr1'], df['tr2'], df['tr3']], axis=1).max(axis=1)
+    df['atr'] = df['tr'].rolling(window=14).mean()
+
+    return df
+
+def analyze_market_conditions(df, symbol, tf_key, tf_name):
+    if df is None or len(df) < 250:
+        return None
+
+    last = df.iloc[-1]
+    prev = df.iloc[-2]
+    price = last['close']
+    atr = last['atr']
+    timestamp = last['timestamp']
+
+    # Уникальный ключ свечи для исключения дублирования сигналов
+    signal_key = f"{symbol}_{tf_key}"
+    if signal_key in last_signal_timestamps and last_signal_timestamps[signal_key] == timestamp:
+        return None
+
+    # ЖЕСТКАЯ МУЛЬТИ-ИНДИКАТОРНАЯ КОНФЛЮЭНТНОСТЬ ДЛЯ ВЫСОКОЙ ТОЧНОСТИ (Исключаем рандом)
+    
+    # Жесткие условия для ЛОНГА
+    long_condition = (
+        (last['close'] > last['ema_50']) and
+        (last['ema_50'] > last['ema_200']) and
+        (prev['macd_hist'] <= 0 and last['macd_hist'] > 0) and
+        (45 <= last['rsi'] <= 68) and
+        (last['stoch_k'] > last['stoch_d']) and
+        (last['stoch_k'] < 80) and
+        (last['close'] > last['bb_middle'])
+    )
+
+    # Жесткие условия для ШОРТА
+    short_condition = (
+        (last['close'] < last['ema_50']) and
+        (last['ema_50'] < last['ema_200']) and
+        (prev['macd_hist'] >= 0 and last['macd_hist'] < 0) and
+        (32 <= last['rsi'] <= 55) and
+        (last['stoch_k'] < last['stoch_d']) and
+        (last['stoch_k'] > 20) and
+        (last['close'] < last['bb_middle'])
+    )
+
+    if long_condition:
+        last_signal_timestamps[signal_key] = timestamp
+        stop_loss = price - (atr * 1.8)
+        take_profit = price + (atr * 3.5)
+        return {
+            'type': 'LONG',
+            'symbol': symbol,
+            'timeframe': tf_name,
+            'price': price,
+            'stop_loss': round(stop_loss, 4),
+            'take_profit': round(take_profit, 4),
+            'rsi': round(last['rsi'], 2),
+            'stoch': round(last['stoch_k'], 2)
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 40px; }
-        
-        .top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-        .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; color: #ffffff; }
-        
-        .panel-right { display: flex; align-items: center; gap: 8px; }
-        .winrate-badge { background: rgba(0, 230, 118, 0.1); color: var(--accent-green); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; border: 1px solid rgba(0, 230, 118, 0.3); animation: pulseGlow 2s infinite; }
-        .lang-switcher { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .lang-switcher:active { transform: scale(0.95); }
-        
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } 50% { box-shadow: 0 0 15px rgba(0,230,118,0.5); } 100% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } }
 
-        .nav-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-        .nav-tab { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: 0.3s; }
-        .nav-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(41, 121, 255, 0.4); }
-        
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: none; }
-        .card.active-section { display: block; }
-        
-        .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; }
-        
-        .tradingview-container { width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }
-        
-        .btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; }
-        .btn:active { transform: scale(0.98); }
-        
-        .btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); transition: 0.2s; }
-        .btn-trade:active { transform: scale(0.98); }
-        
-        .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; font-size: 13px; line-height: 1.5; }
-        
-        .sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
-        .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }
-        .sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
-        
-        .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; font-size: 12px; }
-        .analysis-tool-box.active-tool { display: block; }
-        
-        .confluence-box { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 12px; }
-        .confluence-item { display: flex; justify-content: space-between; margin-top: 6px; }
-        .confluence-item span { color: var(--accent-green); font-weight: 700; }
-
-        .big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }
-        .log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }
-
-        .withdrawal-box { background: rgba(0, 230, 118, 0.03); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; }
-        .withdrawal-feed { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 11px; height: 140px; overflow-y: auto; border: 1px solid var(--border-color); }
-        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
-        .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }
-        .matrix-table th { background: #161e2e; color: var(--text-secondary); }
-        
-        .academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
-        .academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }
-        .academy-module p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
-        .academy-module ul { padding-left: 15px; margin-top: 6px; margin-bottom: 8px; }
-        .academy-module li { font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px; }
-        
-        .platform-perks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-        .perk-mini-card { background: rgba(41, 121, 255, 0.05); border: 1px solid rgba(41, 121, 255, 0.2); border-radius: 10px; padding: 10px; text-align: center; }
-        .perk-mini-card b { display: block; color: var(--accent-green); font-size: 14px; margin-bottom: 2px; }
-        .perk-mini-card span { font-size: 11px; color: var(--text-secondary); }
-
-        .vip-list { list-style: none; padding: 0; }
-        .vip-list li { margin-bottom: 12px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; }
-        .vip-list li b { color: var(--text-main); }
-        .vip-list li::before { content: "⚡"; margin-right: 8px; color: var(--accent-green); flex-shrink: 0; }
-
-        .risk-input { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 8px; margin-top: 5px; margin-bottom: 10px; font-size: 12px; outline: none; }
-        .vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
-
-        .share-container-bottom {
-            margin-top: 15px;
-            margin-bottom: 10px;
-            width: 100%;
+    elif short_condition:
+        last_signal_timestamps[signal_key] = timestamp
+        stop_loss = price + (atr * 1.8)
+        take_profit = price - (atr * 3.5)
+        return {
+            'type': 'SHORT',
+            'symbol': symbol,
+            'timeframe': tf_name,
+            'price': price,
+            'stop_loss': round(stop_loss, 4),
+            'take_profit': round(take_profit, 4),
+            'rsi': round(last['rsi'], 2),
+            'stoch': round(last['stoch_k'], 2)
         }
-        .btn-share-bot {
-            width: 100%;
-            background: linear-gradient(90deg, #ff3d00, #2979ff);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 13px;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3);
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-share-bot:active { transform: scale(0.98); }
-    </style>
-</head>
-<body>
 
-    <script>window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();</script>
+    return None
 
-    <div class="top-panel">
-        <div class="brand-title">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M3 17L9 11L13 15L21 7" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M16 7H21V12" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            BinoDex
-        </div>
-        <div class="panel-right">
-            <div class="winrate-badge" data-i18n="ai_active">🟢 AI СТАТУС: АКТИВЕН</div>
-            <button class="lang-switcher" onclick="toggleLanguage();">RU / EN</button>
-        </div>
-    </div>
+def main_loop():
+    logging.info("ЗАПУСК ПРОФЕССИОНАЛЬНОГО ТОРГОВОГО БОТА В РЕЖИМЕ РЕАЛЬНОГО ВРЕМЕНИ...")
+    print("Бот полностью запущен. Сканирование рынка по всем парам и таймфреймам активировано...")
 
-    <div class="nav-tabs">
-        <div class="nav-tab active" onclick="switchTab('terminal', this)" data-i18n="tab_terminal">📊 ТЕРМИНАЛ</div>
-        <div class="nav-tab" onclick="switchTab('academy', this)" data-i18n="tab_academy">📚 ОБУЧЕНИЕ</div>
-        <div class="nav-tab" onclick="switchTab('vip', this)" data-i18n="tab_vip">🎁 VIP</div>
-    </div>
+    while True:
+        for symbol in PAIRS:
+            for tf_key, tf_name in TIMEFRAMES.items():
+                try:
+                    df = fetch_ohlcv_data(symbol, tf_key)
+                    if df is not None:
+                        df = calculate_all_indicators(df)
+                        signal = analyze_market_conditions(df, symbol, tf_key, tf_name)
 
-    <div id="terminal" class="card active-section">
-        <div class="controls-grid">
-            <select id="assetSelect" class="select-custom" onchange="changeAsset();">
-                <optgroup label="Криптовалюты / Crypto">
-                    <option value="BINANCE:BTCUSDT">BTC/USDT</option>
-                    <option value="BINANCE:ETHUSDT">ETH/USDT</option>
-                    <option value="BINANCE:SOLUSDT">SOL/USDT</option>
-                    <option value="BINANCE:XRPUSDT">XRP/USDT</option>
-                    <option value="BINANCE:DOGEUSDT">DOGE/USDT</option>
-                    <option value="BINANCE:ADAUSDT">ADA/USDT</option>
-                    <option value="BINANCE:DOTUSDT">DOT/USDT</option>
-                    <option value="BINANCE:AVAXUSDT">AVAX/USDT</option>
-                    <option value="BINANCE:LINKUSDT">LINK/USDT</option>
-                    <option value="BINANCE:LTCUSDT">LTC/USDT</option>
-                </optgroup>
-                <optgroup label="Форекс, Металлы и Акции">
-                    <option value="FX:EURUSD">EUR/USD</option>
-                    <option value="FX:GBPUSD">GBP/USD</option>
-                    <option value="FX:AUDUSD">AUD/USD</option>
-                    <option value="FX:USDJPY">USD/JPY</option>
-                    <option value="FX:USDCAD">USD/CAD</option>
-                    <option value="FX:EURGBP">EUR/GBP</option>
-                    <option value="OANDA:XAUUSD">GOLD (XAU/USD)</option>
-                    <option value="OANDA:XAGUSD">SILVER (XAG/USD)</option>
-                    <option value="NASDAQ:AAPL">AAPL (Apple)</option>
-                    <option value="NASDAQ:TSLA">TSLA (Tesla)</option>
-                </optgroup>
-            </select>
-            <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe();">
-                <option value="1">1 Мин / Min</option>
-                <option value="3">3 Мин / Min</option>
-                <option value="5">5 Мин / Min</option>
-                <option value="15">15 Мин / Min</option>
-                <option value="60">1 Час / Hour</option>
-                <option value="D">1 День / Day</option>
-            </select>
-        </div>
+                        if signal:
+                            alert_text = (
+                                f"🔥 **ТОЧНЫЙ СИГНАЛ В ТРЭЙДИНГЕ** 🔥\n\n"
+                                f"📊 Направление: **{signal['type']}**\n"
+                                f"🪙 Пара: `{signal['symbol']}`\n"
+                                f"⏱ Таймфрейм: `{signal['timeframe']}`\n"
+                                f"💰 Цена входа: `{signal['price']}`\n"
+                                f"🛑 Stop Loss: `{signal['stop_loss']}`\n"
+                                f"🎯 Take Profit: `{signal['take_profit']}`\n"
+                                f"📈 RSI: `{signal['rsi']}` | Stoch: `{signal['stoch']}`\n\n"
+                                f"🚀 Сделка подтверждена мульти-индикаторной системой фильтрации!"
+                            )
+                            logging.info(f"СИГНАЛ ВЫДАН: {signal['type']} по {signal['symbol']} ({signal['timeframe']})")
+                            print("\n" + "="*50)
+                            print(alert_text.replace('**', '').replace('`', ''))
+                            print("="*50 + "\n")
+                            send_telegram_alert(alert_text)
 
-        <div class="tradingview-container" id="chartContainer"></div>
+                except Exception as e:
+                    logging.error(f"Ошибка в цикле обработки {symbol} / {tf_key}: {e}")
 
-        <button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">Запустить анализ</button>
-        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трЭйдить</a>
-        
-        <div id="signalResult" class="signal-result"></div>
+                time.sleep(0.4) # пауза для соблюдения лимитов биржи
 
-        <div class="confluence-box">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;" data-i18n="conf_title">📊 Мультииндикаторная конфлюэнтность:</div>
-            <div class="confluence-item"><span data-i18n="conf_sar">Parabolic SAR (на свечах):</span> <span id="confPsar">BULLISH REVERSAL</span></div>
-            <div class="confluence-item"><span data-i18n="conf_rsi">RSI Моментум (14):</span> <span id="confRsi">49.20 (Баланс)</span></div>
-            <div class="confluence-item"><span data-i18n="conf_macd">MACD Импульс:</span> <span id="confMacd">CROSS UP ACTIVE</span></div>
-            <div class="confluence-item"><span data-i18n="conf_bb">Индикатор Bollinger Bands:</span> <span style="color:var(--accent-green)" data-i18n="conf_bb_val">Сжатие / Пробой</span></div>
-            <div class="confluence-item"><span data-i18n="conf_status">Статус алгоритмов:</span> <span style="color:var(--accent-green)" data-i18n="conf_status_val">Синхронизировано</span></div>
-        </div>
+        logging.info("МИКРОЦИКЛ ЗАВЕРШЕН. ОЖИДАНИЕ СЛЕДУЮЩЕГО ТАКТА...")
+        time.sleep(15)
 
-        <div class="big-neuro-box">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;" data-i18n="logs_title">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>
-            <div class="log-box-big" id="terminalLogs">
-                [22:45:01] Инициализация квантового ядра v4.8...<br>
-                [22:45:04] Загрузка индикатора Parabolic SAR на свечи... Успешно.<br>
-                [22:45:08] Канал связи с биржевыми шлюзами активен (0.1ms)...<br>
-                [22:45:12] Ожидание пользовательского сканирования рынка...
-            </div>
-        </div>
-
-        <div class="withdrawal-box">
-            <div style="font-weight:700; color:var(--accent-green); margin-bottom:8px;" data-i18n="withdrawals_title">💸 ВЫПЛАТЫ / WITHDRAWALS</div>
-            <div class="withdrawal-feed" id="withdrawalFeed">
-                [22:46:10] • jo****@gmail.com — выплата <b>$45.00</b> (Успешно)<br>
-                [22:48:25] • ar****@mail.ru — выплата <b>$320.00</b> (Успешно)<br>
-                [22:51:40] • el****@gmail.com — выплата <b>$85.50</b> (Успешно)<br>
-                [22:55:02] • ma****@mail.ru — выплата <b>$1,250.00</b> (Успешно)
-            </div>
-        </div>
-
-        <div class="withdrawal-box" id="statsSection">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:12px;" data-i18n="stats_title">📊 ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ</div>
-            <div class="controls-grid">
-                <div>
-                    <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_wins">ПЛЮСОВЫЕ СДЕЛКИ:</label>
-                    <input type="number" id="winsCount" class="risk-input" value="0">
-                </div>
-                <div>
-                    <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_losses">МИНУСОВЫЕ СДЕЛКИ:</label>
-                    <input type="number" id="lossesCount" class="risk-input" value="0">
-                </div>
-            </div>
-            <div style="margin-bottom:8px;">
-                <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_balance">ТЕКУЩИЙ БАЛАНС ($):</label>
-                <input type="number" id="balanceInput" class="risk-input" value="1000">
-            </div>
-            <button class="btn" onclick="addTradeToStats();" style="margin-bottom:10px;" data-i18n="stats_btn">ЗАФИКСИРОВАТЬ РЕЗУЛЬТАТ</button>
-            <div class="confluence-box" style="margin-top:8px; background: rgba(41, 121, 255, 0.05);">
-                <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span data-i18n="stats_wr">Общий винрейт:</span> <b id="totalWinrate" style="color:var(--accent-green);">0%</b></div>
-                <div style="display:flex; justify-content:space-between;"><span data-i18n="stats_profit">Чистая прибыль:</span> <b id="totalProfit" style="color:var(--accent-green);">+$0.00</b></div>
-            </div>
-        </div>
-
-        <div class="sub-nav-grid">
-            <div class="sub-nav-btn active" onclick="switchTool('matrix', this)" data-i18n="stool_matrix">📈 Матрица ТФ</div>
-            <div class="sub-nav-btn" onclick="switchTool('orderbook', this)" data-i18n="stool_ob">⚖️ Стакан ордеров</div>
-            <div class="sub-nav-btn" onclick="switchTool('risk', this)" data-i18n="stool_risk">🛡️ Риск-менедж</div>
-            <div class="sub-nav-btn" onclick="switchTool('profit', this)" data-i18n="stool_calc">💰 Калькулятор</div>
-            <div class="sub-nav-btn" onclick="switchTool('history', this)" data-i18n="stool_history">📑 История</div>
-            <div class="sub-nav-btn" onclick="switchTool('pool', this)" data-i18n="stool_pool">🌐 Пул ликвидности</div>
-        </div>
-
-        <div id="matrix" class="analysis-tool-box active-tool">
-            <div style="color:var(--text-secondary); margin-bottom:6px;" data-i18n="t_matrix_desc">Синхронизация алгоритмов по 10 топовым таймфреймам:</div>
-            <table class="matrix-table">
-                <tr><th data-i18n="th_tf">Таймфрейм</th><th data-i18n="th_trend">SAR Тренд</th><th data-i18n="th_rsi">RSI Зона</th><th data-i18n="th_status">Статус сигнала</th></tr>
-                <tr><td>1м / 3м</td><td><span style="color:var(--accent-green)">BUY</span></td><td data-i18n="norm">Норма</td><td><b style="color:var(--accent-green)" data-i18n="active_lbl">АКТИВНО</b></td></tr>
-                <tr><td>5м / 15м</td><td><span style="color:var(--accent-green)">BUY</span></td><td data-i18n="opt">Оптимум</td><td><b style="color:var(--accent-green)" data-i18n="active_lbl">АКТИВНО</b></td></tr>
-            </table>
-        </div>
-
-        <div id="orderbook" class="analysis-tool-box">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">⚖️ ГЛУБИНА СТАКАНА МАРКЕТМЕЙКЕРОВ</div>
-            <div id="obContent" style="font-family:monospace; font-size:11px; line-height:1.5;">Загрузка стакана...</div>
-        </div>
-
-        <div id="risk" class="analysis-tool-box">
-            <label style="font-size:11px; color:var(--text-secondary);" data-i18n="r_bal">Ваш торговый баланс ($):</label>
-            <input type="number" id="userBalance" class="risk-input" value="1000" oninput="calculateRisk()">
-            <label style="font-size:11px; color:var(--text-secondary);" data-i18n="r_pct">Риск на одну сделку (%):</label>
-            <input type="number" id="riskPercent" class="risk-input" value="2" oninput="calculateRisk()">
-            <div style="font-weight:700; color:var(--accent-blue);"><span data-i18n="r_rec">Рекомендуемый размер ставки:</span> <span id="recommendedBet" style="color:var(--accent-green);">$20.00</span></div>
-        </div>
-
-        <div id="profit" class="analysis-tool-box">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">💰 КАЛЬКУЛЯТОР СЛОЖНОГО ПРОЦЕНТА</div>
-            <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Начальный депозит ($):</div>
-            <input type="number" id="calcStart" class="risk-input" value="100" oninput="calculateCompound()">
-            <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Прибыль в день (%):</div>
-            <input type="number" id="calcPercent" class="risk-input" value="10" oninput="calculateCompound()">
-            <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Количество дней:</div>
-            <input type="number" id="calcDays" class="risk-input" value="7" oninput="calculateCompound()">
-            <div style="margin-top:8px; font-weight:700; color:var(--accent-green);" id="calcResult">Итог через 7 дней: $194.87</div>
-        </div>
-
-        <div id="history" class="analysis-tool-box">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">📑 ИСТОРИЯ СЕССИОННЫХ СДЕЛОК ИИ</div>
-            <div id="historyFeed" style="font-family:monospace; font-size:11px; max-height:130px; overflow-y:auto; line-height:1.5;">
-                [22:40:12] BTC/USDT • ВВЕРХ • СУММА: $50 • <span style="color:var(--accent-green)">УСПЕХ (+$46.00)</span><br>
-                [22:42:30] EUR/USD • ВВЕРХ • СУММА: $30 • <span style="color:var(--accent-green)">УСПЕХ (+$27.60)</span><br>
-                [22:45:00] GOLD • ВВЕРХ • СУММА: $40 • <span style="color:var(--accent-green)">УСПЕХ (+$36.80)</span>
-            </div>
-        </div>
-
-        <div id="pool" class="analysis-tool-box">
-            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">🌐 МОНИТОРИНГ КИТОВ И ПУЛОВ</div>
-            <div id="poolFeed" style="font-family:monospace; font-size:11px; max-height:130px; overflow-y:auto; line-height:1.5;">
-                Инициализация сканера китовых транзакций...
-            </div>
-        </div>
-    </div>
-
-    <div id="academy" class="card">
-        <div style="font-size:15px; font-weight:900; color:var(--accent-blue); margin-bottom:10px;" data-i18n="acad_main_title">📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ</div>
-        
-        <div class="academy-module" style="background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border-color: rgba(41,121,255,0.3);">
-            <h4 style="color:var(--accent-green); font-size:15px;" data-i18n="acad_perks_head">⚡ ПОЧЕМУ ТРЭЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:</h4>
-            <div class="platform-perks-grid" style="margin-top:10px;">
-                <div class="perk-mini-card">
-                    <b>ОТ $5</b>
-                    <span data-i18n="perk_min">МИНИМАЛЬНЫЙ ДЕПОЗИТ</span>
-                </div>
-                <div class="perk-mini-card">
-                    <b>ДО 96%</b>
-                    <span data-i18n="perk_payout">ДОХОДНОСТЬ СДЕЛОК</span>
-                </div>
-                <div class="perk-mini-card">
-                    <b>БЕСПЛАТНО</b>
-                    <span data-i18n="perk_demo">ДЕМО-СЧЕТ ДЛЯ ТРЕНИРОВОК</span>
-                </div>
-                <div class="perk-mini-card">
-                    <b>МОМЕНТАЛЬНО</b>
-                    <span data-i18n="perk_withdraw">ВЫВОД СРЕДСТВ</span>
-                </div>
-            </div>
-            <p style="margin-top:8px; font-size:12px;" data-i18n="acad_perks_sub">Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.</p>
-        </div>
-
-        <div class="academy-module" style="border-color: rgba(0, 230, 118, 0.4);">
-            <h4 style="color: var(--accent-green);" data-i18n="demo_block_title">🎯 ПОДРОБНО О ДЕМО-СЧЕТЕ: БЕЗОПАСНЫЙ СТАРТ</h4>
-            <p data-i18n="demo_block_desc">Демо-счет — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:</p>
-            <ul>
-                <li data-i18n="demo_li_1"><b>Виртуальный баланс:</b> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.</li>
-                <li data-i18n="demo_li_2"><b>Полная имитация рынка:</b> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.</li>
-                <li data-i18n="demo_li_3"><b>Тест стратегий:</b> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.</li>
-                <li data-i18n="demo_li_4"><b>Мгновенное переключение:</b> Как только вы почувствуете уверенность, можно в один клик переключиться на реальный счет и начать зарабатывать.</li>
-            </ul>
-        </div>
-
-        <div class="academy-module">
-            <h4 data-i18n="acad_h0">1. С чего начать новичку: от регистрации до первой прибыли</h4>
-            <p data-i18n="acad_p0">Если вы никогда раньше не занимались трЭйдингом, путь к успешной торговле состоит из 4 простых шагов:</p>
-            <ul>
-                <li data-i18n="acad_li_step1"><b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.</li>
-                <li data-i18n="acad_li_step2"><b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 часа).</li>
-                <li data-i18n="acad_li_step3"><b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.</li>
-                <li data-i18n="acad_li_step4"><b>Шаг 4. Открытие сделки:</b> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления (ВВЕРХ или ВНИЗ). При верном прогнозе чистая прибыль зачисляется мгновенно!</li>
-            </ul>
-        </div>
-
-        <div class="academy-module">
-            <h4 data-i18n="acad_h1">2. Как работает ИИ-терминал и Parabolic SAR</h4>
-            <p data-i18n="acad_p1">Главный трендовый индикатор нашего терминала — <b>Parabolic SAR</b> — отображается прямо на ценовых свечах в виде точек:</p>
-            <ul>
-                <li data-i18n="acad_li1"><b>Точки под свечами (зеленые):</b> Сигнализируют о сильном бычьем тренде и росте цены. Время открывать сделки ВВЕРХ.</li>
-                <li data-i18n="acad_li2"><b>Точки над свечами (красные):</b> Указывают на медвежий тренд и давление продавцов. Идеально для входа ВНИЗ.</li>
-                <li data-i18n="acad_li3"><b>Смена точек:</b> Пересечение графика через точки SAR дает мощный сигнал разворота тренда с высокой точностью.</li>
-            </ul>
-        </div>
-
-        <div class="academy-module">
-            <h4 data-i18n="acad_h2">3. Торговля по стратегии RSI и сигналам</h4>
-            <p data-i18n="acad_p2">Индикатор RSI (Индекс относительной силы) помогает находить точные точки разворота цены на экстремумах:</p>
-            <ul>
-                <li data-i18n="acad_li4"><b>Зона выше 70%:</b> Актив перекуплен покупателями, ожидается коррекция или падение цен.</li>
-                <li data-i18n="acad_li5"><b>Зона ниже 30%:</b> Актив перепродан продавцами, рынок готов к резкому отскоку вверх.</li>
-                <li data-i18n="acad_li6"><b>Торговля по сигналам:</b> Используя готовые квантовые сигналы ИИ и командные сессии, вы можете совершать сделки с вероятностью победы до 96%!</li>
-            </ul>
-        </div>
-
-        <div class="academy-module">
-            <h4 data-i18n="acad_h3">4. Золотые правила мани-менеджмента</h4>
-            <p data-i18n="acad_p3">Соблюдение правил риска — главный секрет стабильного заработка:</p>
-            <ul>
-                <li data-i18n="acad_li7"><b>Риск на сделку:</b> Выделяйте не более 2-5% от депозита на одну позицию.</li>
-                <li data-i18n="acad_li8"><b>Дисциплина:</b> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.</li>
-            </ul>
-        </div>
-
-        <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">
-            <h4 style="color:var(--accent-green);" data-i18n="acad_h5">Время зарабатывать профессионально!</h4>
-            <p data-i18n="acad_p5">Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трЭйдинг на новый уровень прибыльности.</p>
-            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трЭйдить</a>
-        </div>
-    </div>
-
-    <div id="vip" class="card">
-        <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;" data-i18n="vip_main_title">🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА</div>
-        
-        <div class="vip-card-box" style="border-color: rgba(0, 230, 118, 0.4); background: linear-gradient(135deg, rgba(0,230,118,0.08), rgba(41,121,255,0.08));">
-            <div style="font-weight:800; color:var(--accent-green); margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:6px;">
-                <span>🔗</span> <span data-i18n="ref_box_title">ВАША ПЕРСОНАЛЬНАЯ РЕФЕРАЛЬНАЯ ССЫЛКА:</span>
-            </div>
-            <div style="font-size:11px; color:var(--text-secondary); line-height:1.4; margin-bottom:8px;" data-i18n="ref_box_desc">
-                Пригласите 3 друзей по этой ссылке в нашу команду — получите <b>VIP на 1 неделю</b>! За регистрацию и пополнение — <b>VIP на 1 месяц</b>.
-            </div>
-            <div style="display: flex; gap: 6px; margin-bottom: 8px;">
-                <input type="text" id="refLinkInput" class="risk-input" style="margin: 0; font-size: 11px; background: #000; color: var(--accent-green);" readonly value="https://t.me/Binodex_Signal_Bot?start=ref_12345">
-                <button class="lang-switcher" onclick="copyRefLink()" style="background: var(--accent-blue); color: #fff; border: none; padding: 0 12px; font-weight: 700; border-radius: 8px; cursor: pointer; flex-shrink: 0;" data-i18n="ref_copy_btn">Копировать</button>
-            </div>
-            <div style="font-size: 11px; display: flex; justify-content: space-between; color: var(--text-secondary);">
-                <span data-i18n="ref_invited_count">Приглашено друзей: <b style="color: #fff;" id="invitedCount">0</b> / 3</span>
-                <span style="color: var(--accent-green);" id="refStatus" data-i18n="ref_status_none">До VIP осталось: 3 друга</span>
-            </div>
-        </div>
-
-        <div class="vip-card-box">
-            <div style="font-weight:800; color:var(--accent-blue); margin-bottom:8px; font-size:13px;" data-i18n="vip_how_title">📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:</div>
-            <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="vip_how_text">
-                • Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите сделку на реальном счёте с любым активом и суммой.<br>
-                • Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке выше в нашу команду.
-            </div>
-            <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:5px;" data-i18n="vip_btn_top">Зарегистрироваться и получить VIP</a>
-        </div>
-
-        <div style="font-weight:800; color:var(--text-main
+if __name__ == "__main__":
+    main_loop()
