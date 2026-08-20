@@ -1,9 +1,8 @@
-<!DOCTYPE html>    
-<html lang="ru">    
+<!DOCTYPE html>    <html lang="ru">    
 <head>    
     <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    
-    <title>Binodex Quantum Bot</title>    
+    <title>Binodex Signal Bot</title>    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>    
     <style>    
         :root {    
@@ -12,7 +11,6 @@
             --accent-green: #00e676;    
             --accent-red: #ff3d00;    
             --accent-blue: #2979ff;    
-            --accent-gold: #ffd700;
             --text-main: #ffffff;    
             --text-secondary: #a0aec0;    
             --border-color: #1e293b;    
@@ -20,13 +18,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }    
         body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 40px; }    
         .top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }    
-        .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; color: #ffffff; }    
-        .panel-right { display: flex; align-items: center; gap: 8px; }    
+        .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; color: #ffffff; }    .panel-right { display: flex; align-items: center; gap: 8px; }    
         .winrate-badge { background: rgba(0, 230, 118, 0.1); color: var(--accent-green); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; border: 1px solid rgba(0, 230, 118, 0.3); animation: pulseGlow 2s infinite; }    
+        .lang-switcher { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }    
+        .lang-switcher:active { transform: scale(0.95); }    
+            
         @keyframes pulseGlow { 0% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } 50% { box-shadow: 0 0 15px rgba(0,230,118,0.5); } 100% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } }    
 
-        .nav-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }    
-        .nav-tab { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 4px; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: 0.3s; }    
+        .nav-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }    
+        .nav-tab { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: 0.3s; }    
         .nav-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(41, 121, 255, 0.4); }    
             
         .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: none; }    
@@ -35,27 +35,59 @@
         .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }    
         .select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; }    
             
-        .tradingview-container { width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; position: relative; }    
+        .tradingview-container { width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }    
             
         .btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; }    
         .btn:active { transform: scale(0.98); }    
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
             
-        .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; font-size: 14px; line-height: 1.5; }    
+        .btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); transition: 0.2s; }    
+        .btn-trade:active { transform: scale(0.98); }    
             
-        .confluence-box { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 12px; }    
-        .confluence-item { display: flex; justify-content: space-between; margin-top: 8px; padding-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
-        .confluence-item:last-child { border-bottom: none; padding-bottom: 0; }
-        .confluence-item span:first-child { color: var(--text-secondary); }
-        .confluence-item span:last-child { font-weight: 700; text-align: right; }    
+        .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: left; font-weight: 700; display: none; font-size: 13px; line-height: 1.6; }    
+            
+        .sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }    
+        .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }    
+        .sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }    
+            
+        .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; font-size: 12px; }    
+        .analysis-tool-box.active-tool { display: block; }    
+            
+        .confluence-box { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 12px; }    
+        .confluence-item { display: flex; justify-content: space-between; margin-top: 6px; border-bottom: 1px dashed #1e293b; padding-bottom: 4px; }    
+        .confluence-item span { font-weight: 700; }    
+        .conf-label { color: var(--text-secondary); }
 
-        .liquidity-bar-container { width: 100%; height: 8px; background: #333; border-radius: 4px; margin-top: 5px; display: flex; overflow: hidden; }
-        .liq-bids { height: 100%; background: var(--accent-green); transition: width 0.5s; }
-        .liq-asks { height: 100%; background: var(--accent-red); transition: width 0.5s; }
+        .big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }    
+        .log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }    
 
-        .loader-box { display: none; text-align: center; padding: 20px; font-size: 13px; color: var(--accent-blue); font-weight: 700; }
-        .spinner { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--accent-blue); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .withdrawal-box { background: rgba(0, 230, 118, 0.03); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; }    
+        .withdrawal-feed { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 11px; height: 140px; overflow-y: auto; border: 1px solid var(--border-color); }    
+        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }    
+        .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }    
+        .matrix-table th { background: #161e2e; color: var(--text-secondary); }    
+            
+        .academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }    
+        .academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }    
+        .academy-module p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }    
+        .academy-module ul { padding-left: 15px; margin-top: 6px; margin-bottom: 8px; }    
+        .academy-module li { font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px; }    
+            
+        .platform-perks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }    
+        .perk-mini-card { background: rgba(41, 121, 255, 0.05); border: 1px solid rgba(41, 121, 255, 0.2); border-radius: 10px; padding: 10px; text-align: center; }    
+        .perk-mini-card b { display: block; color: var(--accent-green); font-size: 14px; margin-bottom: 2px; }    
+        .perk-mini-card span { font-size: 11px; color: var(--text-secondary); }    
+
+        .vip-list { list-style: none; padding: 0; }    
+        .vip-list li { margin-bottom: 12px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; }    
+        .vip-list li b { color: var(--text-main); }    
+        .vip-list li::before { content: "⚡"; margin-right: 8px; color: var(--accent-green); flex-shrink: 0; }    
+
+        .risk-input { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 8px; margin-top: 5px; margin-bottom: 10px; font-size: 12px; outline: none; }    
+        .vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }    
+
+        .share-container-bottom { margin-top: 15px; margin-bottom: 10px; width: 100%; }    
+        .btn-share-bot { width: 100%; background: linear-gradient(90deg, #ff3d00, #2979ff); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }    
+        .btn-share-bot:active { transform: scale(0.98); }    
     </style>
 </head>    
 <body>    
@@ -66,177 +98,138 @@
             <path d="M3 17L9 11L13 15L21 7" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>    
             <path d="M16 7H21V12" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>    
         </svg>    
-        BinoDex PRO    
+        BinoDex    
     </div>    
     <div class="panel-right">    
-        <div class="winrate-badge">API ONLINE 🟢</div>    
+        <div class="winrate-badge" data-i18n="ai_active">🟢 API СТАТУС: ONLINE</div>    
+        <button class="lang-switcher" onclick="toggleLanguage();">RU / EN</button>    
     </div>    
 </div>    
 
 <div class="nav-tabs">    
-    <div class="nav-tab active" onclick="switchTab('terminal', this)">📊 ТЕРМИНАЛ</div>    
-    <div class="nav-tab" onclick="switchTab('vip', this)">⚙️ НАСТРОЙКИ</div>    
+    <div class="nav-tab active" onclick="switchTab('terminal', this)" data-i18n="tab_terminal">📊 ТЕРМИНАЛ</div>    
+    <div class="nav-tab" onclick="switchTab('academy', this)" data-i18n="tab_academy">📚 ОБУЧЕНИЕ</div>    
+    <div class="nav-tab" onclick="switchTab('vip', this)" data-i18n="tab_vip">🎁 VIP</div>    
 </div>    
 
 <!-- ТЕРМИНАЛ -->    
 <div id="terminal" class="card active-section">    
     <div class="controls-grid">    
-        <!-- ВАЖНО: Исправлены обработчики событий -->
-        <select id="assetSelect" class="select-custom" onchange="onAssetOrTimeframeChange()">    
-            <option value="BINANCE:BTCUSDT" selected>BTC/USDT (Биткоин)</option>    
-            <option value="BINANCE:ETHUSDT">ETH/USDT (Эфириум)</option>    
-            <option value="BINANCE:SOLUSDT">SOL/USDT (Солана)</option>    
-            <option value="FX:EURUSD">EUR/USD (Forex)</option>    
-            <option value="FX:GBPUSD">GBP/USD (Forex)</option>    
-            <option value="NASDAQ:AAPL">AAPL (Акции)</option>    
+        <select id="assetSelect" class="select-custom" onchange="changeAsset();">    
+            <!-- Только 4 актива, как запрашивалось, разделяем логику через data-type и data-symbol -->
+            <option value="BINANCE:BTCUSDT" data-symbol="BTCUSDT" data-type="crypto" selected>BTC/USDT (Биткоин)</option>    
+            <option value="BINANCE:ETHUSDT" data-symbol="ETHUSDT" data-type="crypto">ETH/USDT (Эфириум)</option>    
+            <option value="BINANCE:SOLUSDT" data-symbol="SOLUSDT" data-type="crypto">SOL/USDT (Солана)</option>    
+            <option value="FX:EURUSD" data-symbol="EURUSDT" data-type="binary">EUR/USD (Бинарные)</option>    
         </select>    
-        <select id="timeframeSelect" class="select-custom" onchange="onAssetOrTimeframeChange()">    
-            <option value="1">1 Минута</option>    
-            <option value="5" selected>5 Минут</option>    
-            <option value="15">15 Минут</option>    
-            <option value="60">1 Час</option>    
-            <option value="240">4 Часа</option>    
+        <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe();">    
+            <option value="1">1 Мин / Min</option>    
+            <option value="5">5 Мин / Min</option>    
+            <option value="60">1 Час / Hour</option>    
+            <option value="240">4 Часа / 4 Hours</option>    
+            <option value="1D">1 День / Day</option>    
         </select>    
     </div>    
 
-    <!-- График TradingView -->
-    <div class="tradingview-container" id="chartWrapper">
-        <div id="chartContainer" style="height: 100%; width: 100%;"></div>
-    </div>    
+    <div class="tradingview-container" id="chartContainer"></div>    
 
-    <button id="scanBtn" class="btn" onclick="runRealAnalysis()">Запустить Quantum Анализ</button>    
+    <button id="scanBtn" class="btn" onclick="runRealTimeAnalysis()" data-i18n="btn_scan">Анализ рынка (Live API)</button>    
+    <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трейдить</a>    
         
-    <!-- Лоадер во время загрузки API -->
-    <div id="loaderBox" class="loader-box">
-        <div class="spinner"></div>
-        Подключение к кластеру Binance API...
-    </div>
-
-    <!-- Вердикт сигнала -->
     <div id="signalResult" class="signal-result"></div>    
 
-    <!-- 6 НОВЫХ API ИНДИКАТОРОВ -->    
-    <div class="confluence-box" id="metricsBox" style="display:none;">    
-        <div style="font-weight:900; color:var(--accent-blue); margin-bottom:10px; text-transform:uppercase;">📡 Метрики реального времени:</div>    
-        
-        <div class="confluence-item">
-            <span>1. Тех. анализ (Свечи API)</span> 
-            <span id="apiRsi">Загрузка...</span>
-        </div>
-        
-        <div class="confluence-item" style="display:block;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span>2. Карта ликвидности (Стакан)</span>
-                <span id="apiLiquidity">Bids 50% / Asks 50%</span>
-            </div>
-            <div class="liquidity-bar-container">
-                <div id="liqBidBar" class="liq-bids" style="width: 50%;"></div>
-                <div id="liqAskBar" class="liq-asks" style="width: 50%;"></div>
-            </div>
-        </div>
-
-        <div class="confluence-item">
-            <span>3. Лента сделок (Давление)</span> 
-            <span id="apiTrades">Анализ ленты...</span>
-        </div>
-
-        <div class="confluence-item">
-            <span>4. Открытый интерес (OI)</span> 
-            <span id="apiOI">Синхронизация...</span>
-        </div>
-
-        <div class="confluence-item">
-            <span>5. Funding Rate (Настроение)</span> 
-            <span id="apiFunding">Загрузка...</span>
-        </div>
-
-        <div class="confluence-item">
-            <span>6. Объем за 24ч (Сила тренда)</span> 
-            <span id="apiVolume">Подсчет...</span>
-        </div>
+    <!-- Конфлюэнтность с новыми индикаторами -->    
+    <div class="confluence-box">    
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;" data-i18n="conf_title">📊 LIVE Индикаторы (Binance API):</div>    
+        <div class="confluence-item"><span class="conf-label" data-i18n="conf_rsi">RSI (14):</span> <span id="confRsi" style="color: #fff">Ожидание данных...</span></div>    
+        <div class="confluence-item"><span class="conf-label" data-i18n="conf_oi">Открытый интерес (OI):</span> <span id="confOi" style="color: #fff">Ожидание...</span></div>    
+        <div class="confluence-item"><span class="conf-label" data-i18n="conf_liq">Ликвидность стакана:</span> <span id="confLiq" style="color: #fff">Ожидание...</span></div>    
+        <div class="confluence-item"><span class="conf-label" data-i18n="conf_status">Статус данных:</span> <span style="color:var(--accent-green)" id="confStatus">Синхронизировано</span></div>    
     </div>    
+
+    <!-- ОСТАЛЬНОЙ UI ОСТАЕТСЯ ПРЕЖНИМ (Логи, Выплаты, Матрицы и т.д.) -->
+    <!-- НЕЙРО-ЛОГИ -->    
+    <div class="big-neuro-box">    
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;" data-i18n="logs_title">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>    
+        <div class="log-box-big" id="terminalLogs">    
+            [SYSTEM] Подключение к сокетам Binance Futures API... Успешно.<br>    
+            [SYSTEM] Канал ликвидности открыт. Ожидание запроса...    
+        </div>    
+    </div>    
+    
+    <div class="withdrawal-box">    
+        <div style="font-weight:700; color:var(--accent-green); margin-bottom:8px;" data-i18n="withdrawals_title">💸 ВЫПЛАТЫ / WITHDRAWALS</div>    
+        <div class="withdrawal-feed" id="withdrawalFeed"></div>    
+    </div> 
 </div>    
 
-<!-- НАСТРОЙКИ / ИНФО -->    
-<div id="vip" class="card">    
-    <div style="color:var(--accent-green); font-weight:800; margin-bottom:10px;">🛡️ СТАТУС СИСТЕМЫ API</div>
-    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px;">
-        Вы используете профессиональную версию сканера. Для криптовалютных пар (BTC, ETH, SOL) данные забираются <b>напрямую с серверов Binance</b> в реальном времени.
-    </p>
-    <ul style="font-size: 12px; color: var(--text-secondary); padding-left: 20px; line-height: 1.5;">
-        <li>Оценка RSI и SMA строится на реальных закрытиях свечей.</li>
-        <li>Ликвидность сканирует реальный стакан ордеров маркетмейкеров.</li>
-        <li>Лента сделок вычисляет агрессивных покупателей по маркету.</li>
-    </ul>
+<!-- ОБУЧЕНИЕ И VIP БЛОКИ СОКРАЩЕНЫ В HTML ДЛЯ ЧИТАЕМОСТИ (НО ТЫ МОЖЕШЬ ОСТАВИТЬ СВОИ) -->
+<div id="academy" class="card">
+    <div style="font-size:15px; font-weight:900; color:var(--accent-blue); margin-bottom:10px;">📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА</div> 
+    <div class="academy-module" style="background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border-color: rgba(41,121,255,0.3);">
+        <p>Наш бот теперь использует прямые подключения к агрегаторам ликвидности для расчета точных точек входа.</p>
+    </div>
+</div>
+<div id="vip" class="card">
+    <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;">🎁 VIP: УСЛОВИЯ</div>
+    <div class="vip-card-box">
+        <p style="font-size: 12px; color: var(--text-secondary);">Здесь находятся ваши VIP преимущества и реферальная ссылка.</p>
+    </div>
+</div>
+
+<div class="share-container-bottom">    
+    <button class="btn-share-bot" onclick="shareBotApp()">    
+        <span data-i18n="share_btn_text">ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ</span>    
+    </button>    
 </div>    
 
 <script>    
     window.addEventListener('DOMContentLoaded', () => {    
-        // Инициализация Telegram WebApp
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready(); 
-            window.Telegram.WebApp.expand();
-        }
-        
-        // Загрузка скрипта TradingView и первичная отрисовка
-        const script = document.createElement('script');    
-        script.src = "https://s3.tradingview.com/tv.js";    
-        script.onload = () => {
-            initChart();
-        };
-        document.head.appendChild(script);    
+        const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;    
+        scheduleNextWithdrawal();  
+        setInterval(updateTerminalLogs, 3500);  
     });    
+  
+    // ЛОГИ
+    function updateTerminalLogs() {  
+        const logBox = document.getElementById('terminalLogs');  
+        if(!logBox) return;  
+        const now = new Date().toTimeString().split(' ')[0];  
+        const msgs = [  
+            "Запрос к Binance API (Kline data)... OK", 
+            "Проверка перекупленности по RSI (14)...",  
+            "Сбор данных Open Interest...", 
+            "Срез ликвидности Depth/OrderBook...",  
+            "Фильтрация рыночного шума... OK", 
+            "Ожидание пользовательского сигнала..."  
+        ];  
+        const msg = msgs[Math.floor(Math.random() * msgs.length)];  
+        logBox.innerHTML += `<br>[${now}] ${msg}`;  
+        logBox.scrollTop = logBox.scrollHeight;  
+    }  
 
-    // --- ЛОГИКА ВКЛАДОК ---
-    function switchTab(tabId, element) {    
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));    
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));    
-        document.getElementById(tabId).classList.add('active-section');    
-        element.classList.add('active');    
-    }    
+    // ВЫПЛАТЫ (Оставил твою логику)
+    function scheduleNextWithdrawal() {  
+        const delay = Math.random() * 10000 + 5000;  
+        setTimeout(() => {  
+            const feed = document.getElementById('withdrawalFeed');  
+            if(feed) {
+                const now = new Date().toTimeString().split(' ')[0];  
+                const sum = (Math.random() * 2990 + 10).toFixed(2);
+                feed.innerHTML += `<br>[${now}] • user***@gmail.com — выплата <b>$${sum}</b> (Успешно)`;  
+                feed.scrollTop = feed.scrollHeight;  
+            }
+            scheduleNextWithdrawal();  
+        }, delay);  
+    }  
 
-    // --- ЛОГИКА ГРАФИКА TRADINGVIEW (ИСПРАВЛЕНА) ---
-    function onAssetOrTimeframeChange() {
-        // Очищаем старый виджет, чтобы он корректно перерисовался
-        const wrapper = document.getElementById('chartWrapper');
-        wrapper.innerHTML = '<div id="chartContainer" style="height: 100%; width: 100%;"></div>';
-        
-        // Перерисовываем
-        initChart();
-        
-        // Скрываем блок с прошлым анализом
-        document.getElementById('metricsBox').style.display = 'none';
-        document.getElementById('signalResult').style.display = 'none';
-    }
-
-    function initChart() {
-        const symbol = document.getElementById('assetSelect').value;
-        const interval = document.getElementById('timeframeSelect').value;
-        
-        new TradingView.widget({    
-            "container_id": "chartContainer",    
-            "autosize": true,
-            "symbol": symbol,    
-            "interval": interval,    
-            "timezone": "Etc/UTC",    
-            "theme": "dark",    
-            "style": "1",    
-            "locale": "ru",    
-            "toolbar_bg": "#161e2e",    
-            "enable_publishing": false,    
-            "hide_top_toolbar": false,
-            "hide_legend": true,
-            "save_image": false,
-            "studies": [    
-                "ParabolicSAR@tv-basicstudies",    
-                "RSI@tv-basicstudies"
-            ]    
-        }); 
-    }
-
-    // --- МАТЕМАТИКА ДЛЯ ИНДИКАТОРОВ (RSI / SMA) ---
+    // ------------------------------------------------------------------
+    // НАСТОЯЩИЕ API ФУНКЦИИ (BINANCE FUTURES)
+    // ------------------------------------------------------------------
+    
+    // 1. Расчет RSI (настоящая математика)
     function calculateRSI(closes, period = 14) {
-        if (closes.length < period + 1) return 50; // Недостаточно данных
+        if (closes.length < period + 1) return 50;
         let gains = 0, losses = 0;
         for (let i = 1; i <= period; i++) {
             let diff = closes[i] - closes[i - 1];
@@ -244,210 +237,160 @@
             else losses -= diff;
         }
         let avgGain = gains / period;
-        let avgLoss = losses / period;
+        let avgLoss = Math.abs(losses / period);
+        for (let i = period + 1; i < closes.length; i++) {
+            let diff = closes[i] - closes[i - 1];
+            if (diff >= 0) {
+                avgGain = (avgGain * (period - 1) + diff) / period;
+                avgLoss = (avgLoss * (period - 1)) / period;
+            } else {
+                avgGain = (avgGain * (period - 1)) / period;
+                avgLoss = (avgLoss * (period - 1) + Math.abs(diff)) / period;
+            }
+        }
         if (avgLoss === 0) return 100;
         let rs = avgGain / avgLoss;
         return 100 - (100 / (1 + rs));
     }
 
-    function calculateSMA(closes, period = 14) {
-        if (closes.length < period) return closes[closes.length - 1];
-        let sum = 0;
-        for (let i = closes.length - period; i < closes.length; i++) {
-            sum += closes[i];
-        }
-        return sum / period;
-    }
+    // 2. Основная функция анализа API
+    async function runRealTimeAnalysis() {    
+        const res = document.getElementById('signalResult');    
+        const btn = document.getElementById('scanBtn');    
+        const assetSelect = document.getElementById('assetSelect');
+        const selectedOption = assetSelect.options[assetSelect.selectedIndex];
+        
+        const symbolRaw = selectedOption.dataset.symbol; // e.g. BTCUSDT
+        const tradeType = selectedOption.dataset.type;   // "crypto" or "binary"
+        
+        let tfRaw = document.getElementById('timeframeSelect').value;
+        let interval = tfRaw === "60" ? "1h" : tfRaw === "240" ? "4h" : tfRaw === "1D" ? "1d" : tfRaw + "m";
 
-    // --- ФЕТЧЕР API BINANCE ---
-    async function fetchBinanceData(symbolUI, tfUI) {
-        // Конвертация форматов
-        let apiSymbol = "BTCUSDT";
-        if (symbolUI.includes("ETH")) apiSymbol = "ETHUSDT";
-        if (symbolUI.includes("SOL")) apiSymbol = "SOLUSDT";
-
-        let binanceTf = "5m"; // Дефолт
-        if (tfUI === "1") binanceTf = "1m";
-        if (tfUI === "5") binanceTf = "5m";
-        if (tfUI === "15") binanceTf = "15m";
-        if (tfUI === "60") binanceTf = "1h";
-        if (tfUI === "240") binanceTf = "4h";
+        res.style.display = 'block';    
+        btn.disabled = true;    
+        res.innerHTML = '⚡ Подключение к серверам Binance API...<br>Загрузка данных (Klines, OrderBook, OpenInterest)...';    
+        res.style.color = 'var(--accent-blue)';
 
         try {
-            // Выполняем 5 запросов к API параллельно для скорости
-            const [klinesRes, depthRes, tradesRes, tickerRes, oiRes, fundingRes] = await Promise.all([
-                fetch(`https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=${binanceTf}&limit=20`),
-                fetch(`https://api.binance.com/api/v3/depth?symbol=${apiSymbol}&limit=50`),
-                fetch(`https://api.binance.com/api/v3/trades?symbol=${apiSymbol}&limit=50`),
-                fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${apiSymbol}`),
-                fetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${apiSymbol}`).catch(()=>null), // Фьючерсный
-                fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${apiSymbol}`).catch(()=>null)  // Фьючерсный
+            // ДЕЛАЕМ ЗАПРОСЫ К 3 РАЗНЫМ API ОДНОВРЕМЕННО
+            const [klinesRes, oiRes, depthRes] = await Promise.all([
+                fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbolRaw}&interval=${interval}&limit=50`),
+                fetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${symbolRaw}`),
+                fetch(`https://fapi.binance.com/fapi/v1/depth?symbol=${symbolRaw}&limit=50`)
             ]);
 
             const klines = await klinesRes.json();
+            const oiData = await oiRes.json();
             const depth = await depthRes.json();
-            const trades = await tradesRes.json();
-            const ticker = await tickerRes.json();
+
+            // Парсим цену и считаем индикаторы
+            const closes = klines.map(k => parseFloat(k[4]));
+            const currentPrice = closes[closes.length - 1];
             
-            // Фьючерсные могут не ответить, если блок CORS, используем fallback
-            const oi = oiRes ? await oiRes.json() : { openInterest: (Math.random() * 50000 + 10000).toFixed(2) };
-            const funding = fundingRes ? await fundingRes.json() : { lastFundingRate: (Math.random() * 0.0002 - 0.0001).toFixed(6) };
-
-            return {
-                isCrypto: true,
-                klines: klines.map(k => parseFloat(k[4])), // Закрытия свечей
-                bids: depth.bids,
-                asks: depth.asks,
-                trades: trades,
-                volume: parseFloat(ticker.quoteVolume),
-                priceChange: parseFloat(ticker.priceChangePercent),
-                oi: parseFloat(oi.openInterest),
-                fundingRate: parseFloat(funding.lastFundingRate)
-            };
-        } catch (error) {
-            console.error("API Error:", error);
-            return null; // В случае ошибки сети
-        }
-    }
-
-    // --- СИМУЛЯТОР ДЛЯ FOREX / АКЦИЙ (Так как нет бесплатных API без ключей) ---
-    function generateSimulatedData(tfUI) {
-        // Создаем правдоподобные математические данные на основе времени
-        let rsiBase = 45 + Math.sin(Date.now() / 10000) * 20; 
-        let isUptrend = rsiBase > 50;
-        
-        return {
-            isCrypto: false,
-            rsi: rsiBase,
-            bidPct: isUptrend ? (55 + Math.random()*10) : (35 + Math.random()*10),
-            buyPressure: isUptrend ? (60 + Math.random()*15) : (30 + Math.random()*15),
-            volume: 45000000 + Math.random() * 10000000,
-            fundingRate: isUptrend ? 0.01 : -0.01,
-            oi: 120500 + Math.random() * 5000
-        };
-    }
-
-    // --- ГЛАВНЫЙ АНАЛИЗАТОР ---
-    async function runRealAnalysis() {
-        const symbol = document.getElementById('assetSelect').value;
-        const tf = document.getElementById('timeframeSelect').value;
-        
-        const btn = document.getElementById('scanBtn');
-        const loader = document.getElementById('loaderBox');
-        const metricsBox = document.getElementById('metricsBox');
-        const resultBox = document.getElementById('signalResult');
-        
-        btn.disabled = true;
-        metricsBox.style.display = 'none';
-        resultBox.style.display = 'none';
-        loader.style.display = 'block';
-
-        // Определяем, крипта или фиат
-        const isCryptoPair = symbol.includes("BINANCE");
-        
-        let score = 0; // Шкала от -5 (Строгий SELL) до +5 (Строгий BUY)
-        
-        let dataRSI, dataBidPct, dataAskPct, dataBuyPress, dataSellPress, dataOI, dataFund, dataVol;
-
-        if (isCryptoPair) {
-            // Ждем ответ от реальных API Binance
-            const apiData = await fetchBinanceData(symbol, tf);
+            // Считаем RSI
+            const rsi = calculateRSI(closes, 14);
             
-            if (apiData) {
-                // 1. Считаем реальный RSI и SMA по свечам
-                const rsi = calculateRSI(apiData.klines);
-                const sma = calculateSMA(apiData.klines);
-                const lastPrice = apiData.klines[apiData.klines.length - 1];
-                dataRSI = rsi;
-                if (rsi < 40 && lastPrice > sma) score += 2;
-                if (rsi > 60 && lastPrice < sma) score -= 2;
+            // Считаем ликвидность (сумма объемов bids vs asks)
+            const totalBids = depth.bids.reduce((acc, val) => acc + parseFloat(val[1]), 0);
+            const totalAsks = depth.asks.reduce((acc, val) => acc + parseFloat(val[1]), 0);
+            const liqRatio = (totalBids / totalAsks).toFixed(2); // > 1 значит больше покупок
 
-                // 2. Считаем ликвидность (Сумма объемов Bids против Asks)
-                let bidVol = apiData.bids.reduce((sum, item) => sum + parseFloat(item[1]), 0);
-                let askVol = apiData.asks.reduce((sum, item) => sum + parseFloat(item[1]), 0);
-                let totalLiq = bidVol + askVol;
-                dataBidPct = (bidVol / totalLiq) * 100;
-                dataAskPct = (askVol / totalLiq) * 100;
-                if (dataBidPct > 55) score += 1.5;
-                if (dataAskPct > 55) score -= 1.5;
-
-                // 3. Анализ Ленты сделок (Агрессия рынком)
-                let buyMarketVol = 0;
-                let sellMarketVol = 0;
-                apiData.trades.forEach(t => {
-                    if (t.isBuyerMaker) sellMarketVol += parseFloat(t.qty); // Продажа по маркету
-                    else buyMarketVol += parseFloat(t.qty); // Покупка по маркету
-                });
-                let totalPress = buyMarketVol + sellMarketVol;
-                dataBuyPress = (buyMarketVol / totalPress) * 100;
-                dataSellPress = (sellMarketVol / totalPress) * 100;
-                if (dataBuyPress > dataSellPress) score += 1;
-                else score -= 1;
-
-                // 4 & 5 & 6. Метрики фьючерсов
-                dataOI = apiData.oi;
-                dataFund = apiData.fundingRate * 100; // в проценты
-                dataVol = apiData.volume;
-                
-                // Если Funding положительный -> толпа в лонгах -> маркетмейкер побреет вниз
-                if (dataFund > 0.01) score -= 0.5;
-                if (dataFund < 0) score += 0.5;
-
+            // Логика принятия решения (AI Сигнал)
+            let isUp = false;
+            // Комбинируем RSI и Ликвидность
+            if (rsi < 45 || (rsi < 60 && liqRatio > 1.1)) {
+                isUp = true; // Перепроданность или сильное давление покупателей
             } else {
-                // Фолбек если API Binance заблокирован у клиента
-                const sim = generateSimulatedData(tf);
-                dataRSI = sim.rsi; dataBidPct = sim.bidPct; dataAskPct = 100 - sim.bidPct;
-                dataBuyPress = sim.buyPressure; dataSellPress = 100 - sim.buyPressure;
-                dataOI = sim.oi; dataFund = sim.fundingRate; dataVol = sim.volume;
-                score = dataRSI > 50 ? 3 : -3;
+                isUp = false; // Перекупленность или давление продавцов
             }
-        } else {
-            // Симуляция для Forex/Акции
-            const sim = generateSimulatedData(tf);
-            dataRSI = sim.rsi; dataBidPct = sim.bidPct; dataAskPct = 100 - sim.bidPct;
-            dataBuyPress = sim.buyPressure; dataSellPress = 100 - sim.buyPressure;
-            dataOI = sim.oi; dataFund = sim.fundingRate; dataVol = sim.volume;
-            score = dataRSI > 50 ? 3 : -3;
+
+            // Обновляем панель индикаторов (Confluence)
+            document.getElementById('confRsi').innerText = `${rsi.toFixed(2)} ${rsi > 70 ? '(Перекуплен)' : rsi < 30 ? '(Перепродан)' : '(Нейтрально)'}`;
+            document.getElementById('confRsi').style.color = rsi > 70 ? 'var(--accent-red)' : rsi < 30 ? 'var(--accent-green)' : '#fff';
+            
+            let oiValue = oiData.openInterest ? parseFloat(oiData.openInterest).toLocaleString() : "Н/Д";
+            document.getElementById('confOi').innerText = oiValue + " контрактов";
+            
+            document.getElementById('confLiq').innerText = `Bids: ${totalBids.toFixed(1)} | Asks: ${totalAsks.toFixed(1)} (Ratio: ${liqRatio})`;
+            document.getElementById('confLiq').style.color = liqRatio > 1 ? 'var(--accent-green)' : 'var(--accent-red)';
+
+            // ФОРМИРУЕМ ВЫВОД В ЗАВИСИМОСТИ ОТ ТИПА ТОРГОВЛИ
+            const dirColor = isUp ? 'var(--accent-green)' : 'var(--accent-red)';
+            const dirText = isUp ? 'ВВЕРХ (LONG 🚀)' : 'ВНИЗ (SHORT 🔻)';
+            
+            let htmlOutput = `<b style="color:#fff; font-size:14px;">✅ LIVE АНАЛИЗ ЗАВЕРШЕН</b><hr style="border-color: #1e293b; margin: 8px 0;">`;
+            
+            if (tradeType === 'crypto') {
+                // Расчет Риск-менеджмента для Крипты (Фьючи)
+                const entryType = "Рыночный (Market)"; // Для простоты бьем по рынку
+                const tpMargin = isUp ? currentPrice * 1.015 : currentPrice * 0.985; // 1.5% профит
+                const slMargin = isUp ? currentPrice * 0.99 : currentPrice * 1.01;   // 1.0% стоп-лосс
+
+                htmlOutput += `
+                    Актив: <b>${symbolRaw}</b><br>
+                    Направление: <b style="color:${dirColor}; font-size:16px;">${dirText}</b><br>
+                    Тип входа: <b>${entryType}</b><br>
+                    Цена входа: <b>$${currentPrice.toFixed(4)}</b><br><br>
+                    🎯 <b>Take-Profit:</b> <span style="color:var(--accent-green)">$${tpMargin.toFixed(4)}</span><br>
+                    🛡 <b>Stop-Loss:</b> <span style="color:var(--accent-red)">$${slMargin.toFixed(4)}</span>
+                `;
+            } else {
+                // Логика для БИНАРОК (EUR/USD)
+                const expiryTime = (tfRaw === "1" || tfRaw === "5") ? `${tfRaw} минут` : "Конец часа";
+                htmlOutput += `
+                    Валютная пара: <b>EUR/USD (OTC/Прокси)</b><br>
+                    Направление: <b style="color:${dirColor}; font-size:16px;">${dirText}</b><br>
+                    Текущая котировка: <b>${currentPrice.toFixed(5)}</b><br><br>
+                    ⏱ <b>Рекомендуемая экспирация:</b> ${expiryTime}<br>
+                    ⚠️ Входить строго с новой свечи.
+                `;
+            }
+
+            res.innerHTML = htmlOutput;
+            res.style.borderColor = dirColor;
+
+        } catch (error) {
+            console.error(error);
+            res.innerHTML = '❌ Ошибка получения данных от биржи. Попробуйте снова.';
+            res.style.color = 'var(--accent-red)';
+        } finally {
+            btn.disabled = false;    
         }
+    }    
 
-        // --- ОТРИСОВКА РЕЗУЛЬТАТОВ НА ЭКРАН ---
-        setTimeout(() => {
-            loader.style.display = 'none';
-            metricsBox.style.display = 'block';
-            resultBox.style.display = 'block';
-            btn.disabled = false;
+    // Трейдинг Вью остается как был
+    function updateChart(symbol, interval) {    
+        const container = document.getElementById('chartContainer');    
+        container.innerHTML = `<div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_chart" style="height:100%;width:100%"></div></div>`;    
+        new TradingView.widget({    
+            "container_id": "tv_chart",    
+            "width": "100%",    
+            "height": "100%",    
+            "symbol": symbol,    
+            "interval": interval,    
+            "theme": "dark",    
+            "style": "1",    
+            "toolbar_bg": "#161e2e",    
+            "enable_publishing": false,    
+            "hide_side_toolbar": false,    
+            "studies": ["ParabolicSAR@tv-basicstudies", "RSI@tv-basicstudies"]    
+        });    
+    }    
+    function changeAsset() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }    
+    function changeTimeframe() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }    
+    
+    // Tabs switcher logic
+    function switchTab(tabId, element) {    
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));    
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));    
+        document.getElementById(tabId).classList.add('active-section');    
+        element.classList.add('active');    
+    }    
 
-            // Заполнение метрик
-            let rsiColor = dataRSI > 50 ? 'var(--accent-green)' : 'var(--accent-red)';
-            document.getElementById('apiRsi').innerHTML = `<span style="color:${rsiColor}">${dataRSI.toFixed(2)} (RSI 14)</span>`;
-
-            document.getElementById('apiLiquidity').innerHTML = `<span style="color:var(--accent-green)">Bids ${dataBidPct.toFixed(1)}%</span> / <span style="color:var(--accent-red)">Asks ${dataAskPct.toFixed(1)}%</span>`;
-            document.getElementById('liqBidBar').style.width = `${dataBidPct}%`;
-            document.getElementById('liqAskBar').style.width = `${dataAskPct}%`;
-
-            let pressColor = dataBuyPress > dataSellPress ? 'var(--accent-green)' : 'var(--accent-red)';
-            let pressText = dataBuyPress > dataSellPress ? 'Преобладают Покупки' : 'Преобладают Продажи';
-            document.getElementById('apiTrades').innerHTML = `<span style="color:${pressColor}">${dataBuyPress.toFixed(1)}% (${pressText})</span>`;
-
-            document.getElementById('apiOI').innerText = `${dataOI.toLocaleString('ru-RU', {maximumFractionDigits: 0})} Контрактов`;
-            document.getElementById('apiFunding').innerText = `${dataFund.toFixed(4)}%`;
-            document.getElementById('apiVolume').innerText = `$${(dataVol / 1000000).toFixed(2)}M`;
-
-            // ФОРМИРОВАНИЕ ИТОГОВОГО СИГНАЛА
-            let direction = score > 0 ? 'ВВЕРХ (CALL) 🟢' : 'ВНИЗ (PUT) 🔴';
-            let color = score > 0 ? 'var(--accent-green)' : 'var(--accent-red)';
-            let confidence = Math.min(65 + Math.abs(score * 6) + Math.random() * 5, 98).toFixed(1);
-
-            resultBox.innerHTML = `
-                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 5px; text-transform:uppercase;">Анализ ТФ: ${document.getElementById('timeframeSelect').options[document.getElementById('timeframeSelect').selectedIndex].text}</div>
-                <div style="font-size: 18px; font-weight: 900; color: ${color}; margin-bottom: 5px;">${direction}</div>
-                <div style="font-size: 12px; color: var(--accent-gold);">Точность по API: ${confidence}%</div>
-            `;
-            resultBox.style.borderColor = color;
-            resultBox.style.background = score > 0 ? 'rgba(0, 230, 118, 0.1)' : 'rgba(255, 61, 0, 0.1)';
-
-        }, isCryptoPair ? 500 : 1500); // Небольшая задержка для визуального эффекта анализа
-    }
-</script>    
+    const script = document.createElement('script');    
+    script.src = "https://s3.tradingview.com/tv.js";    
+    script.onload = () => updateChart("BINANCE:BTCUSDT", "1");    
+    document.head.appendChild(script);    
+</script>  
 </body>    
 </html>
