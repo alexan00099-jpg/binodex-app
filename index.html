@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BinoDex Signal Bot</title>
+    <title>BinoDex Ultimate Bot</title>
     <style>
         :root {
             --bg-main: #0b0e14;
@@ -49,48 +49,28 @@
         .logo span {
             color: var(--accent-green);
         }
-        .ai-status {
+        .balance-badge {
             background: rgba(0, 255, 136, 0.1);
             color: var(--accent-green);
             padding: 4px 10px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             border: 1px solid rgba(0, 255, 136, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .ai-status::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-green);
-        }
-        .lang-switch {
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
         }
         .nav-tabs {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
             margin-bottom: 12px;
         }
         .tab-btn {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            padding: 10px 4px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 8px 2px;
+            border-radius: 6px;
+            font-size: 10px;
             font-weight: 700;
             text-align: center;
             cursor: pointer;
@@ -122,7 +102,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            height: 380px;
+            height: 350px;
             margin-bottom: 12px;
             overflow: hidden;
             position: relative;
@@ -143,9 +123,6 @@
         .btn-analyze {
             background: linear-gradient(135deg, #2563eb, #3b82f6);
             color: white;
-        }
-        .btn-analyze:active {
-            transform: scale(0.98);
         }
         .btn-trade {
             background: linear-gradient(135deg, #059669, #10b981);
@@ -197,7 +174,7 @@
             font-family: monospace;
             font-size: 11px;
             color: #34d399;
-            max-height: 110px;
+            max-height: 100px;
             overflow-y: auto;
             line-height: 1.4;
         }
@@ -206,6 +183,20 @@
         }
         .tab-content.active {
             display: block;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: var(--bg-main);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        .history-item .win {
+            color: var(--accent-green);
+            font-weight: 700;
         }
         .vip-banner {
             background: linear-gradient(135deg, #1e1b4b, #312e81);
@@ -243,209 +234,73 @@
 <body>
 
     <header>
-        <div class="logo"><span>BinoDex</span> Bot</div>
-        <div class="ai-status" id="aiStatusText">AI СТАТУС: АКТИВЕН</div>
-        <button class="lang-switch" onclick="toggleLang()" id="langBtn">RU / EN</button>
+        <div class="logo"><span>BinoDex</span> Ultimate</div>
+        <div class="balance-badge" id="userBalance">БАЛАНС: $12,500.00</div>
     </header>
 
     <div class="nav-tabs">
-        <div class="tab-btn active" onclick="switchTab('terminal', this)" id="tabTerm">ТЕРМИНАЛ</div>
-        <div class="tab-btn" onclick="switchTab('edu', this)" id="tabEdu">ОБУЧЕНИЕ</div>
-        <div class="tab-btn" onclick="switchTab('vip', this)" id="tabVip">VIP</div>
+        <div class="tab-btn active" onclick="switchTab('terminal', this)">ТЕРМИНАЛ</div>
+        <div class="tab-btn" onclick="switchTab('signals', this)">СИГНАЛЫ</div>
+        <div class="tab-btn" onclick="switchTab('history', this)">ИСТОРИЯ</div>
+        <div class="tab-btn" onclick="switchTab('edu', this)">ОБУЧЕНИЕ</div>
+        <div class="tab-btn" onclick="switchTab('vip', this)">VIP</div>
     </div>
 
     <div id="terminal" class="tab-content active">
         <div class="controls-row">
             <select class="select-box" id="assetSelect" onchange="updateChart()">
-                <option value="BINANCE:BTCUSDT">BTC/USDT</option>
-                <option value="BINANCE:ETHUSDT">ETH/USDT</option>
-                <option value="BINANCE:SOLUSDT">SOL/USDT</option>
-                <option value="BINANCE:XRPUSDT">XRP/USDT</option>
-                <option value="FX:EURUSD">EUR/USD</option>
+                <optgroup label="Форекс (Валюты)">
+                    <option value="FX:EURUSD">EUR/USD (Евро / Доллар)</option>
+                    <option value="FX:GBPUSD">GBP/USD (Фунт / Доллар)</option>
+                    <option value="FX:USDJPY">USD/JPY (Доллар / Иена)</option>
+                    <option value="FX:AUDUSD">AUD/USD (Австр. Доллар)</option>
+                    <option value="FX:USDCAD">USD/CAD (Доллар / Канадэц)</option>
+                    <option value="FX:NZDUSD">NZD/USD (Новозел. Доллар)</option>
+                    <option value="FX:EURGBP">EUR/GBP (Евро / Фунт)</option>
+                    <option value="FX:EURJPY">EUR/JPY (Евро / Иена)</option>
+                    <option value="FX:USDCHF">USD/CHF (Доллар / Франк)</option>
+                </optgroup>
+                <optgroup label="Криптовалюты">
+                    <option value="BINANCE:BTCUSDT">BTC/USDT (Bitcoin)</option>
+                    <option value="BINANCE:ETHUSDT">ETH/USDT (Ethereum)</option>
+                    <option value="BINANCE:SOLUSDT">SOL/USDT (Solana)</option>
+                    <option value="BINANCE:XRPUSDT">XRP/USDT (Ripple)</option>
+                    <option value="BINANCE:ADAUSDT">ADA/USDT (Cardano)</option>
+                    <option value="BINANCE:AVAXUSDT">AVAX/USDT (Avalanche)</option>
+                    <option value="BINANCE:DOGEUSDT">DOGE/USDT (Dogecoin)</option>
+                    <option value="BINANCE:DOTUSDT">DOT/USDT (Polkadot)</option>
+                    <option value="BINANCE:LINKUSDT">LINK/USDT (Chainlink)</option>
+                    <option value="BINANCE:MATICUSDT">MATIC/USDT (Polygon)</option>
+                    <option value="BINANCE:BNBUSDT">BNB/USDT (Binance Coin)</option>
+                </optgroup>
             </select>
             <select class="select-box" id="timeframeSelect" onchange="updateChart()">
                 <option value="1">1 Мин</option>
-                <option value="3">3 Мин</option>
                 <option value="5">5 Мин</option>
                 <option value="15">15 Мин</option>
+                <option value="30">30 Мин</option>
                 <option value="60">1 Час</option>
+                <option value="240">4 Часа</option>
+                <option value="D">1 День</option>
             </select>
         </div>
 
         <div class="chart-container" id="tradingview_widget"></div>
 
-        <button class="action-btn btn-analyze" id="scanBtn" onclick="runAnalysis()">Запустить анализ</button>
-        <button class="action-btn btn-trade" onclick="startTrading()">Начать трэйдить</button>
+        <button class="action-btn btn-analyze" id="scanBtn" onclick="runAnalysis()">Запустить глубокий анализ</button>
+        <button class="action-btn btn-trade" onclick="startTrading()">Войти в сделку в плюс</button>
 
         <div class="signal-result" id="signalResult"></div>
 
         <div class="card">
-            <div class="card-title">📊 Мультииндикаторная конклюэнтность:</div>
+            <div class="card-title">📊 Индикаторы и конклюэнтность:</div>
             <div class="conf-grid">
-                <span>Parabolic SAR (на свечах):</span><b id="confPsar" style="color:var(--accent-green)">BULLISH REVERSAL</b>
-                <span>RSI Моментум (14):</span><b id="confRsi">58.40 (Бычий моментум)</b>
-                <span>MACD Импульс:</span><b id="confMacd" style="color:var(--accent-green)">CROSS UP ACTIVE</b>
-                <span>Индикатор Bollinger Bands:</span><b>Сжатие / Пробой</b>
-                <span>Статус алгоритмов:</span><b style="color:var(--accent-green)">Синхронизировано</b>
+                <span>Parabolic SAR:</span><b style="color:var(--accent-green)">АКТИВНЫЙ ИМПУЛЬС В ПЛЮС</b>
+                <span>RSI Моментум (14):</span><b>СТАБИЛЬНЫЙ ПОТОК</b>
+                <span>MACD Сеть:</span><b style="color:var(--accent-green)">СИНХРОНИЗИРОВАНО</b>
+                <span>Волатильность:</span><b>ОПТИМАЛЬНАЯ ЗОНА</b>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-title">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>
-            <div class="log-box" id="logBox">
-                [22:45:01] Инициализация квантового ядра v4.8...<br>
-                [22:45:04] Загрузка индикатора Parabolic SAR на свечи... Успешно.<br>
-                [22:45:08] Канал связи с биржевыми шлюзами активен (0.1ms)...<br>
-                [22:45:12] Ожидание пользовательского сканирования рынка...
-            </div>
-        </div>
-
-        <div class="cta-box">
-            А в моём канале я бесплатно обучаю <b>трэйдингу</b> и захожу в сделки со своей командой в прямом эфире. Вступить в нашу команду можно по ссылке в профиле!
-        </div>
-    </div>
-
-    <div id="edu" class="tab-content">
-        <div class="card">
-            <div class="card-title">📚 Академия и преимущества платформы</div>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px;">
-                <b>Демо-счет</b> — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:
-            </p>
-            <ul style="font-size: 12px; color: var(--text-secondary); padding-left: 16px; line-height: 1.6;">
-                <li><b>Виртуальный баланс:</b> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.</li>
-                <li><b>Полная имитация рынка:</b> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.</li>
-                <li><b>Тест стратегий:</b> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.</li>
-            </ul>
-        </div>
-        <div class="card">
-            <div class="card-title">🚀 4 шага новичка к первой прибыли</div>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-                <b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе.<br><br>
-                <b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм.<br><br>
-                <b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале.<br><br>
-                <b>Шаг 4. Открытие сделки:</b> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления. При верном прогнозе чистая прибыль зачисляется мгновенно!
-            </p>
-        </div>
-    </div>
-
-    <div id="vip" class="tab-content">
-        <div class="vip-banner">
-            <div class="card-title" style="color: #fff;">💎 VIP: Условия и преимущества</div>
-            <div style="font-size: 12px; color: #c7d2fe; margin-bottom: 8px;">Ваша персональная реферальная ссылка:</div>
-            <div class="ref-box">https://binodex_signal_bot?start=vip</div>
-            <button class="action-btn btn-analyze" style="margin-top: 8px;" onclick="alert('Ссылка скопирована!')">Копировать ссылку</button>
-        </div>
-        <div class="card">
-            <div class="card-title">⭐ Что дает VIP (Все привилегии):</div>
-            <ul style="font-size: 12px; color: var(--text-secondary); padding-left: 16px; line-height: 1.8;">
-                <li><b>Закрытый VIP-канал:</b> Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.</li>
-                <li><b>Повышенная точность алгоритмов:</b> Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.</li>
-                <li><b>Автоматический копи-трейдинг:</b> Зеркалирование сделок лучших <b>трэйдеров</b> платформы в один клик с защитой от просадок.</li>
-            </ul>
-        </div>
-    </div>
-
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script>
-        let tvWidget = null;
-        let currentLang = 'ru';
-
-        function initWidget() {
-            const asset = document.getElementById('assetSelect').value;
-            const tf = document.getElementById('timeframeSelect').value;
-            
-            document.getElementById('tradingview_widget').innerHTML = '';
-            tvWidget = new TradingView.widget({
-                "width": "100%",
-                "height": "380",
-                "symbol": asset,
-                "interval": tf,
-                "timezone": "Etc/UTC",
-                "theme": "dark",
-                "style": "1",
-                "locale": "ru",
-                "toolbar_bg": "#151921",
-                "enable_publishing": false,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true,
-                "container_id": "tradingview_widget"
-            });
-        }
-
-        function updateChart() {
-            initWidget();
-        }
-
-        function switchTab(tabId, el) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            el.classList.add('active');
-        }
-
-        function toggleLang() {
-            currentLang = currentLang === 'ru' ? 'en' : 'ru';
-            document.getElementById('langBtn').innerText = currentLang.toUpperCase();
-            document.getElementById('aiStatusText').innerText = currentLang === 'ru' ? 'AI СТАТУС: АКТИВЕН' : 'AI STATUS: ACTIVE';
-            document.getElementById('scanBtn').innerText = currentLang === 'ru' ? 'Запустить анализ' : 'Run Analysis';
-            document.getElementById('tabTerm').innerText = currentLang === 'ru' ? 'ТЕРМИНАЛ' : 'TERMINAL';
-            document.getElementById('tabEdu').innerText = currentLang === 'ru' ? 'ОБУЧЕНИЕ' : 'EDUCATION';
-        }
-
-        function runAnalysis() {
-            const res = document.getElementById('signalResult');
-            const btn = document.getElementById('scanBtn');
-            const asset = document.getElementById('assetSelect').value;
-            const tf = document.getElementById('timeframeSelect').value;
-            
-            res.style.display = 'block';
-            btn.disabled = true;
-            
-            res.style.color = 'var(--accent-blue)';
-            res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 1/5] Сканирование стакана ордеров и объема...' : '⚡ [Step 1/5] Scanning order book & volume...';
-            
-            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 2/5] Расчет тренда по Parabolic SAR и RSI...' : '⚡ [Step 2/5] Calculating SAR & RSI trend...'; }, 500);
-            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 3/5] Фильтрация волатильности Боллинджера...' : '⚡ [Step 3/5] Filtering Bollinger volatility...'; }, 1000);
-            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 4/5] Синхронизация мультитаймфреймного ядра...' : '⚡ [Step 4/5] Synchronizing multi-tf core...'; }, 1500);
-            setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 5/5] Подтверждение точки входа...' : '⚡ [Step 5/5] Confirming entry point...'; }, 2000);
-
-            setTimeout(() => {
-                let hash = 0;
-                const str = asset + tf + "_ultimate_trading_core_2026";
-                for (let i = 0; i < str.length; i++) {
-                    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-                    hash |= 0;
-                }
-                const isUp = Math.abs(hash) % 2 === 0;
-
-                const dirTextRu = isUp ? 'НАПРАВЛЕНИЕ: ВВЕРХ (STRONG BUY)' : 'НАПРАВЛЕНИЕ: ВНИЗ (STRONG SELL)';
-                const dirTextEn = isUp ? 'DIRECTION: UP (STRONG BUY)' : 'DIRECTION: DOWN (STRONG SELL)';
-                const dirColor = isUp ? 'var(--accent-green)' : 'var(--accent-red)';
-                
-                const psarEl = document.getElementById('confPsar');
-                psarEl.innerText = isUp ? 'BULLISH REVERSAL (АКТИВНО)' : 'BEARISH REVERSAL (АКТИВНО)';
-                psarEl.style.color = dirColor;
-                
-                const rsiVal = isUp ? (62 + (Math.abs(hash) % 8)).toFixed(2) : (31 + (Math.abs(hash) % 8)).toFixed(2);
-                document.getElementById('confRsi').innerText = `${rsiVal} (${isUp ? 'Бычий моментум' : 'Медвежий моментум'})`;
-                
-                document.getElementById('confMacd').innerText = isUp ? 'CROSS UP ACTIVE (+1.92)' : 'CROSS DOWN ACTIVE (-1.92)';
-                
-                res.innerHTML = currentLang === 'ru' ? 
-                    `📈 АЛГОРИТМ СФОРМИРОВАЛ ТОЧНЫЙ СИГНАЛ<br><b style="color:${dirColor}; font-size:14px;">${dirTextRu}</b>` : 
-                    `📈 ALGORITHM GENERATED PRECISE SIGNAL<br><b style="color:${dirColor}; font-size:14px;">${dirTextEn}</b>`;
-                res.style.color = dirColor;
-                btn.disabled = false;
-            }, 2500);
-        }
-
-        function startTrading() {
-            alert(currentLang === 'ru' ? 'Режим трэйдинга активирован! Подключение к торговому шлюзу...' : 'Trading mode activated! Connecting to trading gateway...');
-        }
-
-        window.onload = function() {
-            initWidget();
-        };
-    </script>
-</body>
-</html>
+            <div class="card-title">🧠
