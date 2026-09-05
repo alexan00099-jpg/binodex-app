@@ -1,933 +1,877 @@
-<!DOCTYPE html>    <html lang="ru">    
-<head>    
-    <meta charset="UTF-8">    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    
-    <title>Binodex Signal Bot</title>    
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>    
-    <style>    
-        :root {    
-            --bg-color: #05070a;    
-            --card-bg: #0d111a;    
-            --accent-green: #00e676;    
-            --accent-red: #ff3d00;    
-            --accent-blue: #2979ff;    
-            --text-main: #ffffff;    
-            --text-secondary: #a0aec0;    
-            --border-color: #1e293b;    
-        }    
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }    
-        body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 40px; }    
-        .top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }    
-        .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; color: #ffffff; }    .panel-right { display: flex; align-items: center; gap: 8px; }    
-    .winrate-badge { background: rgba(0, 230, 118, 0.1); color: var(--accent-green); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; border: 1px solid rgba(0, 230, 118, 0.3); animation: pulseGlow 2s infinite; }    
-    .lang-switcher { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }    
-    .lang-switcher:active { transform: scale(0.95); }    
-        
-    @keyframes pulseGlow { 0% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } 50% { box-shadow: 0 0 15px rgba(0,230,118,0.5); } 100% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } }    
+<!DOCTYPE html>  <html lang="ru">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    <title>Binodex Signal Bot</title>  
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>  
+    <style>  
+        :root {  
+            --bg-color: #05070a;  
+            --card-bg: #0d111a;  
+            --accent-green: #00e676;  
+            --accent-red: #ff3d00;  
+            --accent-blue: #2979ff;  
+            --text-main: #ffffff;  
+            --text-secondary: #a0aec0;  
+            --border-color: #1e293b;  
+        }  
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }  
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 10px; padding-bottom: 40px; }  .top-panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }  
+    .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; color: #ffffff; }  
+      
+    .panel-right { display: flex; align-items: center; gap: 8px; }  
+    .winrate-badge { background: rgba(0, 230, 118, 0.1); color: var(--accent-green); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; border: 1px solid rgba(0, 230, 118, 0.3); animation: pulseGlow 2s infinite; }  
+    .lang-switcher { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }  
+    .lang-switcher:active { transform: scale(0.95); }  
+      
+    @keyframes pulseGlow { 0% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } 50% { box-shadow: 0 0 15px rgba(0,230,118,0.5); } 100% { box-shadow: 0 0 5px rgba(0,230,118,0.2); } }  
 
-    .nav-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }    
-    .nav-tab { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: 0.3s; }    
-    .nav-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(41, 121, 255, 0.4); }    
-        
-    .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: none; }    
-    .card.active-section { display: block; }    
-        
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }    
-    .select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; }    
-        
-    .tradingview-container { width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }    
-        
-    .btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; }    
-    .btn:active { transform: scale(0.98); }    
-        
-    .btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); transition: 0.2s; }    
-    .btn-trade:active { transform: scale(0.98); }    
-        
-    .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; font-size: 13px; line-height: 1.5; }    
-        
-    .sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }    
-    .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }    
-    .sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }    
-        
-    .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; font-size: 12px; }    
-    .analysis-tool-box.active-tool { display: block; }    
-        
-    .confluence-box { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 12px; }    
-    .confluence-item { display: flex; justify-content: space-between; margin-top: 6px; }    
-    .confluence-item span { color: var(--accent-green); font-weight: 700; }    
+    .nav-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }  
+    .nav-tab { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: 0.3s; }  
+    .nav-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(41, 121, 255, 0.4); }  
+      
+    .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: none; }  
+    .card.active-section { display: block; }  
+      
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }  
+    .select-custom { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; outline: none; }  
+      
+    .tradingview-container { width: 100%; height: 360px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 12px; background: #000; }  
+      
+    .btn { width: 100%; background: linear-gradient(90deg, #2979ff, #00e676); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 5px; box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3); transition: 0.2s; }  
+    .btn:active { transform: scale(0.98); }  
+      
+    .btn-trade { background: linear-gradient(135deg, #00e676, #00c853); margin-top: 10px; display: block; text-align: center; text-decoration: none; border-radius: 12px; padding: 15px; font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); transition: 0.2s; }  
+    .btn-trade:active { transform: scale(0.98); }  
+      
+    .signal-result { margin-top: 10px; padding: 15px; border-radius: 12px; background: rgba(41, 121, 255, 0.1); border: 1px solid var(--accent-blue); text-align: center; font-weight: 700; display: none; font-size: 13px; line-height: 1.5; }  
+      
+    .sub-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }  
+    .sub-nav-btn { background: #161e2e; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.2s; }  
+    .sub-nav-btn.active { background: rgba(41, 121, 255, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }  
+      
+    .analysis-tool-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: none; font-size: 12px; }  
+    .analysis-tool-box.active-tool { display: block; }  
+      
+    .confluence-box { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 12px; }  
+    .confluence-item { display: flex; justify-content: space-between; margin-top: 6px; }  
+    .confluence-item span { color: var(--accent-green); font-weight: 700; }  
 
-    .big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }    
-    .log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }    
+    .big-neuro-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 12px; }  
+    .log-box-big { background: #000; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-green); height: 220px; overflow-y: auto; border: 1px solid var(--border-color); }  
 
-    .withdrawal-box { background: rgba(0, 230, 118, 0.03); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; }    
-    .withdrawal-feed { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 11px; height: 140px; overflow-y: auto; border: 1px solid var(--border-color); }    
-    .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }    
-    .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }    
-    .matrix-table th { background: #161e2e; color: var(--text-secondary); }    
-        
-    .academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }    
-    .academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }    
-    .academy-module p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }    
-    .academy-module ul { padding-left: 15px; margin-top: 6px; margin-bottom: 8px; }    
-    .academy-module li { font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px; }    
-        
-    .platform-perks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }    
-    .perk-mini-card { background: rgba(41, 121, 255, 0.05); border: 1px solid rgba(41, 121, 255, 0.2); border-radius: 10px; padding: 10px; text-align: center; }    
-    .perk-mini-card b { display: block; color: var(--accent-green); font-size: 14px; margin-bottom: 2px; }    
-    .perk-mini-card span { font-size: 11px; color: var(--text-secondary); }    
+    .withdrawal-box { background: rgba(0, 230, 118, 0.03); border: 1px solid rgba(0, 230, 118, 0.2); border-radius: 12px; padding: 12px; margin-top: 12px; }  
+    .withdrawal-feed { background: #000; border-radius: 8px; padding: 8px; font-family: monospace; font-size: 11px; height: 140px; overflow-y: auto; border: 1px solid var(--border-color); }  
+    .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }  
+    .matrix-table th, .matrix-table td { border: 1px solid var(--border-color); padding: 6px; text-align: center; }  
+    .matrix-table th { background: #161e2e; color: var(--text-secondary); }  
+      
+    .academy-module { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px; }  
+    .academy-module h4 { color: var(--accent-blue); margin-bottom: 8px; font-size: 14px; }  
+    .academy-module p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }  
+    .academy-module ul { padding-left: 15px; margin-top: 6px; margin-bottom: 8px; }  
+    .academy-module li { font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px; }  
+      
+    .platform-perks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }  
+    .perk-mini-card { background: rgba(41, 121, 255, 0.05); border: 1px solid rgba(41, 121, 255, 0.2); border-radius: 10px; padding: 10px; text-align: center; }  
+    .perk-mini-card b { display: block; color: var(--accent-green); font-size: 14px; margin-bottom: 2px; }  
+    .perk-mini-card span { font-size: 11px; color: var(--text-secondary); }  
 
-    .vip-list { list-style: none; padding: 0; }    
-    .vip-list li { margin-bottom: 12px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; }    
-    .vip-list li b { color: var(--text-main); }    
-    .vip-list li::before { content: "⚡"; margin-right: 8px; color: var(--accent-green); flex-shrink: 0; }    
+    .vip-list { list-style: none; padding: 0; }  
+    .vip-list li { margin-bottom: 12px; font-size: 12px; display: flex; align-items: flex-start; color: var(--text-secondary); line-height: 1.4; }  
+    .vip-list li b { color: var(--text-main); }  
+    .vip-list li::before { content: "⚡"; margin-right: 8px; color: var(--accent-green); flex-shrink: 0; }  
 
-    .risk-input { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 8px; margin-top: 5px; margin-bottom: 10px; font-size: 12px; outline: none; }    
-    .vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }    
+    .risk-input { width: 100%; background: #161e2e; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 8px; margin-top: 5px; margin-bottom: 10px; font-size: 12px; outline: none; }  
+    .vip-card-box { background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border: 1px solid rgba(41,121,255,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px; }  
 
-    .share-container-bottom {    
-        margin-top: 15px;    
-        margin-bottom: 10px;    
-        width: 100%;    
-    }    
-    .btn-share-bot {    
-        width: 100%;    
-        background: linear-gradient(90deg, #ff3d00, #2979ff);    
-        color: #fff;    
-        border: none;    
-        border-radius: 12px;    
-        padding: 15px;    
-        font-size: 13px;    
-        font-weight: 800;    
-        cursor: pointer;    
-        text-transform: uppercase;    
-        box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3);    
-        transition: 0.2s;    
-        display: flex;    
-        align-items: center;    
-        justify-content: center;    
-        gap: 8px;    
-    }    
-    .btn-share-bot:active { transform: scale(0.98); }    
+    .share-container-bottom {  
+        margin-top: 15px;  
+        margin-bottom: 10px;  
+        width: 100%;  
+    }  
+    .btn-share-bot {  
+        width: 100%;  
+        background: linear-gradient(90deg, #ff3d00, #2979ff);  
+        color: #fff;  
+        border: none;  
+        border-radius: 12px;  
+        padding: 15px;  
+        font-size: 13px;  
+        font-weight: 800;  
+        cursor: pointer;  
+        text-transform: uppercase;  
+        box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3);  
+        transition: 0.2s;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        gap: 8px;  
+    }  
+    .btn-share-bot:active { transform: scale(0.98); }  
 </style>
 
-</head>    
-<body>    
-<script>window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();</script>    <div class="top-panel">    
-    <div class="brand-title">    
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">    
-            <path d="M3 17L9 11L13 15L21 7" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>    
-            <path d="M16 7H21V12" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>    
-        </svg>    
-        BinoDex    
-    </div>    
-    <div class="panel-right">    
-        <div class="winrate-badge" data-i18n="ai_active">🟢 AI СТАТУС: АКТИВЕН</div>    
-        <button class="lang-switcher" onclick="toggleLanguage();">RU / EN</button>    
-    </div>    
-</div>    <div class="nav-tabs">    
-    <div class="nav-tab active" onclick="switchTab('terminal', this)" data-i18n="tab_terminal">📊 ТЕРМИНАЛ</div>    
-    <div class="nav-tab" onclick="switchTab('academy', this)" data-i18n="tab_academy">📚 ОБУЧЕНИЕ</div>    
-    <div class="nav-tab" onclick="switchTab('vip', this)" data-i18n="tab_vip">🎁 VIP</div>    
-</div>    <!-- ТЕРМИНАЛ -->    <div id="terminal" class="card active-section">    
-    <div class="controls-grid">    
-        <select id="assetSelect" class="select-custom" onchange="changeAsset();">    
-            <option value="BINANCE:BTCUSDT" selected>BTC/USDT (Биткоин)</option>    
-            <option value="FX:EURUSD">EUR/USD (Евро / Доллар)</option>    
-            <option value="BINANCE:ETHUSDT">ETH/USDT (Эфириум)</option>    
-            <option value="FX:GBPUSD">GBP/USD (Фунт / Доллар)</option>    
-            <option value="BINANCE:SOLUSDT">SOL/USDT (Солана)</option>    
-            <option value="NASDAQ:AAPL">AAPL (Apple)</option>    
-            <option value="NASDAQ:TSLA">TSLA (Tesla)</option>    
-        </select>    
-        <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe();">    
-            <option value="1">1 Мин / Min</option>    
-            <option value="5">5 Мин / Min</option>    
-            <option value="60">1 Час / Hour</option>    
-            <option value="240">4 Часа / 4 Hours</option>    
-            <option value="D">1 День / Day</option>    
-        </select>    
-    </div>    <div class="tradingview-container" id="chartContainer"></div>    
+</head>  
+<body>  <script>window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();</script>  
 
-<button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">Запустить анализ</button>    
-<a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трэйдить</a>    
-    
-<div id="signalResult" class="signal-result"></div>    
+<div class="top-panel">  
+    <div class="brand-title">  
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">  
+            <path d="M3 17L9 11L13 15L21 7" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>  
+            <path d="M16 7H21V12" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>  
+        </svg>  
+        BinoDex  
+    </div>  
+    <div class="panel-right">  
+        <div class="winrate-badge" data-i18n="ai_active">🟢 AI СТАТУС: АКТИВЕН</div>  
+        <button class="lang-switcher" onclick="toggleLanguage();">RU / EN</button>  
+    </div>  
+</div>  
 
-<!-- Конфлюэнтность -->    
-<div class="confluence-box">    
-    <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;" data-i18n="conf_title">📊 Мультииндикаторная конфлюэнтность:</div>    
-    <div class="confluence-item"><span data-i18n="conf_sar">Parabolic SAR (на свечах):</span> <span id="confPsar">Ожидание сканирования</span></div>    
-    <div class="confluence-item"><span data-i18n="conf_rsi">RSI Моментум (14):</span> <span id="confRsi">50.00 (Баланс)</span></div>    
-    <div class="confluence-item"><span data-i18n="conf_macd">MACD Импульс:</span> <span id="confMacd">READY / СТАТУС ГОТОВ</span></div>    
-    <div class="confluence-item"><span data-i18n="conf_bb">Индикатор Bollinger Bands:</span> <span style="color:var(--accent-green)" data-i18n="conf_bb_val">Сжатие / Пробой</span></div>    
-    <div class="confluence-item"><span data-i18n="conf_status">Статус алгоритмов:</span> <span style="color:var(--accent-green)" data-i18n="conf_status_val">Синхронизировано</span></div>    
-</div>    
+<div class="nav-tabs">  
+    <div class="nav-tab active" onclick="switchTab('terminal', this)" data-i18n="tab_terminal">📊 ТЕРМИНАЛ</div>  
+    <div class="nav-tab" onclick="switchTab('academy', this)" data-i18n="tab_academy">📚 ОБУЧЕНИЕ</div>  
+    <div class="nav-tab" onclick="switchTab('vip', this)" data-i18n="tab_vip">🎁 VIP</div>  
+</div>  
 
-<!-- НЕЙРО-ЛОГИ -->    
-<div class="big-neuro-box">    
-    <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;" data-i18n="logs_title">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>    
-    <div class="log-box-big" id="terminalLogs">    
-        [22:45:01] Инициализация квантового ядра v4.8...<br>    
-        [22:45:04] Загрузка индикатора Parabolic SAR на свечи... Успешно.<br>    
-        [22:45:08] Канал связи с биржевыми шлюзами активен (0.1ms)...<br>    
-        [22:45:12] Ожидание пользовательского сканирования рынка...    
-    </div>    
-</div>    
+<!-- ТЕРМИНАЛ -->  
+<div id="terminal" class="card active-section">  
+    <div class="controls-grid">  
+        <select id="assetSelect" class="select-custom" onchange="changeAsset();">  
+            <option value="FX:EURUSD">EUR/USD (Евро / Доллар)</option>  
+            <option value="BINANCE:BTCUSDT">BTC/USDT (Биткоин)</option>  
+            <option value="BINANCE:ETHUSDT">ETH/USDT (Эфириум)</option>  
+            <option value="FX:GBPUSD">GBP/USD (Фунт / Доллар)</option>  
+            <option value="BINANCE:SOLUSDT">SOL/USDT (Солана)</option>  
+            <option value="NASDAQ:AAPL">AAPL (Apple)</option>  
+            <option value="NASDAQ:TSLA">TSLA (Tesla)</option>  
+        </select>  
+        <select id="timeframeSelect" class="select-custom" onchange="changeTimeframe();">  
+            <option value="1">1 Мин / Min</option>  
+            <option value="5">5 Мин / Min</option>  
+            <option value="60">1 Час / Hour</option>  
+            <option value="240">4 Часа / 4 Hours</option>  
+            <option value="D">1 День / Day</option>  
+        </select>  
+    </div>  
 
-<!-- БЛОК ВЫПЛАТ -->    
-<div class="withdrawal-box">    
-    <div style="font-weight:700; color:var(--accent-green); margin-bottom:8px;" data-i18n="withdrawals_title">💸 ВЫПЛАТЫ / WITHDRAWALS</div>    
-    <div class="withdrawal-feed" id="withdrawalFeed">    
-        [22:46:10] • jo****@gmail.com — выплата <b>$45.00</b> (Успешно)<br>    
-        [22:48:25] • ar****@mail.ru — выплата <b>$320.00</b> (Успешно)<br>    
-        [22:51:40] • el****@gmail.com — выплата <b>$85.50</b> (Успешно)<br>    
-        [22:55:02] • ma****@mail.ru — выплата <b>$1,250.00</b> (Успешно)    
-    </div>    
-</div>    
+    <div class="tradingview-container" id="chartContainer"></div>  
 
-<!-- СТАТИСТИКА -->    
-<div class="withdrawal-box" id="statsSection">    
-    <div style="font-weight:700; color:var(--accent-blue); margin-bottom:12px;" data-i18n="stats_title">📊 ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ</div>    
-    <div class="controls-grid">    
-        <div>    
-            <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_wins">ПЛЮСОВЫЕ СДЕЛКИ:</label>    
-            <input type="number" id="winsCount" class="risk-input" value="0">    
-        </div>    
-        <div>    
-            <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_losses">МИНУСОВЫЕ СДЕЛКИ:</label>    
-            <input type="number" id="lossesCount" class="risk-input" value="0">    
-        </div>    
-    </div>    
-    <div style="margin-bottom:8px;">    
-        <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_balance">ТЕКУЩИЙ БАЛАНС ($):</label>    
-        <input type="number" id="balanceInput" class="risk-input" value="1000">    
-    </div>    
-    <button class="btn" onclick="addTradeToStats();" style="margin-bottom:10px;" data-i18n="stats_btn">ЗАФИКСИРОВАТЬ РЕЗУЛЬТАТ</button>    
-    <div class="confluence-box" style="margin-top:8px; background: rgba(41, 121, 255, 0.05);">    
-        <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span data-i18n="stats_wr">Общий винрейт:</span> <b id="totalWinrate" style="color:var(--accent-green);">0%</b></div>    
-        <div style="display:flex; justify-content:space-between;"><span data-i18n="stats_profit">Чистая прибыль:</span> <b id="totalProfit" style="color:var(--accent-green);">+$0.00</b></div>    
-    </div>    
-</div>    
+    <button id="scanBtn" class="btn" onclick="runAnalysis()" data-i18n="btn_scan">Запустить анализ</button>  
+    <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трэйдить</a>  
+      
+    <div id="signalResult" class="signal-result"></div>  
 
-<!-- Переключатель функций -->    
-<div class="sub-nav-grid">    
-    <div class="sub-nav-btn active" onclick="switchTool('matrix', this)" data-i18n="stool_matrix">📈 Матрица ТФ</div>    
-    <div class="sub-nav-btn" onclick="switchTool('orderbook', this)" data-i18n="stool_ob">⚖️ Стакан ордеров</div>    
-    <div class="sub-nav-btn" onclick="switchTool('risk', this)" data-i18n="stool_risk">🛡️ Риск-менеджмент</div>    
-    <div class="sub-nav-btn" onclick="switchTool('profit', this)" data-i18n="stool_calc">💰 Калькулятор</div>    
-    <div class="sub-nav-btn" onclick="switchTool('history', this)" data-i18n="stool_history">📑 История</div>    
-    <div class="sub-nav-btn" onclick="switchTool('pool', this)" data-i18n="stool_pool">🌐 Пул ликвидности</div>    
-</div>    
+    <!-- Конфлюэнтность -->  
+    <div class="confluence-box">  
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:4px;" data-i18n="conf_title">📊 Мультииндикаторная конфлюэнтность:</div>  
+        <div class="confluence-item"><span data-i18n="conf_sar">Parabolic SAR (на свечах):</span> <span id="confPsar">Ожидание сканирования</span></div>  
+        <div class="confluence-item"><span data-i18n="conf_rsi">RSI Моментум (14):</span> <span id="confRsi">50.00 (Баланс)</span></div>  
+        <div class="confluence-item"><span data-i18n="conf_macd">MACD Импульс:</span> <span id="confMacd">READY / СТАТУС ГОТОВ</span></div>  
+        <div class="confluence-item"><span data-i18n="conf_bb">Индикатор Bollinger Bands:</span> <span style="color:var(--accent-green)" data-i18n="conf_bb_val">Сжатие / Пробой</span></div>  
+        <div class="confluence-item"><span data-i18n="conf_status">Статус алгоритмов:</span> <span style="color:var(--accent-green)" data-i18n="conf_status_val">Синхронизировано</span></div>  
+    </div>  
 
-<div id="matrix" class="analysis-tool-box active-tool">    
-    <div style="color:var(--text-secondary); margin-bottom:6px;" data-i18n="t_matrix_desc">Синхронизация алгоритмов по топовым таймфреймам:</div>    
-    <table class="matrix-table">    
-        <tr><th data-i18n="th_tf">Таймфрейм</th><th data-i18n="th_trend">SAR Тренд</th><th data-i18n="th_rsi">RSI Зона</th><th data-i18n="th_status">Статус сигнала</th></tr>    
-        <tr><td>1м / 5м</td><td><span style="color:var(--accent-green)">BUY</span></td><td data-i18n="norm">Норма</td><td><b style="color:var(--accent-green)" data-i18n="active_lbl">АКТИВНО</b></td></tr>    
-        <tr><td>1ч / 4ч / Д</td><td><span style="color:var(--accent-green)">BUY</span></td><td data-i18n="opt">Оптимум</td><td><b style="color:var(--accent-green)" data-i18n="active_lbl">АКТИВНО</b></td></tr>    
-    </table>    
-</div>    
+    <!-- НЕЙРО-ЛОГИ -->  
+    <div class="big-neuro-box">  
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;" data-i18n="logs_title">🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):</div>  
+        <div class="log-box-big" id="terminalLogs">  
+            [22:45:01] Инициализация квантового ядра v4.8...<br>  
+            [22:45:04] Загрузка индикатора Parabolic SAR на свечи... Успешно.<br>  
+            [22:45:08] Канал связи с биржевыми шлюзами активен (0.1ms)...<br>  
+            [22:45:12] Ожидание пользовательского сканирования рынка...  
+        </div>  
+    </div>  
 
-<!-- 1. Стакан ордеров -->    
-<div id="orderbook" class="analysis-tool-box">    
-    <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">⚖️ ГЛУБИНА СТАКАНА МАРКЕТМЕЙКЕРОВ</div>    
-    <div id="obContent" style="font-family:monospace; font-size:11px; line-height:1.5;">Загрузка стакана...</div>    
-</div>    
+    <!-- БЛОК ВЫПЛАТ -->  
+    <div class="withdrawal-box">  
+        <div style="font-weight:700; color:var(--accent-green); margin-bottom:8px;" data-i18n="withdrawals_title">💸 ВЫПЛАТЫ / WITHDRAWALS</div>  
+        <div class="withdrawal-feed" id="withdrawalFeed">  
+            [22:46:10] • jo****@gmail.com — выплата <b>$45.00</b> (Успешно)<br>  
+            [22:48:25] • ar****@mail.ru — выплата <b>$320.00</b> (Успешно)<br>  
+            [22:51:40] • el****@gmail.com — выплата <b>$85.50</b> (Успешно)<br>  
+            [22:55:02] • ma****@mail.ru — выплата <b>$1,250.00</b> (Успешно)  
+        </div>  
+    </div>  
 
-<!-- Риск-менеджмент -->    
-<div id="risk" class="analysis-tool-box">    
-    <label style="font-size:11px; color:var(--text-secondary);" data-i18n="r_bal">Ваш торговый баланс ($):</label>    
-    <input type="number" id="userBalance" class="risk-input" value="1000" oninput="calculateRisk()">    
-    <label style="font-size:11px; color:var(--text-secondary);" data-i18n="r_pct">Риск на одну сделку (%):</label>    
-    <input type="number" id="riskPercent" class="risk-input" value="2" oninput="calculateRisk()">    
-    <div style="font-weight:700; color:var(--accent-blue);"><span data-i18n="r_rec">Рекомендуемый размер ставки:</span> <span id="recommendedBet" style="color:var(--accent-green);">$20.00</span></div>    
-</div>    
+    <!-- СТАТИСТИКА -->  
+    <div class="withdrawal-box" id="statsSection">  
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:12px;" data-i18n="stats_title">📊 ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ</div>  
+        <div class="controls-grid">  
+            <div>  
+                <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_wins">ПЛЮСОВЫЕ СДЕЛКИ:</label>  
+                <input type="number" id="winsCount" class="risk-input" value="0">  
+            </div>  
+            <div>  
+                <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_losses">МИНУСОВЫЕ СДЕЛКИ:</label>  
+                <input type="number" id="lossesCount" class="risk-input" value="0">  
+            </div>  
+        </div>  
+        <div style="margin-bottom:8px;">  
+            <label style="font-size:10px; color:var(--text-secondary); display:block; margin-bottom:2px;" data-i18n="stats_balance">ТЕКУЩИЙ БАЛАНС ($):</label>  
+            <input type="number" id="balanceInput" class="risk-input" value="1000">  
+        </div>  
+        <button class="btn" onclick="addTradeToStats();" style="margin-bottom:10px;" data-i18n="stats_btn">ЗАФИКСИРОВАТЬ РЕЗУЛЬТАТ</button>  
+        <div class="confluence-box" style="margin-top:8px; background: rgba(41, 121, 255, 0.05);">  
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span data-i18n="stats_wr">Общий винрейт:</span> <b id="totalWinrate" style="color:var(--accent-green);">0%</b></div>  
+            <div style="display:flex; justify-content:space-between;"><span data-i18n="stats_profit">Чистая прибыль:</span> <b id="totalProfit" style="color:var(--accent-green);">+$0.00</b></div>  
+        </div>  
+    </div>  
 
-<!-- 2. Калькулятор сложного процента -->    
-<div id="profit" class="analysis-tool-box">    
-    <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">💰 КАЛЬКУЛЯТОР СЛОЖНОГО ПРОЦЕНТА</div>    
-    <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Начальный депозит ($):</div>    
-    <input type="number" id="calcStart" class="risk-input" value="100" oninput="calculateCompound()">    
-    <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Прибыль в день (%):</div>    
-    <input type="number" id="calcPercent" class="risk-input" value="10" oninput="calculateCompound()">    
-    <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Количество дней:</div>    
-    <input type="number" id="calcDays" class="risk-input" value="7" oninput="calculateCompound()">    
-    <div style="margin-top:8px; font-weight:700; color:var(--accent-green);" id="calcResult">Итог через 7 дней: $194.87</div>    
-</div>    
+    <!-- Переключатель функций -->  
+    <div class="sub-nav-grid">  
+        <div class="sub-nav-btn active" onclick="switchTool('matrix', this)" data-i18n="stool_matrix">📈 Матрица ТФ</div>  
+        <div class="sub-nav-btn" onclick="switchTool('orderbook', this)" data-i18n="stool_ob">⚖️ Стакан ордеров</div>  
+        <div class="sub-nav-btn" onclick="switchTool('risk', this)" data-i18n="stool_risk">🛡️ Риск-менедж</div>  
+        <div class="sub-nav-btn" onclick="switchTool('profit', this)" data-i18n="stool_calc">💰 Калькулятор</div>  
+        <div class="sub-nav-btn" onclick="switchTool('history', this)" data-i18n="stool_history">📑 История</div>  
+        <div class="sub-nav-btn" onclick="switchTool('pool', this)" data-i18n="stool_pool">🌐 Пул ликвидности</div>  
+    </div>  
 
-<!-- 3. История сессионных сделок -->    
-<div id="history" class="analysis-tool-box">    
-    <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">📑 ИСТОРИЯ СЕССИОННЫХ СДЕЛОК ИИ</div>    
-    <div id="historyFeed" style="font-family:monospace; font-size:11px; max-height:130px; overflow-y:auto; line-height:1.5;">    
-        [22:40:12] EUR/USD • ВВЕРХ • СУММА: $50 • <span style="color:var(--accent-green)">УСПЕХ (+$46.00)</span><br>    
-        [22:42:30] BTC/USDT • ВВЕРХ • СУММА: $30 • <span style="color:var(--accent-green)">УСПЕХ (+$27.60)</span><br>    
-        [22:45:00] ETH/USDT • ВВЕРХ • СУММА: $40 • <span style="color:var(--accent-green)">УСПЕХ (+$36.80)</span>    
-    </div>    
-</div>    
+    <div id="matrix" class="analysis-tool-box active-tool">  
+        <div style="color:var(--text-secondary); margin-bottom:6px;" data-i18n="t_matrix_desc">Синхронизация алгоритмов по топовым таймфреймам:</div>  
+        <table class="matrix-table">  
+            <tr><th data-i18n="th_tf">Таймфрейм</th><th data-i18n="th_trend">SAR Тренд</th><th data-i18n="th_rsi">RSI Зона</th><th data-i18n="th_status">Статус сигнала</th></tr>  
+            <tr><td>1м / 5м</td><td><span style="color:var(--accent-green)">BUY</span></td><td data-i18n="norm">Норма</td><td><b style="color:var(--accent-green)" data-i18n="active_lbl">АКТИВНО</b></td></tr>  
+            <tr><td>1ч / 4ч / Д</td><td><span style="color:var(--accent-green)">BUY</span></td><td data-i18n="opt">Оптимум</td><td><b style="color:var(--accent-green)" data-i18n="active_lbl">АКТИВНО</b></td></tr>  
+        </table>  
+    </div>  
 
-<!-- 4. Пул ликвидности / Киты -->    
-<div id="pool" class="analysis-tool-box">    
-    <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">🌐 МОНИТОРИНГ КИТОВ И ПУЛОВ</div>    
-    <div id="poolFeed" style="font-family:monospace; font-size:11px; max-height:130px; overflow-y:auto; line-height:1.5;">    
-        Инициализация сканера китовых транзакций...    
-    </div>    
-</div>
+    <!-- 1. Стакан ордеров -->  
+    <div id="orderbook" class="analysis-tool-box">  
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">⚖️ ГЛУБИНА СТАКАНА МАРКЕТМЕЙКЕРОВ</div>  
+        <div id="obContent" style="font-family:monospace; font-size:11px; line-height:1.5;">Загрузка стакана...</div>  
+    </div>  
 
-</div>    <!-- ОБУЧЕНИЕ -->    <div id="academy" class="card">    
-    <div style="font-size:15px; font-weight:900; color:var(--accent-blue); margin-bottom:10px;" data-i18n="acad_main_title">📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ</div>    <div class="academy-module" style="background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border-color: rgba(41,121,255,0.3);">    
-    <h4 style="color:var(--accent-green); font-size:15px;" data-i18n="acad_perks_head">⚡ ПОЧЕМУ ТРЭЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:</h4>    
-    <div class="platform-perks-grid" style="margin-top:10px;">    
-        <div class="perk-mini-card">    
-            <b>ОТ $5</b>    
-            <span data-i18n="perk_min">МИНИМАЛЬНЫЙ ДЕПОЗИТ</span>    
-        </div>    
-        <div class="perk-mini-card">    
-            <b>ДО 96%</b>    
-            <span data-i18n="perk_payout">ДОХОДНОСТЬ СДЕЛОК</span>    
-        </div>    
-        <div class="perk-mini-card">    
-            <b>БЕСПЛАТНО</b>    
-            <span data-i18n="perk_demo">ДЕМО-СЧЕТ ДЛЯ ТРЕНИРОВОК</span>    
-        </div>    
-        <div class="perk-mini-card">    
-            <b>МОМЕНТАЛЬНО</b>    
-            <span data-i18n="perk_withdraw">ВЫВОД СРЕДСТВ</span>    
-        </div>    
-    </div>    
-    <p style="margin-top:8px; font-size:12px;" data-i18n="acad_perks_sub">Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.</p>    
-</div>    
+    <!-- Риск-менеджмент -->  
+    <div id="risk" class="analysis-tool-box">  
+        <label style="font-size:11px; color:var(--text-secondary);" data-i18n="r_bal">Ваш торговый баланс ($):</label>  
+        <input type="number" id="userBalance" class="risk-input" value="1000" oninput="calculateRisk()">  
+        <label style="font-size:11px; color:var(--text-secondary);" data-i18n="r_pct">Риск на одну сделку (%):</label>  
+        <input type="number" id="riskPercent" class="risk-input" value="2" oninput="calculateRisk()">  
+        <div style="font-weight:700; color:var(--accent-blue);"><span data-i18n="r_rec">Рекомендуемый размер ставки:</span> <span id="recommendedBet" style="color:var(--accent-green);">$20.00</span></div>  
+    </div>  
 
-<div class="academy-module" style="border-color: rgba(0, 230, 118, 0.4);">    
-    <h4 style="color: var(--accent-green);" data-i18n="demo_block_title">🎯 ПОДРОБНО О ДЕМО-СЧЕТЕ: БЕЗОПАСНЫЙ СТАРТ</h4>    
-    <p data-i18n="demo_block_desc">Демо-счет — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:</p>    
-    <ul>    
-        <li data-i18n="demo_li_1"><b>Виртуальный баланс:</b> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.</li>    
-        <li data-i18n="demo_li_2"><b>Полная имитация рынка:</b> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.</li>    
-        <li data-i18n="demo_li_3"><b>Тест стратегий:</b> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.</li>    
-        <li data-i18n="demo_li_4"><b>Мгновенное переключение:</b> Как только вы почувствуете уверенность, можно в один клик переключиться на реальный счет и начать зарабатывать.</li>    
-    </ul>    
-</div>    
+    <!-- 2. Калькулятор сложного процента -->  
+    <div id="profit" class="analysis-tool-box">  
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">💰 КАЛЬКУЛЯТОР СЛОЖНОГО ПРОЦЕНТА</div>  
+        <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Начальный депозит ($):</div>  
+        <input type="number" id="calcStart" class="risk-input" value="100" oninput="calculateCompound()">  
+        <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Прибыль в день (%):</div>  
+        <input type="number" id="calcPercent" class="risk-input" value="10" oninput="calculateCompound()">  
+        <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">Количество дней:</div>  
+        <input type="number" id="calcDays" class="risk-input" value="7" oninput="calculateCompound()">  
+        <div style="margin-top:8px; font-weight:700; color:var(--accent-green);" id="calcResult">Итог через 7 дней: $194.87</div>  
+    </div>  
 
-<div class="academy-module">    
-    <h4 data-i18n="acad_h0">1. С чего начать новичку: от регистрации до первой прибыли</h4>    
-    <p data-i18n="acad_p0">Если вы никогда раньше не занимались трэйдингом, путь к успешной торговле состоит из 4 простых шагов:</p>    
-    <ul>    
-        <li data-i18n="acad_li_step1"><b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.</li>    
-        <li data-i18n="acad_li_step2"><b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 дня).</li>    
-        <li data-i18n="acad_li_step3"><b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.</li>    
-        <li data-i18n="acad_li_step4"><b>Шаг 4. Открытие сделки:</b> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления (ВВЕРХ или ВНИЗ). При верном прогнозе чистая прибыль зачисляется мгновенно!</li>    
-    </ul>    
-</div>    
+    <!-- 3. История сессионных сделок -->  
+    <div id="history" class="analysis-tool-box">  
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">📑 ИСТОРИЯ СЕССИОННЫХ СДЕЛОК ИИ</div>  
+        <div id="historyFeed" style="font-family:monospace; font-size:11px; max-height:130px; overflow-y:auto; line-height:1.5;">  
+            [22:40:12] EUR/USD • ВВЕРХ • СУММА: $50 • <span style="color:var(--accent-green)">УСПЕХ (+$46.00)</span><br>  
+            [22:42:30] BTC/USDT • ВВЕРХ • СУММА: $30 • <span style="color:var(--accent-green)">УСПЕХ (+$27.60)</span><br>  
+            [22:45:00] ETH/USDT • ВВЕРХ • СУММА: $40 • <span style="color:var(--accent-green)">УСПЕХ (+$36.80)</span>  
+        </div>  
+    </div>  
 
-<div class="academy-module">    
-    <h4 data-i18n="acad_h1">2. Как работает ИИ-терминал и Parabolic SAR</h4>    
-    <p data-i18n="acad_p1">Главный трендовый индикатор нашего терминала — <b>Parabolic SAR</b> — отображается прямо на ценовых свечах в виде точек:</p>    
-    <ul>    
-        <li data-i18n="acad_li1"><b>Точки под свечами (зеленые):</b> Сигнализируют о сильном бычьем тренде и росте цены. Время открывать сделки ВВЕРХ.</li>    
-        <li data-i18n="acad_li2"><b>Точки над свечами (красные):</b> Указывают на медвежий тренд и давление продавцов. Идеально для входа ВНИЗ.</li>    
-        <li data-i18n="acad_li3"><b>Смена точек:</b> Пересечение графика через точки SAR дает мощный сигнал разворота тренда с высокой точностью.</li>    
-    </ul>    
-</div>    
+    <!-- 4. Пул ликвидности / Киты -->  
+    <div id="pool" class="analysis-tool-box">  
+        <div style="font-weight:700; color:var(--accent-blue); margin-bottom:6px;">🌐 МОНИТОРИНГ КИТОВ И ПУЛОВ</div>  
+        <div id="poolFeed" style="font-family:monospace; font-size:11px; max-height:130px; overflow-y:auto; line-height:1.5;">  
+            Инициализация сканера китовых транзакций...  
+        </div>  
+    </div>  
+</div>  
 
-<div class="academy-module">    
-    <h4 data-i18n="acad_h2">3. Торговля по стратегии RSI и сигналам</h4>    
-    <p data-i18n="acad_p2">Индикатор RSI (Индекс относительной силы) помогает находить точные точки разворота цены на экстремумах:</p>    
-    <ul>    
-        <li data-i18n="acad_li4"><b>Зона выше 70%:</b> Актив перекуплен покупателями, ожидается коррекция или падение цен.</li>    
-        <li data-i18n="acad_li5"><b>Зона ниже 30%:</b> Актив перепродан продавцами, рынок готов к резкому отскоку вверх.</li>    
-        <li data-i18n="acad_li6"><b>Торговля по сигналам:</b> Используя готовые квантовые сигналы ИИ и командные сессии, вы можете совершать сделки с высокой точностью!</li>    
-    </ul>    
-</div>    
+<!-- ОБУЧЕНИЕ -->  
+<div id="academy" class="card">  
+    <div style="font-size:15px; font-weight:900; color:var(--accent-blue); margin-bottom:10px;" data-i18n="acad_main_title">📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ</div>  
+      
+    <div class="academy-module" style="background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08)); border-color: rgba(41,121,255,0.3);">  
+        <h4 style="color:var(--accent-green); font-size:15px;" data-i18n="acad_perks_head">⚡ ПОЧЕМУ ТРЕЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:</h4>  
+        <div class="platform-perks-grid" style="margin-top:10px;">  
+            <div class="perk-mini-card">  
+                <b>ОТ $5</b>  
+                <span data-i18n="perk_min">МИНИМАЛЬНЫЙ ДЕПОЗИТ</span>  
+            </div>  
+            <div class="perk-mini-card">  
+                <b>ДО 96%</b>  
+                <span data-i18n="perk_payout">ДОХОДНОСТЬ СДЕЛОК</span>  
+            </div>  
+            <div class="perk-mini-card">  
+                <b>БЕСПЛАТНО</b>  
+                <span data-i18n="perk_demo">ДЕМО-СЧЕТ ДЛЯ ТРЕНИРОВОК</span>  
+            </div>  
+            <div class="perk-mini-card">  
+                <b>МОМЕНТАЛЬНО</b>  
+                <span data-i18n="perk_withdraw">ВЫВОД СРЕДСТВ</span>  
+            </div>  
+        </div>  
+        <p style="margin-top:8px; font-size:12px;" data-i18n="acad_perks_sub">Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.</p>  
+    </div>  
 
-<div class="academy-module">    
-    <h4 data-i18n="acad_h3">4. Золотые правила мани-менеджмента</h4>    
-    <p data-i18n="acad_p3">Соблюдение правил риска — главный секрет стабильного заработка:</p>    
-    <ul>    
-        <li data-i18n="acad_li7"><b>Риск на сделку:</b> Выделяйте не более 2-5% от депозита на одну позицию.</li>    
-        <li data-i18n="acad_li8"><b>Дисциплина:</b> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.</li>    
-    </ul>    
-</div>    
+    <div class="academy-module" style="border-color: rgba(0, 230, 118, 0.4);">  
+        <h4 style="color: var(--accent-green);" data-i18n="demo_block_title">🎯 ПОДРОБНО О ДЕМО-СЧЕТЕ: БЕЗОПАСНЫЙ СТАРТ</h4>  
+        <p data-i18n="demo_block_desc">Демо-счет — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:</p>  
+        <ul>  
+            <li data-i18n="demo_li_1"><b>Виртуальный баланс:</b> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.</li>  
+            <li data-i18n="demo_li_2"><b>Полная имитация рынка:</b> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.</li>  
+            <li data-i18n="demo_li_3"><b>Тест стратегий:</b> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.</li>  
+            <li data-i18n="demo_li_4"><b>Мгновенное переключение:</b> Как только вы почувствуете уверенность, можно в один клик переключиться на реальный счет и начать зарабатывать.</li>  
+        </ul>  
+    </div>  
 
-<div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">    
-    <h4 style="color:var(--accent-green);" data-i18n="acad_h5">Время зарабатывать профессионально!</h4>    
-    <p data-i18n="acad_p5">Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трэйдинг на новый уровень прибыльности.</p>    
-    <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трэйдить</a>    
-</div>
+    <div class="academy-module">  
+        <h4 data-i18n="acad_h0">1. С чего начать новичку: от регистрации до первой прибыли</h4>  
+        <p data-i18n="acad_p0">Если вы никогда раньше не занимались трэйдингом, путь к успешной торговле состоит из 4 простых шагов:</p>  
+        <ul>  
+            <li data-i18n="acad_li_step1"><b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.</li>  
+            <li data-i18n="acad_li_step2"><b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 дня).</li>  
+            <li data-i18n="acad_li_step3"><b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.</li>  
+            <li data-i18n="acad_li_step4"><b>Шаг 4. Открытие сделки:</b> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления (ВВЕРХ или ВНИЗ). При верном прогнозе чистая прибыль зачисляется мгновенно!</li>  
+        </ul>  
+    </div>  
 
-</div>    <!-- VIP -->    <div id="vip" class="card">    
-    <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;" data-i18n="vip_main_title">🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА</div>    <!-- ИНТЕРАКТИВНЫЙ БЛОК РЕФЕРАЛЬНОЙ ССЫЛКИ -->    
-<div class="vip-card-box" style="border-color: rgba(0, 230, 118, 0.4); background: linear-gradient(135deg, rgba(0,230,118,0.08), rgba(41,121,255,0.08));">    
-    <div style="font-weight:800; color:var(--accent-green); margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:6px;">    
-        <span>🔗</span> <span data-i18n="ref_box_title">ВАША ПЕРСОНАЛЬНАЯ РЕФЕРАЛЬНАЯ ССЫЛКА:</span>    
-    </div>    
-    <div style="font-size:11px; color:var(--text-secondary); line-height:1.4; margin-bottom:8px;" data-i18n="ref_box_desc">    
-        Пригласите 3 друзей по этой ссылке в нашу команду — получите <b>VIP на 1 неделю</b>! За регистрацию и пополнение — <b>VIP на 1 месяц</b>.    
-    </div>    
-    <div style="display: flex; gap: 6px; margin-bottom: 8px;">    
-        <input type="text" id="refLinkInput" class="risk-input" style="margin: 0; font-size: 11px; background: #000; color: var(--accent-green);" readonly value="https://t.me/Binodex_Signal_Bot?start=ref_12345">    
-        <button class="lang-switcher" onclick="copyRefLink()" style="background: var(--accent-blue); color: #fff; border: none; padding: 0 12px; font-weight: 700; border-radius: 8px; cursor: pointer; flex-shrink: 0;" data-i18n="ref_copy_btn">Копировать</button>    
-    </div>    
-    <div style="font-size: 11px; display: flex; justify-content: space-between; color: var(--text-secondary);">    
-        <span data-i18n="ref_invited_count">Приглашено друзей: <b style="color: #fff;" id="invitedCount">0</b> / 3</span>    
-        <span style="color: var(--accent-green);" id="refStatus" data-i18n="ref_status_none">До VIP осталось: 3 друга</span>    
-    </div>    
-</div>    
+    <div class="academy-module">  
+        <h4 data-i18n="acad_h1">2. Как работает ИИ-терминал и Parabolic SAR</h4>  
+        <p data-i18n="acad_p1">Главный трендовый индикатор нашего терминала — <b>Parabolic SAR</b> — отображается прямо на ценовых свечах в виде точек:</p>  
+        <ul>  
+            <li data-i18n="acad_li1"><b>Точки под свечами (зеленые):</b> Сигнализируют о сильном бычьем тренде и росте цены. Время открывать сделки ВВЕРХ.</li>  
+            <li data-i18n="acad_li2"><b>Точки над свечами (красные):</b> Указывают на медвежий тренд и давление продавцов. Идеально для входа ВНИЗ.</li>  
+            <li data-i18n="acad_li3"><b>Смена точек:</b> Пересечение графика через точки SAR дает мощный сигнал разворота тренда с высокой точностью.</li>  
+        </ul>  
+    </div>  
 
-<div class="vip-card-box">    
-    <div style="font-weight:800; color:var(--accent-blue); margin-bottom:8px; font-size:13px;" data-i18n="vip_how_title">📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:</div>    
-    <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="vip_how_text">    
-        • Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите сделку на реальном счёте с любым активом и суммой.<br>    
-        • Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке выше в нашу команду.    
-    </div>    
-    <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:5px;" data-i18n="vip_btn_top">Зарегистрироваться и получить VIP</a>    
-</div>    
+    <div class="academy-module">  
+        <h4 data-i18n="acad_h2">3. Торговля по стратегии RSI и сигналам</h4>  
+        <p data-i18n="acad_p2">Индикатор RSI (Индекс относительной силы) помогает находить точные точки разворота цены на экстремумах:</p>  
+        <ul>  
+            <li data-i18n="acad_li4"><b>Зона выше 70%:</b> Актив перекуплен покупателями, ожидается коррекция или падение цен.</li>  
+            <li data-i18n="acad_li5"><b>Зона ниже 30%:</b> Актив перепродан продавцами, рынок готов к резкому отскоку вверх.</li>  
+            <li data-i18n="acad_li6"><b>Торговля по сигналам:</b> Используя готовые квантовые сигналы ИИ и командные сессии, вы можете совершать сделки с высокой точностью!</li>  
+        </ul>  
+    </div>  
 
-<div style="font-weight:800; color:var(--text-main); margin-bottom:8px; font-size:13px;" data-i18n="vip_perks_title">🚀 ЧТО ДАЕТ VIP (ВСЕ ПРИВИЛЕГИИ):</div>    
-<ul class="vip-list">    
-    <li><b data-i18n="v1_title">ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:</b> <span data-i18n="v1_desc">Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.</span></li>    
-    <li><b data-i18n="v2_title">ПОВЫШЕННАЯ ТОЧНОСТЬ АЛГОРИТМОВ ИИ:</b> <span data-i18n="v2_desc">Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.</span></li>    
-    <li><b data-i18n="v3_title">АВТОМАТИЧЕСКИЙ КОПИ-ТРЕЙДИНГ:</b> <span data-i18n="v3_desc">Зеркалирование сделок лучших трэйдеров платформы в один клик с защитой от просадок.</span></li>    
-    <li><b data-i18n="v4_title">ПРИОРИТЕТНЫЕ СЕРВЕРА С МИНИМАЛЬНЫМ ПИНГОМ:</b> <span data-i18n="v4_desc">Мгновенное исполнение ордеров без задержек и проскальзываний на самых быстрых каналах.</span></li>    
-    <li><b data-i18n="v5_title">ЕЖЕНЕДЕЛЬНЫЕ ДЕНЕЖНЫЕ ТУРНИРЫ:</b> <span data-i18n="v5_desc">Участие в закрытых розыгрышах ценных призов и депозитов среди участников VIP-команды.</span></li>    
-    <li><b data-i18n="v6_title">ПЕРСОНАЛЬНЫЙ МАНИ-МЕНДЖМЕНТ ПЛАН:</b> <span data-i18n="v6_desc">Индивидуальная стратегия разгона депозита от профессиональных трэйдеров с личным разбором ошибок.</span></li>    
-    <li><b data-i18n="v7_title">АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:</b> <span data-i18n="v7_desc">Автоматическое предупреждение и защита депозита во время выхода важных макроэкономических новостей.</span></li>    
-    <li><b data-i18n="v8_title">ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):</b> <span data-i18n="v8_desc">Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.</span></li>    
-</ul>    
+    <div class="academy-module">  
+        <h4 data-i18n="acad_h3">4. Золотые правила мани-менеджмента</h4>  
+        <p data-i18n="acad_p3">Соблюдение правил риска — главный секрет стабильного заработка:</p>  
+        <ul>  
+            <li data-i18n="acad_li7"><b>Риск на сделку:</b> Выделяйте не более 2-5% от депозита на одну позицию.</li>  
+            <li data-i18n="acad_li8"><b>Дисциплина:</b> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.</li>  
+        </ul>  
+    </div>  
 
-<a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-bottom: 12px;" data-i18n="vip_btn_bot">Получить VIP доступ прямо сейчас</a>    
+    <div class="academy-module" style="background: rgba(0, 230, 118, 0.05); border-color: rgba(0, 230, 118, 0.3);">  
+        <h4 style="color:var(--accent-green);" data-i18n="acad_h5">Время зарабатывать профессионально!</h4>  
+        <p data-i18n="acad_p5">Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трэйдинг на новый уровень прибыльности.</p>  
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" data-i18n="btn_trade">Начать трэйдить</a>  
+    </div>  
+</div>  
 
-<!-- ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР / ПОДДЕРЖКА -->    
-<div class="vip-card-box" style="margin-top: 10px; margin-bottom: 0; border-color: rgba(41, 121, 255, 0.4); background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08));">    
-    <div style="font-weight:800; color:var(--accent-blue); margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:6px;">    
-        <span>💬</span> <span data-i18n="manager_box_title">ВАШ ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР:</span>    
-    </div>    
-    <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="manager_box_desc">    
-        Остались вопросы по VIP доступу, пополнению или стратегии? Напишите нашему официальному представителю в Telegram, и вам помогут моментально!    
-    </div>    
-    <a href="https://t.me/jenna_mo1" class="btn-trade" target="_blank" style="background: linear-gradient(135deg, #2979ff, #00e676); margin-top:5px; margin-bottom:0;" data-i18n="manager_btn">Написать менеджеру (@jenna_mo1)</a>    
-</div>
+<!-- VIP -->  
+<div id="vip" class="card">  
+    <div style="font-size:14px; font-weight:900; color:var(--accent-green); margin-bottom:12px;" data-i18n="vip_main_title">🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА</div>  
+      
+    <!-- ИНТЕРАКТИВНЫЙ БЛОК РЕФЕРАЛЬНОЙ ССЫЛКИ -->  
+    <div class="vip-card-box" style="border-color: rgba(0, 230, 118, 0.4); background: linear-gradient(135deg, rgba(0,230,118,0.08), rgba(41,121,255,0.08));">  
+        <div style="font-weight:800; color:var(--accent-green); margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:6px;">  
+            <span>🔗</span> <span data-i18n="ref_box_title">ВАША ПЕРСОНАЛЬНАЯ РЕФЕРАЛЬНАЯ ССЫЛКА:</span>  
+        </div>  
+        <div style="font-size:11px; color:var(--text-secondary); line-height:1.4; margin-bottom:8px;" data-i18n="ref_box_desc">  
+            Пригласите 3 друзей по этой ссылке в нашу команду — получите <b>VIP на 1 неделю</b>! За регистрацию и пополнение — <b>VIP на 1 месяц</b>.  
+        </div>  
+        <div style="display: flex; gap: 6px; margin-bottom: 8px;">  
+            <input type="text" id="refLinkInput" class="risk-input" style="margin: 0; font-size: 11px; background: #000; color: var(--accent-green);" readonly value="https://t.me/Binodex_Signal_Bot?start=ref_12345">  
+            <button class="lang-switcher" onclick="copyRefLink()" style="background: var(--accent-blue); color: #fff; border: none; padding: 0 12px; font-weight: 700; border-radius: 8px; cursor: pointer; flex-shrink: 0;" data-i18n="ref_copy_btn">Копировать</button>  
+        </div>  
+        <div style="font-size: 11px; display: flex; justify-content: space-between; color: var(--text-secondary);">  
+            <span data-i18n="ref_invited_count">Приглашено друзей: <b style="color: #fff;" id="invitedCount">0</b> / 3</span>  
+            <span style="color: var(--accent-green);" id="refStatus" data-i18n="ref_status_none">До VIP осталось: 3 друга</span>  
+        </div>  
+    </div>  
 
-</div>    <!-- КНОПКА ПОДЕЛИТЬСЯ В САМОМ НИЗУ -->    <div class="share-container-bottom">    
-    <button class="btn-share-bot" onclick="shareBotApp()">    
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>    
-        <span data-i18n="share_btn_text">ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ</span>    
-    </button>    
-</div>    <script>    
-    window.addEventListener('DOMContentLoaded', () => {    
-        const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;    
-        const userId = (tgUser && tgUser.id) ? tgUser.id : 'demo_user_' + Math.floor(Math.random() * 10000);    
-            
-        const botUsername = 'Binodex_Signal_Bot';     
-        const refUrl = `https://t.me/${botUsername}?start=ref_${userId}`;    
-            
-        const refInput = document.getElementById('refLinkInput');    
-        if(refInput) {    
-            refInput.value = refUrl;    
-        }    
-  
-        updateOrderBook();    
-        setInterval(updateOrderBook, 3000);    
-        calculateCompound();    
-        updatePoolFeed();    
-        setInterval(updatePoolFeed, 4000);    
-  
-        // ЗАПУСК ДИНАМИКИ НЕЙРОЛОГОВ  
-        setInterval(updateTerminalLogs, 2500);  
-  
-        // ЗАПУСК ЖИВЫХ ВЫПЛАТ (до 20 в час с уникальными почтами и суммами до $10000)  
-        scheduleNextWithdrawal();  
-    });    
-  
-    // БАЗА УНИКАЛЬНЫХ ПОЧТ БЕЗ ПОВТОРЕНИЙ  
-    const uniqueWithdrawalEmails = [  
-        "ar****@mail.ru", "jo****@gmail.com", "el****@gmail.com", "ma****@mail.ru",  
-        "ka****@gmail.com", "tr****@yandex.ru", "sv****@gmail.com", "an****@mail.ru",  
-        "di****@gmail.com", "ev****@mail.ru", "ol****@gmail.com", "ro****@mail.ru",  
-        "al****@gmail.com", "kn****@mail.ru", "ni****@gmail.com", "da****@mail.ru",  
-        "mi****@gmail.com", "vi****@mail.ru", "rt****@gmail.com", "le****@mail.ru",  
-        "ir****@gmail.com", "pa****@mail.ru", "so****@gmail.com", "ti****@mail.ru",  
-        "artem****@gmail.com", "mikhail****@mail.ru", "elena****@gmail.com", "svetlana****@mail.ru",  
-        "dmitry****@yandex.ru", "oksana****@gmail.com", "sergey****@mail.ru", "anna****@gmail.com",  
-        "ivan****@mail.ru", "natalia****@gmail.com", "alex****@yandex.ru", "tatiana****@gmail.com",  
-        "pavel****@mail.ru", "julia****@gmail.com", "roman****@yandex.ru", "ekaterina****@gmail.com",  
-        "denis****@mail.ru", "victoria****@gmail.com", "maxim****@yandex.ru", "olga****@gmail.com",  
-        "vladimir****@mail.ru", "arina****@gmail.com", "gleb****@yandex.ru", "polina****@gmail.com"  
-    ];  
-    let usedEmailsSet = new Set();  
-  
-    function updateWithdrawalFeed() {  
-        const feed = document.getElementById('withdrawalFeed');  
-        if(!feed) return;  
+    <div class="vip-card-box">  
+        <div style="font-weight:800; color:var(--accent-blue); margin-bottom:8px; font-size:13px;" data-i18n="vip_how_title">📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:</div>  
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="vip_how_text">  
+            • Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите сделку на реальном счёте с любым активом и суммой.<br>  
+            • Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке выше в нашу команду.  
+        </div>  
+        <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-top:5px; margin-bottom:5px;" data-i18n="vip_btn_top">Зарегистрироваться и получить VIP</a>  
+    </div>  
+
+    <div style="font-weight:800; color:var(--text-main); margin-bottom:8px; font-size:13px;" data-i18n="vip_perks_title">🚀 ЧТО ДАЕТ VIP (ВСЕ ПРИВИЛЕГИИ):</div>  
+    <ul class="vip-list">  
+        <li><b data-i18n="v1_title">ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:</b> <span data-i18n="v1_desc">Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.</span></li>  
+        <li><b data-i18n="v2_title">ПОВЫШЕННАЯ ТОЧНОСТЬ АЛГОРИТМОВ ИИ:</b> <span data-i18n="v2_desc">Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.</span></li>  
+        <li><b data-i18n="v3_title">АВТОМАТИЧЕСКИЙ КОПИ-ТРЕЙДИНГ:</b> <span data-i18n="v3_desc">Зеркалирование сделок лучших трэйдеров платформы в один клик с защитой от просадок.</span></li>  
+        <li><b data-i18n="v4_title">ПРИОРИТЕТНЫЕ СЕРВЕРА С МИНИМАЛЬНЫМ ПИНГОМ:</b> <span data-i18n="v4_desc">Мгновенное исполнение ордеров без задержек и проскальзываний на самых быстрых каналах.</span></li>  
+        <li><b data-i18n="v5_title">ЕЖЕНЕДЕЛЬНЫЕ ДЕНЕЖНЫЕ ТУРНИРЫ:</b> <span data-i18n="v5_desc">Участие в закрытых розыгрышах ценных призов и депозитов среди участников VIP-команды.</span></li>  
+        <li><b data-i18n="v6_title">ПЕРСОНАЛЬНЫЙ МАНИ-МЕНДЖМЕНТ ПЛАН:</b> <span data-i18n="v6_desc">Индивидуальная стратегия разгона депозита от профессиональных трэйдеров с личным разбором ошибок.</span></li>  
+        <li><b data-i18n="v7_title">АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:</b> <span data-i18n="v7_desc">Автоматическое предупреждение и защита депозита во время выхода важных макроэкономических новостей.</span></li>  
+        <li><b data-i18n="v8_title">ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):</b> <span data-i18n="v8_desc">Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.</span></li>  
+    </ul>  
+
+    <a href="https://bdclick.app/smart/naJly9" class="btn-trade" target="_blank" style="margin-bottom: 12px;" data-i18n="vip_btn_bot">Получить VIP доступ прямо сейчас</a>  
+
+    <!-- ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР / ПОДДЕРЖКА -->  
+    <div class="vip-card-box" style="margin-top: 10px; margin-bottom: 0; border-color: rgba(41, 121, 255, 0.4); background: linear-gradient(135deg, rgba(41,121,255,0.08), rgba(0,230,118,0.08));">  
+        <div style="font-weight:800; color:var(--accent-blue); margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:6px;">  
+            <span>💬</span> <span data-i18n="manager_box_title">ВАШ ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР:</span>  
+        </div>  
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;" data-i18n="manager_box_desc">  
+            Остались вопросы по VIP доступу, пополнению или стратегии? Напишите нашему официальному представителю в Telegram, и вам помогут моментально!  
+        </div>  
+        <a href="https://t.me/jenna_mo1" class="btn-trade" target="_blank" style="background: linear-gradient(135deg, #2979ff, #00e676); margin-top:5px; margin-bottom:0;" data-i18n="manager_btn">Написать менеджеру (@jenna_mo1)</a>  
+    </div>  
+</div>  
+
+<!-- КНОПКА ПОДЕЛИТЬСЯ В САМОМ НИЗУ -->  
+<div class="share-container-bottom">  
+    <button class="btn-share-bot" onclick="shareBotApp()">  
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>  
+        <span data-i18n="share_btn_text">ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ</span>  
+    </button>  
+</div>  
+
+<script>  
+    window.addEventListener('DOMContentLoaded', () => {  
+        const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;  
+        const userId = (tgUser && tgUser.id) ? tgUser.id : 'demo_user_' + Math.floor(Math.random() * 10000);  
+          
+        const botUsername = 'Binodex_Signal_Bot';   
+        const refUrl = `https://t.me/${botUsername}?start=ref_${userId}`;  
+          
+        const refInput = document.getElementById('refLinkInput');  
+        if(refInput) {  
+            refInput.value = refUrl;  
+        }  
+
+        updateOrderBook();  
+        setInterval(updateOrderBook, 3000);  
+        calculateCompound();  
+        updatePoolFeed();  
+        setInterval(updatePoolFeed, 4000);  
+    });  
+
+    function updateOrderBook() {  
+        const ob = document.getElementById('obContent');  
+        if(!ob) return;  
+        const bPrice = (Math.random() * 500 + 60000).toFixed(2);  
+        ob.innerHTML = `  
+            🔴 ПРОДАЖИ (ASK): $${(parseFloat(bPrice)+1.5).toFixed(2)} — <span style="color:var(--accent-red)">${(Math.random()*15+5).toFixed(2)} BTC</span><br>  
+            🔴 ПРОДАЖИ (ASK): $${(parseFloat(bPrice)+0.8).toFixed(2)} — <span style="color:var(--accent-red)">${(Math.random()*10+2).toFixed(2)} BTC</span><br>  
+            🟢 СПРЕД ЦЕНА: <b>$${bPrice}</b><br>  
+            🟢 ПОКУПКИ (BID): $${(parseFloat(bPrice)-0.7).toFixed(2)} — <span style="color:var(--accent-green)">${(Math.random()*12+3).toFixed(2)} BTC</span><br>  
+            🟢 ПОКУПКИ (BID): $${(parseFloat(bPrice)-1.4).toFixed(2)} — <span style="color:var(--accent-green)">${(Math.random()*18+8).toFixed(2)} BTC</span>  
+        `;  
+    }  
+
+    function calculateCompound() {  
+        const start = parseFloat(document.getElementById('calcStart').value) || 100;  
+        const pct = parseFloat(document.getElementById('calcPercent').value) || 10;  
+        const days = parseInt(document.getElementById('calcDays').value) || 7;  
+        let total = start;  
+        for(let i=0; i<days; i++) {  
+            total += total * (pct / 100);  
+        }  
+        const resEl = document.getElementById('calcResult');  
+        if(resEl) {  
+            resEl.innerText = `Итог через ${days} дней: $${total.toFixed(2)}`;  
+        }  
+    }  
+
+    function updatePoolFeed() {  
+        const pool = document.getElementById('poolFeed');  
+        if(!pool) return;  
+        const amounts = [150000, 320000, 500000, 1200000, 850000];  
+        const randAmt = amounts[Math.floor(Math.random() * amounts.length)];  
+        const assets = ['BTC', 'ETH', 'SOL', 'XRP', 'EUR'];  
+        const randAsset = assets[Math.floor(Math.random() * assets.length)];  
         const now = new Date().toTimeString().split(' ')[0];  
-  
-        // Получаем уникальную почту  
-        let availableEmails = uniqueWithdrawalEmails.filter(e => !usedEmailsSet.has(e));  
-        if (availableEmails.length === 0) {  
-            usedEmailsSet.clear(); // Сбрасываем, если все почты были использованы  
-            availableEmails = uniqueWithdrawalEmails;  
+          
+        const currentHTML = pool.innerHTML.includes('Инициализация') ? '' : pool.innerHTML;  
+        pool.innerHTML = `[${now}] 🐋 КИТОВЫЙ ОРДЕР: Перевод <b>$${randAmt.toLocaleString()}</b> в пул ${randAsset}<br>` + currentHTML;  
+    }  
+
+    function copyRefLink() {  
+        const input = document.getElementById('refLinkInput');  
+        input.select();  
+        input.setSelectionRange(0, 99999);  
+        navigator.clipboard.writeText(input.value);  
+          
+        const btn = event.target;  
+        const oldText = btn.innerText;  
+        btn.innerText = currentLang === 'ru' ? 'СКОПИРОВАНО!' : 'COPIED!';  
+        btn.style.background = 'var(--accent-green)';  
+        setTimeout(() => {  
+            btn.innerText = oldText;  
+            btn.style.background = 'var(--accent-blue)';  
+        }, 2000);  
+    }  
+
+    function shareBotApp() {  
+        const refInputVal = document.getElementById('refLinkInput').value;  
+        const shareText = encodeURIComponent("🚀 Залетай в наш крутой бот-терминал BinoDex! Здесь бесплатное обучение, квантовый ИИ и трэйдинг со своей командой в прямом эфире!");  
+        window.open(`https://t.me/share/url?url=${encodeURIComponent(refInputVal)}&text=${shareText}`, '_blank');  
+    }  
+
+    const translations = {  
+        ru: {  
+            ai_active: "🟢 AI СТАТУС: АКТИВЕН",  
+            tab_terminal: "📊 ТЕРМИНАЛ",  
+            tab_academy: "📚 ОБУЧЕНИЕ",  
+            tab_vip: "🎁 VIP",  
+            btn_scan: "ЗАПУСТИТЬ АНАЛИЗ",  
+            btn_trade: "Начать трэйдить",  
+            conf_title: "📊 Мультииндикаторная конфлюэнтность:",  
+            conf_sar: "Parabolic SAR (на свечах):",  
+            conf_rsi: "RSI Моментум (14):",  
+            conf_macd: "MACD Импульс:",  
+            conf_bb: "Индикатор Bollinger Bands:",  
+            conf_bb_val: "Сжатие / Пробой",  
+            conf_status: "Статус алгоритмов:",  
+            conf_status_val: "Синхронизировано",  
+            logs_title: "🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):",  
+            withdrawals_title: "💸 ВЫПЛАТЫ / WITHDRAWALS",  
+            stats_title: "📊 ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ",  
+            stats_wins: "ПЛЮСОВЫЕ СДЕЛКИ:",  
+            stats_losses: "МИНУСОВЫЕ СДЕЛКИ:",  
+            stats_balance: "ТЕКУЩИЙ БАЛАНС ($):",  
+            stats_btn: "ЗАФИКСИРОВАТЬ РЕЗУЛЬТАТ",  
+            stats_wr: "Общий винрейт:",  
+            stats_profit: "Чистая прибыль:",  
+            stool_matrix: "📈 Матрица ТФ",  
+            stool_ob: "⚖️ Стакан ордеров",  
+            stool_risk: "🛡️ Риск-менедж",  
+            stool_calc: "💰 Калькулятор",  
+            stool_history: "📑 История",  
+            stool_pool: "🌐 Пул ликвидности",  
+            t_matrix_desc: "Синхронизация алгоритмов по топовым таймфреймам:",  
+            th_tf: "Таймфрейм",  
+            th_trend: "SAR Тренд",  
+            th_rsi: "RSI Зона",  
+            th_status: "Статус сигнала",  
+            norm: "Норма",  
+            opt: "Оптимум",  
+            active_lbl: "АКТИВНО",  
+            r_bal: "Ваш торговый баланс ($):",  
+            r_pct: "Риск на одну сделку (%):",  
+            r_rec: "Рекомендуемый размер ставки:",  
+            acad_main_title: "📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ",  
+            acad_perks_head: "⚡ ПОЧЕМУ ТРЕЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:",  
+            perk_min: "МИНИМАЛЬНЫЙ ДЕПОЗИТ",  
+            perk_payout: "ДОХОДНОСТЬ СДЕЛОК",  
+            perk_demo: "ДЕМО-СЧЕТ ДЛЯ ТРЕНИРОВОК",  
+            perk_withdraw: "ВЫВОД СРЕДСТВ",  
+            acad_perks_sub: "Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.",  
+            demo_block_title: "🎯 ПОДРОБНО О ДЕМО-СЧЕТЕ: БЕЗОПАСНЫЙ СТАРТ",  
+            demo_block_desc: "Демо-счет — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:",  
+            demo_li_1: "<b>Виртуальный баланс:</b> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.",  
+            demo_li_2: "<b>Полная имитация рынка:</b> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.",  
+            demo_li_3: "<b>Тест стратегий:</b> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.",  
+            demo_li_4: "<b>Мгновенное переключение:</b> Как только вы почувствуете уверенность, можно в один клик переключиться на реальный счет и начать зарабатывать.",  
+            acad_h0: "1. С чего начать новичку: от регистрации до первой прибыли",  
+            acad_p0: "Если вы никогда раньше не занимались трэйдингом, путь к успешной торговле состоит из 4 простых шагов:",  
+            acad_li_step1: "<b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.",  
+            acad_li_step2: "<b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 дня).",  
+            acad_li_step3: "<b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.",  
+            acad_li_step4: "<b>Шаг 4. Открытие сделки:</b> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления (ВВЕРХ или ВНИЗ). При верном прогнозе чистая прибыль зачисляется мгновенно!",  
+            acad_h1: "2. Как работает ИИ-терминал и Parabolic SAR",  
+            acad_p1: "Главный трендовый индикатор нашего терминала — <b>Parabolic SAR</b> — отображается прямо на ценовых свечах в виде точек:",  
+            acad_li1: "<b>Точки под свечами (зеленые):</b> Сигнализируют о сильном бычьем тренде и росте цены. Время открывать сделки ВВЕРХ.",  
+            acad_li2: "<b>Точки над свечами (красные):</b> Указывают на медвежий тренд и давление продавцов. Идеально для входа ВНИЗ.",  
+            acad_li3: "<b>Смена точек:</b> Пересечение графика через точки SAR дает мощный сигнал разворота тренда с высокой точностью.",  
+            acad_h2: "3. Торговля по стратегии RSI и сигналам",  
+            acad_p2: "Индикатор RSI (Индекс относительной силы) помогает находить точные точки разворота цены на экстремумах:",  
+            acad_li4: "<b>Зона выше 70%:</b> Актив перекуплен покупателями, ожидается коррекция или падение цен.",  
+            acad_li5: "<b>Зона ниже 30%:</b> Актив перепродан продавцами, рынок готов к резкому отскоку вверх.",  
+            acad_li6: "<b>Торговля по сигналам:</b> Используя готовые квантовые сигналы ИИ и командные сессии, вы можете совершать сделки с высокой точностью!",  
+            acad_h3: "4. Золотые правила мани-менеджмента",  
+            acad_p3: "Соблюдение правил риска — главный секрет стабильного заработка:",  
+            acad_li7: "<b>Риск на сделку:</b> Выделяйте не более 2-5% от депозита на одну позицию.",  
+            acad_li8: "<b>Дисциплина:</b> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.",  
+            acad_h5: "Время зарабатывать профессионально!",  
+            acad_p5: "Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трэйдинг на новый уровень прибыльности.",  
+            vip_main_title: "🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА",  
+            ref_box_title: "ВАША ПЕРСОНАЛЬНАЯ РЕФЕРАЛЬНАЯ ССЫЛКА:",  
+            ref_box_desc: "Пригласите 3 друзей по этой ссылке в нашу команду — получите VIP на 1 неделю! За регистрацию и пополнение — VIP на 1 месяц.",  
+            ref_copy_btn: "Копировать",  
+            ref_invited_count: "Приглашено друзей:",  
+            ref_status_none: "До VIP осталось: 3 друга",  
+            vip_how_title: "📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:",  
+            vip_how_text: "• Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите сделку на реальном счёте с любым активом и суммой.<br>• Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке выше в нашу команду.",  
+            vip_btn_top: "Зарегистрироваться и получить VIP",  
+            vip_perks_title: "🚀 ЧТО ДАЕТ VIP (ВСЕ ПРИВИЛЕГИИ):",  
+            v1_title: "ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:",  
+            v1_desc: "Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.",  
+            v2_title: "ПОВЫШЕННАЯ ТОЧНОСТЬ АЛГОРИТМОВ ИИ:",  
+            v2_desc: "Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.",  
+            v3_title: "АВТОМАТИЧЕСКИЙ КОПИ-ТРЕЙДИНГ:",  
+            v3_desc: "Зеркалирование сделок лучших трэйдеров платформы в один клик с защитой от просадок.",  
+            v4_title: "ПРИОРИТЕТНЫЕ СЕРВЕРА С МИНИМАЛЬНЫМ ПИНГОМ:",  
+            v4_desc: "Мгновенное исполнение ордеров без задержек и проскальзываний на самых быстрых каналах.",  
+            v5_title: "ЕЖЕНЕДЕЛЬНЫЕ ДЕНЕЖНЫЕ ТУРНИРЫ:",  
+            v5_desc: "Участие в закрытых розыгрышах ценных призов и депозитов среди участников VIP-команды.",  
+            v6_title: "ПЕРСОНАЛЬНЫЙ МАНИ-МЕНДЖМЕНТ ПЛАН:",  
+            v6_desc: "Индивидуальная стратегия разгона депозита от профессиональных трэйдеров с личным разбором ошибок.",  
+            v7_title: "АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:",  
+            v7_desc: "Автоматическое предупреждение и защита депозита во время выхода важных макроэкономических новостей.",  
+            v8_title: "ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):",  
+            v8_desc: "Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.",  
+            vip_btn_bot: "Получить VIP доступ прямо сейчас",  
+            manager_box_title: "ВАШ ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР:",  
+            manager_box_desc: "Остались вопросы по VIP доступу, пополнению или стратегии? Напишите нашему официальному представителю в Telegram, и вам помогут моментально!",  
+            manager_btn: "Написать менеджеру (@jenna_mo1)",  
+            share_btn_text: "ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ"  
+        },  
+        en: {  
+            ai_active: "🟢 AI STATUS: ACTIVE",  
+            tab_terminal: "📊 TERMINAL",  
+            tab_academy: "📚 LEARNING",  
+            tab_vip: "🎁 VIP",  
+            btn_scan: "RUN ANALYSIS",  
+            btn_trade: "Start Trading",  
+            conf_title: "📊 Multi-Indicator Confluence:",  
+            conf_sar: "Parabolic SAR (on candles):",  
+            conf_rsi: "RSI Momentum (14):",  
+            conf_macd: "MACD Momentum:",  
+            conf_bb: "Bollinger Bands Indicator:",  
+            conf_bb_val: "Squeeze / Breakout",  
+            conf_status: "Algorithm Status:",  
+            conf_status_val: "Synchronized",  
+            logs_title: "🧠 LIVE NEURO-ANALYSIS (LOG):",  
+            withdrawals_title: "💸 WITHDRAWALS",  
+            stats_title: "📊 PERSONAL STATS & WINRATE",  
+            stats_wins: "WINNING TRADES:",  
+            stats_losses: "LOSING TRADES:",  
+            stats_balance: "CURRENT BALANCE ($):",  
+            stats_btn: "SAVE RESULT",  
+            stats_wr: "Total Winrate:",  
+            stats_profit: "Net Profit:",  
+            stool_matrix: "📈 TF Matrix",  
+            stool_ob: "⚖️ Order Book",  
+            stool_risk: "🛡️ Risk Mgmt",  
+            stool_calc: "💰 Calculator",  
+            stool_history: "📑 History",  
+            stool_pool: "🌐 Liquidity Pool",  
+            t_matrix_desc: "Algorithm synchronization across top timeframes:",  
+            th_tf: "Timeframe",  
+            th_trend: "SAR Trend",  
+            th_rsi: "RSI Zone",  
+            th_status: "Signal Status",  
+            norm: "Normal",  
+            opt: "Optimal",  
+            active_lbl: "ACTIVE",  
+            r_bal: "Your Trading Balance ($):",  
+            r_pct: "Risk per Trade (%):",  
+            r_rec: "Recommended Bet Size:",  
+            acad_main_title: "📚 ACADEMY & PLATFORM PERKS",  
+            acad_perks_head: "⚡ WHY TRADERS CHOOSE OUR PLATFORM:",  
+            perk_min: "MINIMUM DEPOSIT",  
+            perk_payout: "PAYOUT UP TO 96%",  
+            perk_demo: "FREE DEMO ACCOUNT",  
+            perk_withdraw: "INSTANT WITHDRAWAL",  
+            acad_perks_sub: "Reliable terminal, high liquidity, and instant order execution without slippage allow both beginners and pros to trade comfortably.",  
+            demo_block_title: "🎯 DEMO ACCOUNT: SAFE START",  
+            demo_block_desc: "A demo account is your ideal tool for learning and testing strategies with absolutely zero risk to real funds:",  
+            demo_li_1: "<b>Virtual Balance:</b> Upon registration, virtual funds are automatically credited to your account for unlimited practice.",  
+            demo_li_2: "<b>Full Market Simulation:</b> Charts, quotes, and execution speed fully match real trading conditions.",  
+            demo_li_3: "<b>Strategy Testing:</b> Test AI quantum signals and indicators without psychological pressure.",  
+            demo_li_4: "<b>Instant Switch:</b> Once confident, switch to a real account in one click.",  
+            acad_h0: "1. Beginner's Guide: From Registration to First Profit",  
+            acad_p0: "If you have never traded before, your path to success consists of 4 simple steps:",  
+            acad_li_step1: "<b>Step 1. Registration & Demo Account:</b> Create an account and practice on a free virtual balance to master the interface without risk.",  
+            acad_li_step2: "<b>Step 2. Asset & Timeframe:</b> Choose a currency pair (e.g. EUR/USD or BTC/USDT) and candle timeframe.",  
+            acad_li_step3: "<b>Step 3. Analysis & Signals:</b> Use our quantum AI scanner or live team trading sessions.",  
+            acad_li_step4: "<b>Step 4. Open a Trade:</b> Enter investment amount, expiry time, and click UP or DOWN. Profits are credited instantly upon a correct forecast!",  
+            acad_h1: "2. How AI Terminal & Parabolic SAR Work",  
+            acad_p1: "The main trend indicator — <b>Parabolic SAR</b> — is displayed right on price candles as dots:",  
+            acad_li1: "<b>Dots below candles (green):</b> Strong uptrend signal. Time to open UP trades.",  
+            acad_li2: "<b>Dots above candles (red):</b> Downtrend signal. Perfect for DOWN trades.",  
+            acad_li3: "<b>Dot Switch:</b> Price crossing SAR dots provides a high-accuracy reversal signal.",  
+            acad_h2: "3. RSI Strategy & Signal Trading",  
+            acad_p2: "The RSI indicator helps find exact reversal points at extremes:",  
+            acad_li4: "<b>Above 70%:</b> Asset is overbought, correction or downward drop is expected.",  
+            acad_li5: "<b>Below 30%:</b> Asset is oversold, market is ready for a sharp upward bounce.",  
+            acad_li6: "<b>Signal Trading:</b> Use AI quantum signals and team sessions to execute trades with high winrate!",  
+            acad_h3: "4. Golden Money Management Rules",  
+            acad_p3: "Risk management is the main secret of stable income:",  
+            acad_li7: "<b>Risk per trade:</b> Allocate no more than 2-5% of your balance per position.",  
+            acad_li8: "<b>Discipline:</b> Trade with the trend and never try to win back losses impulsively.",  
+            acad_h5: "Time to Earn Professionally!",  
+            acad_p5: "Harness our terminal power, deposit from 5 dollars, and take your trading to new levels of profitability.",  
+            vip_main_title: "🎁 VIP: CONDITIONS & EXCLUSIVE PERKS",  
+            ref_box_title: "YOUR PERSONAL REFERRAL LINK:",  
+            ref_box_desc: "Invite 3 friends via this link to our team — get VIP for 1 week! For registration and deposit — VIP for 1 month.",  
+            ref_copy_btn: "Copy",  
+            ref_invited_count: "Invited friends:",  
+            ref_status_none: "Left to VIP: 3 friends",  
+            vip_how_title: "📌 HOW TO GET FREE VIP ACCESS:",  
+            vip_how_text: "• Option 1 (VIP for 1 month): Register via the link below, fund your account with a comfortable amount, and execute a trade on a real account with any asset and amount.<br>• Option 2 (VIP for 1 week): Invite just 3 friends via your referral link above to our team.",  
+            vip_btn_top: "Register & Get VIP",  
+            vip_perks_title: "🚀 WHAT VIP INCLUDES (ALL PRIVILEGES):",  
+            v1_title: "CLOSED VIP SIGNAL CHANNEL 24/7:",  
+            v1_desc: "Live stream trade entries with our team and real-time precise insights.",  
+            v2_title: "ENHANCED AI ALGORITHM ACCURACY:",  
+            v2_desc: "Full access to deep neural network analysis layers with maximum market noise filtering.",  
+            v3_title: "AUTOMATED COPY TRADING:",  
+            v3_desc: "Mirror top platform traders' positions in one click with drawdown protection.",  
+            v4_title: "PRIORITY LOW-PING SERVERS:",  
+            v4_desc: "Lightning-fast order execution without delays or slippage on top-tier server channels.",  
+            v5_title: "WEEKLY CASH TOURNAMENTS:",  
+            v5_desc: "Participate in exclusive prize and deposit giveaways among VIP team members.",  
+            v6_title: "PERSONAL MONEY MANAGEMENT PLAN:",  
+            v6_desc: "Custom deposit growth strategy from professional traders with personal error analysis.",  
+            v7_title: "ANTICRISIS NEWS FILTER:",  
+            v7_desc: "Automatic warnings and deposit protection during major macroeconomic news releases.",  
+            v8_title: "ENHANCED CASHBACK (REBATE):",  
+            v8_desc: "Get a portion of fees refunded directly to your real balance on every executed trade.",  
+            vip_btn_bot: "Get VIP Access Right Now",  
+            manager_box_title: "YOUR PERSONAL MANAGER:",  
+            manager_box_desc: "Have questions about VIP access, deposits, or strategy? Contact our official representative on Telegram for instant support!",  
+            manager_btn: "Contact Manager (@jenna_mo1)",  
+            share_btn_text: "SHARE WITH FRIENDS"  
         }  
-        const randomEmail = availableEmails[Math.floor(Math.random() * available_emails_length_fix = availableEmails.length)];  
-        usedEmailsSet.add(randomEmail);  
-  
-        // Генерация суммы: до $10,000, в среднем от $10 до $3,000  
-        let sum;  
-        const chance = Math.random();  
-        if (chance < 0.65) {  
-            // 65% сделок: от $10 до $800  
-            sum = (Math.random() * 790 + 10).toFixed(2);  
-        } else if (chance < 0.92) {  
-            // 27% сделок: от $800 до $3,000  
-            sum = (Math.random() * 2200 + 800).toFixed(2);  
-        } else {  
-            // 8% крупных выплат: от $3,000 до $10,000  
-            sum = (Math.random() * 7000 + 3000).toFixed(2);  
-        }  
-  
-        // Форматирование суммы с запятой для тысяч (например, 3,450.00)  
-        let formattedSum = parseFloat(sum).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });  
-  
-        feed.innerHTML += `<br>[${now}] • ${randomEmail} — выплата <b>$${formattedSum}</b> (Успешно)`;  
+    };  
+
+    let currentLang = 'ru';  
+
+    function toggleLanguage() {  
+        currentLang = currentLang === 'ru' ? 'en' : 'ru';  
+        document.querySelectorAll('[data-i18n]').forEach(el => {  
+            const key = el.getAttribute('data-i18n');  
+            if (translations[currentLang][key]) {  
+                el.innerHTML = translations[currentLang][key];  
+            }  
+        });  
+    }  
+
+    function switchTab(tabId, element) {  
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));  
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));  
+        document.getElementById(tabId).classList.add('active-section');  
+        element.classList.add('active');  
+    }  
+
+    function switchTool(toolId, element) {  
+        document.querySelectorAll('.analysis-tool-box').forEach(b => b.classList.remove('active-tool'));  
+        document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));  
+        document.getElementById(toolId).classList.add('active-tool');  
+        element.classList.add('active');  
+    }  
+
+    let initialBalance = 1000;  
+    function addTradeToStats() {  
+        const wins = parseInt(document.getElementById('winsCount').value) || 0;  
+        const losses = parseInt(document.getElementById('lossesCount').value) || 0;  
+        const currentBal = parseFloat(document.getElementById('balanceInput').value) || 1000;  
+          
+        const totalTrades = wins + losses;  
+        const winrate = totalTrades > 0 ? ((wins / totalTrades) * 100).toFixed(1) : 0;  
+          
+        document.getElementById('totalWinrate').innerText = winrate + '%';  
+          
+        const profit = currentBal - initialBalance;  
+        const profitElem = document.getElementById('totalProfit');  
+        profitElem.innerText = (profit >= 0 ? '+' : '') + '$' + profit.toFixed(2);  
+        profitElem.style.color = profit >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';  
+          
+        const feed = document.getElementById('withdrawalFeed');  
+        const now = new Date().toTimeString().split(' ')[0];  
+        feed.innerHTML += `<div>[${now}] Stats • Win: <b>${wins}</b> | Loss: <b>${losses}</b> | Bal: <b>$${currentBal.toFixed(2)}</b> (WR: ${winrate}%)</div>`;  
         feed.scrollTop = feed.scrollHeight;  
     }  
-  
-    // Рандомный интервал для обеспечения в среднем до 20 выплат в час (каждые 150 - 250 секунд)  
-    function scheduleNextWithdrawal() {  
-        updateWithdrawalFeed();  
-        const randomDelay = Math.floor(Math.random() * 100000) + 120000; // от 2 до 3.5 минут  
-        setTimeout(scheduleNextWithdrawal, randomDelay);  
+
+    // СТАБИЛЬНЫЙ И ДЕТЕРМИНИРОВАННЫЙ АЛГОРИТМ СКАНИРОВАНИЯ  
+    function runAnalysis() {  
+        const res = document.getElementById('signalResult');  
+        const btn = document.getElementById('scanBtn');  
+        const asset = document.getElementById('assetSelect').value;  
+        const tf = document.getElementById('timeframeSelect').value;  
+          
+        res.style.display = 'block';  
+        btn.disabled = true;  
+          
+        res.style.color = 'var(--accent-blue)';  
+        res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 1/5] Сканирование стакана ордеров и объема...' : '⚡ [Step 1/5] Scanning order book & volume...';  
+          
+        setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 2/5] Расчет тренда по Parabolic SAR и RSI...' : '⚡ [Step 2/5] Calculating SAR & RSI trend...'; }, 600);  
+        setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 3/5] Фильтрация волатильности Боллинджера...' : '⚡ [Step 3/5] Filtering Bollinger volatility...'; }, 1200);  
+        setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 4/5] Синхронизация мультитаймфреймного ядра...' : '⚡ [Step 4/5] Synchronizing multi-tf core...'; }, 1800);  
+        setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 5/5] Формирование прогноза...' : '⚡ [Step 5/5] Generating forecast...'; }, 2400);  
+
+        setTimeout(() => {  
+            // Стабильный хэш на основе названия актива, таймфрейма и текущего часа  
+            let assetSum = 0;  
+            for (let i = 0; i < asset.length; i++) {  
+                assetSum += asset.charCodeAt(i);  
+            }  
+            const currentHour = new Date().getHours();  
+            const tfVal = (tf === 'D') ? 1440 : parseInt(tf) || 1;  
+              
+            const hashVal = (assetSum + tfVal + currentHour) % 2;  
+            const isUp = hashVal === 0;  
+
+            const dirTextRu = isUp ? 'НАПРАВЛЕНИЕ: ВВЕРХ (BUY)' : 'НАПРАВЛЕНИЕ: ВНИЗ (SELL)';  
+            const dirTextEn = isUp ? 'DIRECTION: UP (BUY)' : 'DIRECTION: DOWN (SELL)';  
+            const dirColor = isUp ? 'var(--accent-green)' : 'var(--accent-red)';  
+              
+            const psarEl = document.getElementById('confPsar');  
+            psarEl.innerText = isUp ? 'BULLISH REVERSAL (Бычий разворот)' : 'BEARISH REVERSAL (Медвежий разворот)';  
+            psarEl.style.color = dirColor;  
+              
+            document.getElementById('confRsi').innerText = isUp ? '58.40 (Зона роста)' : '41.20 (Зона коррекции)';  
+            document.getElementById('confMacd').innerText = isUp ? 'CROSS UP ACTIVE (+1.85)' : 'CROSS DOWN ACTIVE (-1.45)';  
+              
+            res.innerHTML = currentLang === 'ru' ?   
+                `📈 АНАЛИЗ ЗАВЕРШЕН. СИГНАЛ ГОТОВ<br><b style="color:${dirColor}; font-size:14px;">${dirTextRu}</b>` :   
+                `📈 ANALYSIS COMPLETE. SIGNAL READY<br><b style="color:${dirColor}; font-size:14px;">${dirTextEn}</b>`;  
+            res.style.color = dirColor;  
+            btn.disabled = false;  
+        }, 3000);  
     }  
-  
-    // ФУНКЦИЯ ДЛЯ НЕЙРО-ЛОГОВ В РЕАЛЬНОМ ВРЕМЕНИ  
-    function updateTerminalLogs() {  
-        const logBox = document.getElementById('terminalLogs');  
-        if(!logBox) return;  
-        const now = new Date().toTimeString().split(' ')[0];  
-        const msgs = [  
-            "Синхронизация с биржевыми шлюзами...", "Анализ волатильности 1m/5m...",  
-            "Обработка данных Parabolic SAR...", "Оптимизация нейронных весов...",  
-            "Проверка зон перекупленности RSI...", "Квантовое ядро: ВЫЧИСЛЕНИЕ СИГНАЛА...",  
-            "Мониторинг объема китов: ОШИБОК НЕТ"  
-        ];  
-        const msg = msgs[Math.floor(Math.random() * msgs.length)];  
-        logBox.innerHTML += `<br>[${now}] ${msg}`;  
-        logBox.scrollTop = logBox.scrollHeight;  
+
+    function calculateRisk() {  
+        const balance = document.getElementById('userBalance').value;  
+        const percent = document.getElementById('riskPercent').value;  
+        const bet = (balance * percent) / 100;  
+        document.getElementById('recommendedBet').innerText = '$' + bet.toFixed(2);  
     }  
-  
-    function updateOrderBook() {    
-        const ob = document.getElementById('obContent');    
-        if(!ob) return;    
-        const bPrice = (Math.random() * 500 + 60000).toFixed(2);    
-        ob.innerHTML = `    
-            🔴 ПРОДАЖИ (ASK): $${(parseFloat(bPrice)+1.5).toFixed(2)} — <span style="color:var(--accent-red)">${(Math.random()*15+5).toFixed(2)} BTC</span><br>    
-            🔴 ПРОДАЖИ (ASK): $${(parseFloat(bPrice)+0.8).toFixed(2)} — <span style="color:var(--accent-red)">${(Math.random()*10+2).toFixed(2)} BTC</span><br>    
-            🟢 СПРЕД ЦЕНА: <b>$${bPrice}</b><br>    
-            🟢 ПОКУПКИ (BID): $${(parseFloat(bPrice)-0.7).toFixed(2)} — <span style="color:var(--accent-green)">${(Math.random()*12+3).toFixed(2)} BTC</span><br>    
-            🟢 ПОКУПКИ (BID): $${(parseFloat(bPrice)-1.4).toFixed(2)} — <span style="color:var(--accent-green)">${(Math.random()*18+8).toFixed(2)} BTC</span>    
-        `;    
-    }    
-  
-    function calculateCompound() {    
-        const start = parseFloat(document.getElementById('calcStart').value) || 100;    
-        const pct = parseFloat(document.getElementById('calcPercent').value) || 10;    
-        const days = parseInt(document.getElementById('calcDays').value) || 7;    
-        let total = start;    
-        for(let i=0; i<days; i++) {    
-            total += total * (pct / 100);    
-        }    
-        const resEl = document.getElementById('calcResult');    
-        if(resEl) {    
-            resEl.innerText = `Итог через ${days} дней: $${total.toFixed(2)}`;    
-        }    
-    }    
-  
-    function updatePoolFeed() {    
-        const pool = document.getElementById('poolFeed');    
-        if(!pool) return;    
-        const amounts = [150000, 320000, 500000, 1200000, 850000];    
-        const randAmt = amounts[Math.floor(Math.random() * amounts.length)];    
-        const assets = ['BTC', 'ETH', 'SOL', 'XRP', 'EUR'];    
-        const randAsset = assets[Math.floor(Math.random() * assets.length)];    
-        const now = new Date().toTimeString().split(' ')[0];    
-            
-        const currentHTML = pool.innerHTML.includes('Инициализация') ? '' : pool.innerHTML;    
-        pool.innerHTML = `[${now}] 🐋 КИТОВЫЙ ОРДЕР: Перевод <b>$${randAmt.toLocaleString()}</b> в пул ${randAsset}<br>` + currentHTML;    
-    }    
-  
-    function copyRefLink() {    
-        const input = document.getElementById('refLinkInput');    
-        input.select();    
-        input.setSelectionRange(0, 99999);    
-        navigator.clipboard.writeText(input.value);    
-            
-        const btn = event.target;    
-        const oldText = btn.innerText;    
-        btn.innerText = currentLang === 'ru' ? 'СКОПИРОВАНО!' : 'COPIED!';    
-        btn.style.background = 'var(--accent-green)';    
-        setTimeout(() => {    
-            btn.innerText = oldText;    
-            btn.style.background = 'var(--accent-blue)';    
-        }, 2000);    
-    }    
-  
-    function shareBotApp() {    
-        const refInputVal = document.getElementById('refLinkInput').value;    
-        const shareText = encodeURIComponent("🚀 Залетай в наш крутой бот-терминал BinoDex! Здесь бесплатное обучение, квантовый ИИ и трэйдинг со своей командой в прямом эфире!");    
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(refInputVal)}&text=${shareText}`, '_blank');    
-    }    
-  
-    const translations = {    
-        ru: {    
-            ai_active: "🟢 AI СТАТУС: АКТИВЕН",    
-            tab_terminal: "📊 ТЕРМИНАЛ",    
-            tab_academy: "📚 ОБУЧЕНИЕ",    
-            tab_vip: "🎁 VIP",    
-            btn_scan: "ЗАПУСТИТЬ АНАЛИЗ",    
-            btn_trade: "Начать трэйдить",    
-            conf_title: "📊 Мультииндикаторная конфлюэнтность:",    
-            conf_sar: "Parabolic SAR (на свечах):",    
-            conf_rsi: "RSI Моментум (14):",    
-            conf_macd: "MACD Импульс:",    
-            conf_bb: "Индикатор Bollinger Bands:",    
-            conf_bb_val: "Сжатие / Пробой",    
-            conf_status: "Статус алгоритмов:",    
-            conf_status_val: "Синхронизировано",    
-            logs_title: "🧠 ЖИВОЙ НЕЙРО-АНАЛИЗ (LOG):",    
-            withdrawals_title: "💸 ВЫПЛАТЫ / WITHDRAWALS",    
-            stats_title: "📊 ЛИЧНАЯ СТАТИСТИКА И ВИНРЕЙТ",    
-            stats_wins: "ПЛЮСОВЫЕ СДЕЛКИ:",    
-            stats_losses: "МИНУСОВЫЕ СДЕЛКИ:",    
-            stats_balance: "ТЕКУЩИЙ БАЛАНС ($):",    
-            stats_btn: "ЗАФИКСИРОВАТЬ РЕЗУЛЬТАТ",    
-            stats_wr: "Общий винрейт:",    
-            stats_profit: "Чистая прибыль:",    
-            stool_matrix: "📈 Матрица ТФ",    
-            stool_ob: "⚖️ Стакан ордеров",    
-            stool_risk: "🛡️ Риск-менеджмент",    
-            stool_calc: "💰 Калькулятор",    
-            stool_history: "📑 История",    
-            stool_pool: "🌐 Пул ликвидности",    
-            t_matrix_desc: "Синхронизация алгоритмов по топовым таймфреймам:",    
-            th_tf: "Таймфрейм",    
-            th_trend: "SAR Тренд",    
-            th_rsi: "RSI Зона",    
-            th_status: "Статус сигнала",    
-            norm: "Норма",    
-            opt: "Оптимум",    
-            active_lbl: "АКТИВНО",    
-            r_bal: "Ваш торговый баланс ($):",    
-            r_pct: "Риск на одну сделку (%):",    
-            r_rec: "Рекомендуемый размер ставки:",    
-            acad_main_title: "📚 АКАДЕМИЯ И ПРЕИМУЩЕСТВА ПЛАТФОРМЫ",    
-            acad_perks_head: "⚡ ПОЧЕМУ ТРЭЙДЕРЫ ВЫБИРАЮТ НАШУ ПЛАТФОРМУ:",    
-            perk_min: "МИНИМАЛЬНЫЙ ДЕПОЗИТ",    
-            perk_payout: "ДОХОДНОСТЬ СДЕЛОК",    
-            perk_demo: "ДЕМО-СЧЕТ ДЛЯ ТРЕНИРОВОК",    
-            perk_withdraw: "ВЫВОД СРЕДСТВ",    
-            acad_perks_sub: "Надежный терминал, высокая ликвидность и моментальное исполнение ордеров без проскальзываний позволяют комфортно зарабатывать как новичкам, так и профессионалам.",    
-            demo_block_title: "🎯 ПОДРОБНО О ДЕМО-СЧЕТЕ: БЕЗОПАСНЫЙ СТАРТ",    
-            demo_block_desc: "Демо-счет — это ваш идеальный инструмент для обучения и тестирования стратегий абсолютно без риска потерять реальные деньги:",    
-            demo_li_1: "<b>Виртуальный баланс:</b> При регистрации на ваш счет автоматически начисляются виртуальные средства для неограниченных тренировок.",    
-            demo_li_2: "<b>Полная имитация рынка:</b> Графики, котировки и скорость работы терминала на демо-счете полностью совпадают с реальным режимом торгов в реальном времени.",    
-            demo_li_3: "<b>Тест стратегий:</b> Вы можете проверять сигналы нашего квантового ИИ и индикаторы Parabolic SAR и RSI без психологического давления.",    
-            demo_li_4: "<b>Мгновенное переключение:</b> Как только вы почувствуете уверенность, можно в один клик переключиться на реальный счет и начать зарабатывать.",    
-            acad_h0: "1. С чего начать новичку: от регистрации до первой прибыли",    
-            acad_p0: "Если вы никогда раньше не занимались трэйдингом, путь к успешной торговле состоит из 4 простых шагов:",    
-            acad_li_step1: "<b>Шаг 1. Регистрация и демо-счет:</b> Создайте аккаунт на платформе и потренируйтесь на бесплатном виртуальном балансе, чтобы полностью понять интерфейс без риска потерять средства.",    
-            acad_li_step2: "<b>Шаг 2. Выбор актива и времени:</b> Выберите нужную валютную пару (например, EUR/USD или BTC/USDT) и таймфрейм свечей (от 1 минуты до 1 дня).",    
-            acad_li_step3: "<b>Шаг 3. Анализ и сигналы:</b> Воспользуйтесь нашим квантовым ИИ-сканером в терминале или прогнозами команды в прямом эфире.",    
-            acad_li_step4: "<b>Шаг 4. Открытие сделки:</b> Укажите сумму инвестиции, выберите время экспирации и нажмите кнопку направления (ВВЕРХ или ВНИЗ). При верном прогнозе чистая прибыль зачисляется мгновенно!",    
-            acad_h1: "2. Как работает ИИ-терминал и Parabolic SAR",    
-            acad_p1: "Главный трендовый индикатор нашего терминала — <b>Parabolic SAR</b> — отображается прямо на ценовых свечах в виде точек:",    
-            acad_li1: "<b>Точки под свечами (зеленые):</b> Сигнализируют о сильном бычьем тренде и росте цены. Время открывать сделки ВВЕРХ.",    
-            acad_li2: "<b>Точки над свечами (красные):</b> Указывают на медвежий тренд и давление продавцов. Идеально для входа ВНИЗ.",    
-            acad_li3: "<b>Смена точек:</b> Пересечение графика через точки SAR дает мощный сигнал разворота тренда с высокой точностью.",    
-            acad_h2: "3. Торговля по стратегии RSI и сигналам",    
-            acad_p2: "Индикатор RSI (Индекс относительной силы) помогает находить точные точки разворота цены на экстремумах:",    
-            acad_li4: "<b>Зона выше 70%:</b> Актив перекуплен покупателями, ожидается коррекция или падение цен.",    
-            acad_li5: "<b>Зона ниже 30%:</b> Актив перепродан продавцами, рынок готов к резкому отскоку вверх.",    
-            acad_li6: "<b>Торговля по сигналам:</b> Используя готовые квантовые сигналы ИИ и командные сессии, вы можете совершать сделки с высокой точностью!",    
-            acad_h3: "4. Золотые правила мани-менеджмента",    
-            acad_p3: "Соблюдение правил риска — главный секрет стабильного заработка:",    
-            acad_li7: "<b>Риск на сделку:</b> Выделяйте не более 2-5% от депозита на одну позицию.",    
-            acad_li8: "<b>Дисциплина:</b> Торгуйте по тренду и не пытайтесь отыграться после неудачной сделки.",    
-            acad_h5: "Время зарабатывать профессионально!",    
-            acad_p5: "Используйте всю мощь нашего терминала, пополняйте счет от 5 долларов и выводите свой трэйдинг на новый уровень прибыльности.",    
-            vip_main_title: "🎁 VIP: УСЛОВИЯ И УНИКАЛЬНЫЕ ПРЕИМУЩЕСТВА",    
-            ref_box_title: "ВАША ПЕРСОНАЛЬНАЯ РЕФЕРАЛЬНАЯ ССЫЛКА:",    
-            ref_box_desc: "Пригласите 3 друзей по этой ссылке в нашу команду — получите VIP на 1 неделю! За регистрацию и пополнение — VIP на 1 месяц.",    
-            ref_copy_btn: "Копировать",    
-            ref_invited_count: "Приглашено друзей:",    
-            ref_status_none: "До VIP осталось: 3 друга",    
-            vip_how_title: "📌 КАК ПОЛУЧИТЬ VIP ДОСТУП БЕСПЛАТНО:",    
-            vip_how_text: "• Вариант 1 (VIP на 1 месяц): Зарегистрируйте новый аккаунт по ссылке ниже, пополните счёт на комфортную сумму и совершите сделку на реальном счёте с любым активом и суммой.<br>• Вариант 2 (VIP на 1 неделю): Пригласите всего 3 друзей по вашей реферальной ссылке выше в нашу команду.",    
-            vip_btn_top: "Зарегистрироваться и получить VIP",    
-            vip_perks_title: "🚀 ЧТО ДАЕТ VIP (ВСЕ ПРИВИЛЕГИИ):",    
-            v1_title: "ЗАКРЫТЫЙ VIP-КАНАЛ С СИГНАЛАМИ 24/7:",    
-            v1_desc: "Прямые трансляции входа в сделки вместе с командой и точные инсайды в реальном времени.",    
-            v2_title: "ПОВЫШЕННАЯ ТОЧНОСТЬ АЛГОРИТМОВ ИИ:",    
-            v2_desc: "Полный доступ к глубоким нейросетевым слоям анализа с максимальной фильтрацией рыночного шума.",    
-            v3_title: "АВТОМАТИЧЕСКИЙ КОПИ-ТРЕЙДИНГ:",    
-            v3_desc: "Зеркалирование сделок лучших трэйдеров платформы в один клик с защитой от просадок.",    
-            v4_title: "ПРИОРИТЕТНЫЕ СЕРВЕРА С МИНИМАЛЬНЫМ ПИНГОМ:",    
-            v4_desc: "Мгновенное исполнение ордеров без задержек и проскальзываний на самых быстрых каналах.",    
-            v5_title: "ЕЖЕНЕДЕЛЬНЫЕ ДЕНЕЖНЫЕ ТУРНИРЫ:",    
-            v5_desc: "Участие в закрытых розыгрышах ценных призов и депозитов среди участников VIP-команды.",    
-            v6_title: "ПЕРСОНАЛЬНЫЙ МАНИ-МЕНДЖМЕНТ ПЛАН:",    
-            v6_desc: "Индивидуальная стратегия разгона депозита от профессиональных трэйдеров с личным разбором ошибок.",    
-            v7_title: "АНТИКРИЗИСНЫЙ НОВОСТНОЙ ФИЛЬТР:",    
-            v7_desc: "Автоматическое предупреждение и защита депозита во время выхода важных макроэкономических новостей.",    
-            v8_title: "ПОВЫШЕННЫЙ КЭШБЭК (РЕБЕЙТ):",    
-            v8_desc: "Возврат части средств с каждой совершенной сделки обратно на ваш реальный баланс.",    
-            vip_btn_bot: "Получить VIP доступ прямо сейчас",    
-            manager_box_title: "ВАШ ПЕРСОНАЛЬНЫЙ МЕНЕДЖЕР:",    
-            manager_box_desc: "Остались вопросы по VIP доступу, пополнению или стратегии? Напишите нашему официальному представителю в Telegram, и вам помогут моментально!",    
-            manager_btn: "Написать менеджеру (@jenna_mo1)",    
-            share_btn_text: "ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ"    
-        },    
-        en: {    
-            ai_active: "🟢 AI STATUS: ACTIVE",    
-            tab_terminal: "📊 TERMINAL",    
-            tab_academy: "📚 LEARNING",    
-            tab_vip: "🎁 VIP",    
-            btn_scan: "RUN ANALYSIS",    
-            btn_trade: "Start Trading",    
-            conf_title: "📊 Multi-Indicator Confluence:",    
-            conf_sar: "Parabolic SAR (on candles):",    
-            conf_rsi: "RSI Momentum (14):",    
-            conf_macd: "MACD Momentum:",    
-            conf_bb: "Bollinger Bands Indicator:",    
-            conf_bb_val: "Squeeze / Breakout",    
-            conf_status: "Algorithm Status:",    
-            conf_status_val: "Synchronized",    
-            logs_title: "🧠 LIVE NEURO-ANALYSIS (LOG):",    
-            withdrawals_title: "💸 WITHDRAWALS",    
-            stats_title: "📊 PERSONAL STATS & WINRATE",    
-            stats_wins: "WINNING TRADES:",    
-            stats_losses: "LOSING TRADES:",    
-            stats_balance: "CURRENT BALANCE ($):",    
-            stats_btn: "SAVE RESULT",    
-            stats_wr: "Total Winrate:",    
-            stats_profit: "Net Profit:",    
-            stool_matrix: "📈 TF Matrix",    
-            stool_ob: "⚖️ Order Book",    
-            stool_risk: "🛡️ Risk Mgmt",    
-            stool_calc: "💰 Calculator",    
-            stool_history: "📑 History",    
-            stool_pool: "🌐 Liquidity Pool",    
-            t_matrix_desc: "Algorithm synchronization across top timeframes:",    
-            th_tf: "Timeframe",    
-            th_trend: "SAR Trend",    
-            th_rsi: "RSI Zone",    
-            th_status: "Signal Status",    
-            norm: "Normal",    
-            opt: "Optimal",    
-            active_lbl: "ACTIVE",    
-            r_bal: "Your Trading Balance ($):",    
-            r_pct: "Risk per Trade (%):",    
-            r_rec: "Recommended Bet Size:",    
-            acad_main_title: "📚 ACADEMY & PLATFORM PERKS",    
-            acad_perks_head: "⚡ WHY TRADERS CHOOSE OUR PLATFORM:",    
-            perk_min: "MINIMUM DEPOSIT",    
-            perk_payout: "PAYOUT UP TO 96%",    
-            perk_demo: "FREE DEMO ACCOUNT",    
-            perk_withdraw: "INSTANT WITHDRAWAL",    
-            acad_perks_sub: "Reliable terminal, high liquidity, and instant order execution without slippage allow both beginners and pros to trade comfortably.",    
-            demo_block_title: "🎯 DEMO ACCOUNT: SAFE START",    
-            demo_block_desc: "A demo account is your ideal tool for learning and testing strategies with absolutely zero risk to real funds:",    
-            demo_li_1: "<b>Virtual Balance:</b> Upon registration, virtual funds are automatically credited to your account for unlimited practice.",    
-            demo_li_2: "<b>Full Market Simulation:</b> Charts, quotes, and execution speed fully match real trading conditions.",    
-            demo_li_3: "<b>Strategy Testing:</b> Test AI quantum signals and indicators without psychological pressure.",    
-            demo_li_4: "<b>Instant Switch:</b> Once confident, switch to a real account in one click.",    
-            acad_h0: "1. Beginner's Guide: From Registration to First Profit",    
-            acad_p0: "If you have never traded before, your path to success consists of 4 simple steps:",    
-            acad_li_step1: "<b>Step 1. Registration & Demo Account:</b> Create an account and practice on a free virtual balance to master the interface without risk.",    
-            acad_li_step2: "<b>Step 2. Asset & Timeframe:</b> Choose a currency pair (e.g. EUR/USD or BTC/USDT) and candle timeframe.",    
-            acad_li_step3: "<b>Step 3. Analysis & Signals:</b> Use our quantum AI scanner or live team trading sessions.",    
-            acad_li_step4: "<b>Step 4. Open a Trade:</b> Enter investment amount, expiry time, and click UP or DOWN. Profits are credited instantly upon a correct forecast!",    
-            acad_h1: "2. How AI Terminal & Parabolic SAR Work",    
-            acad_p1: "The main trend indicator — <b>Parabolic SAR</b> — is displayed right on price candles as dots:",    
-            acad_li1: "<b>Dots below candles (green):</b> Strong uptrend signal. Time to open UP trades.",    
-            acad_li2: "<b>Dots above candles (red):</b> Downtrend signal. Perfect for DOWN trades.",    
-            acad_li3: "<b>Dot Switch:</b> Price crossing SAR dots provides a high-accuracy reversal signal.",    
-            acad_h2: "3. RSI Strategy & Signal Trading",    
-            acad_p2: "The RSI indicator helps find exact reversal points at extremes:",    
-            acad_li4: "<b>Above 70%:</b> Asset is overbought, correction or downward drop is expected.",    
-            acad_li5: "<b>Below 30%:</b> Asset is oversold, market is ready for a sharp upward bounce.",    
-            acad_li6: "<b>Signal Trading:</b> Use AI quantum signals and team sessions to execute trades with high winrate!",    
-            acad_h3: "4. Golden Money Management Rules",    
-            acad_p3: "Risk management is the main secret of stable income:",    
-            acad_li7: "<b>Risk per trade:</b> Allocate no more than 2-5% of your balance per position.",    
-            acad_li8: "<b>Discipline:</b> Trade with the trend and never try to win back losses impulsively.",    
-            acad_h5: "Time to Earn Professionally!",    
-            acad_p5: "Harness our terminal power, deposit from 5 dollars, and take your trading to new levels of profitability.",    
-            vip_main_title: "🎁 VIP: CONDITIONS & EXCLUSIVE PERKS",    
-            ref_box_title: "YOUR PERSONAL REFERRAL LINK:",    
-            ref_box_desc: "Invite 3 friends via this link to our team — get VIP for 1 week! For registration and deposit — VIP for 1 month.",    
-            ref_copy_btn: "Copy",    
-            ref_invited_count: "Invited friends:",    
-            ref_status_none: "Left to VIP: 3 friends",    
-            vip_how_title: "📌 HOW TO GET FREE VIP ACCESS:",    
-            vip_how_text: "• Option 1 (VIP for 1 month): Register via the link below, fund your account with a comfortable amount, and execute a trade on a real account with any asset and amount.<br>• Option 2 (VIP for 1 week): Invite just 3 friends via your referral link above to our team.",    
-            vip_btn_top: "Register & Get VIP",    
-            vip_perks_title: "🚀 WHAT VIP INCLUDES (ALL PRIVILEGES):",    
-            v1_title: "CLOSED VIP SIGNAL CHANNEL 24/7:",    
-            v1_desc: "Live stream trade entries with our team and real-time precise insights.",    
-            v2_title: "ENHANCED AI ALGORITHM ACCURACY:",    
-            v2_desc: "Full access to deep neural network analysis layers with maximum market noise filtering.",    
-            v3_title: "AUTOMATED COPY TRADING:",    
-            v3_desc: "Mirror top platform traders' positions in one click with drawdown protection.",    
-            v4_title: "PRIORITY LOW-PING SERVERS:",    
-            v4_desc: "Lightning-fast order execution without delays or slippage on top-tier server channels.",    
-            v5_title: "WEEKLY CASH TOURNAMENTS:",    
-            v5_desc: "Participate in exclusive prize and deposit giveaways among VIP team members.",    
-            v6_title: "PERSONAL MONEY MANAGEMENT PLAN:",    
-            v6_desc: "Custom deposit growth strategy from professional traders with personal error analysis.",    
-            v7_title: "ANTICRISIS NEWS FILTER:",    
-            v7_desc: "Automatic warnings and deposit protection during major macroeconomic news releases.",    
-            v8_title: "ENHANCED CASHBACK (REBATE):",    
-            v8_desc: "Get a portion of fees refunded directly to your real balance on every executed trade.",    
-            vip_btn_bot: "Get VIP Access Right Now",    
-            manager_box_title: "YOUR PERSONAL MANAGER:",    
-            manager_box_desc: "Have questions about VIP access, deposits, or strategy? Contact our official representative on Telegram for instant support!",    
-            manager_btn: "Contact Manager (@jenna_mo1)",    
-            share_btn_text: "SHARE WITH FRIENDS"    
-        }    
-    };    
-  
-    let currentLang = 'ru';    
-  
-    function toggleLanguage() {    
-        currentLang = currentLang === 'ru' ? 'en' : 'ru';    
-        document.querySelectorAll('[data-i18n]').forEach(el => {    
-            const key = el.getAttribute('data-i18n');    
-            if (translations[currentLang][key]) {    
-                el.innerHTML = translations[currentLang][key];    
-            }    
-        });    
-    }    
-  
-    function switchTab(tabId, element) {    
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active-section'));    
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));    
-        document.getElementById(tabId).classList.add('active-section');    
-        element.classList.add('active');    
-    }    
-  
-    function switchTool(toolId, element) {    
-        document.querySelectorAll('.analysis-tool-box').forEach(b => b.classList.remove('active-tool'));    
-        document.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));    
-        document.getElementById(toolId).classList.add('active-tool');    
-        element.classList.add('active');    
-    }    
-  
-    let initialBalance = 1000;    
-    function addTradeToStats() {    
-        const wins = parseInt(document.getElementById('winsCount').value) || 0;    
-        const losses = parseInt(document.getElementById('lossesCount').value) || 0;    
-        const currentBal = parseFloat(document.getElementById('balanceInput').value) || 1000;    
-            
-        const totalTrades = wins + losses;    
-        const winrate = totalTrades > 0 ? ((wins / totalTrades) * 100).toFixed(1) : 0;    
-            
-        document.getElementById('totalWinrate').innerText = winrate + '%';    
-            
-        const profit = currentBal - initialBalance;    
-        const profitElem = document.getElementById('totalProfit');    
-        profitElem.innerText = (profit >= 0 ? '+' : '') + '$' + profit.toFixed(2);    
-        profitElem.style.color = profit >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';    
-            
-        const feed = document.getElementById('withdrawalFeed');    
-        const now = new Date().toTimeString().split(' ')[0];    
-        feed.innerHTML += `<div>[${now}] Stats • Win: <b>${wins}</b> | Loss: <b>${losses}</b> | Bal: <b>$${currentBal.toFixed(2)}</b> (WR: ${winrate}%)</div>`;    
-        feed.scrollTop = feed.scrollHeight;    
-    }    
-  
-    function runAnalysis() {    
-        const res = document.getElementById('signalResult');    
-        const btn = document.getElementById('scanBtn');    
-        const asset = document.getElementById('assetSelect').value;    
-        const tf = document.getElementById('timeframeSelect').value;    
-            
-        res.style.display = 'block';    
-        btn.disabled = true;    
-            
-        res.style.color = 'var(--accent-blue)';    
-        res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 1/5] Сканирование стакана ордеров и объема...' : '⚡ [Step 1/5] Scanning order book & volume...';    
-            
-        setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 2/5] Расчет тренда по Parabolic SAR и RSI...' : '⚡ [Step 2/5] Calculating SAR & RSI trend...'; }, 600);    
-        setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 3/5] Фильтрация волатильности Боллинджера...' : '⚡ [Step 3/5] Filtering Bollinger volatility...'; }, 1200);    
-        setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 4/5] Синхронизация мультитаймфреймного ядра...' : '⚡ [Step 4/5] Synchronizing multi-tf core...'; }, 1800);    
-        setTimeout(() => { res.innerHTML = currentLang === 'ru' ? '⚡ [Шаг 5/5] Формирование прогноза...' : '⚡ [Step 5/5] Generating forecast...'; }, 2400);    
-  
-        setTimeout(() => {    
-            let assetSum = 0;    
-            for (let i = 0; i < asset.length; i++) {    
-                assetSum += asset.charCodeAt(i);    
-            }    
-            const currentHour = new Date().getHours();    
-            const tfVal = (tf === 'D') ? 1440 : parseInt(tf) || 1;    
-                
-            const hashVal = (assetSum + tfVal + currentHour) % 2;    
-            const isUp = hashVal === 0;    
-  
-            const dirTextRu = isUp ? 'НАПРАВЛЕНИЕ: ВВЕРХ (BUY)' : 'НАПРАВЛЕНИЕ: ВНИЗ (SELL)';    
-            const dirTextEn = isUp ? 'DIRECTION: UP (BUY)' : 'DIRECTION: DOWN (SELL)';    
-            const dirColor = isUp ? 'var(--accent-green)' : 'var(--accent-red)';    
-                
-            const psarEl = document.getElementById('confPsar');    
-            psarEl.innerText = isUp ? 'BULLISH REVERSAL (Бычий разворот)' : 'BEARISH REVERSAL (Медвежий разворот)';    
-            psarEl.style.color = dirColor;    
-                
-            document.getElementById('confRsi').innerText = isUp ? '58.40 (Зона роста)' : '41.20 (Зона коррекции)';    
-            document.getElementById('confMacd').innerText = isUp ? 'CROSS UP ACTIVE (+1.85)' : 'CROSS DOWN ACTIVE (-1.45)';    
-                
-            res.innerHTML = currentLang === 'ru' ?     
-                `📈 АНАЛИЗ ЗАВЕРШЕН. СИГНАЛ ГОТОВ<br><b style="color:${dirColor}; font-size:14px;">${dirTextRu}</b>` :     
-                `📈 ANALYSIS COMPLETE. SIGNAL READY<br><b style="color:${dirColor}; font-size:14px;">${dirTextEn}</b>`;    
-            res.style.color = dirColor;    
-            btn.disabled = false;    
-        }, 3000);    
-    }    
-  
-    function calculateRisk() {    
-        const balance = document.getElementById('userBalance').value;    
-        const percent = document.getElementById('riskPercent').value;    
-        const bet = (balance * percent) / 100;    
-        document.getElementById('recommendedBet').innerText = '$' + bet.toFixed(2);    
-    }    
-  
-    function updateChart(symbol, interval) {    
-        const container = document.getElementById('chartContainer');    
-        container.innerHTML = `<div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_chart" style="height:100%;width:100%"></div></div>`;    
-            
-        new TradingView.widget({    
-            "container_id": "tv_chart",    
-            "width": "100%",    
-            "height": "100%",    
-            "symbol": symbol,    
-            "interval": interval,    
-            "timezone": "Etc/UTC",    
-            "theme": "dark",    
-            "style": "1",    
-            "locale": currentLang,    
-            "toolbar_bg": "#161e2e",    
-            "enable_publishing": false,    
-            "hide_side_toolbar": false,    
-            "studies": [    
-                "ParabolicSAR@tv-basicstudies",    
-                "RSI@tv-basicstudies",    
-                "MACD@tv-basicstudies",    
-                "BollingerBands@tv-basicstudies"    
-            ]    
-        });    
-    }    
-  
-    function changeAsset() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }    
-    function changeTimeframe() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }    
-  
-    const script = document.createElement('script');    
-    script.src = "https://s3.tradingview.com/tv.js";    
-    script.onload = () => updateChart("BINANCE:BTCUSDT", "1");    
-    document.head.appendChild(script);    
-</script>  </body>    
-</html>    
+
+    function updateChart(symbol, interval) {  
+        const container = document.getElementById('chartContainer');  
+        container.innerHTML = `<div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tv_chart" style="height:100%;width:100%"></div></div>`;  
+          
+        new TradingView.widget({  
+            "container_id": "tv_chart",  
+            "width": "100%",  
+            "height": "100%",  
+            "symbol": symbol,  
+            "interval": interval,  
+            "timezone": "Etc/UTC",  
+            "theme": "dark",  
+            "style": "1",  
+            "locale": currentLang,  
+            "toolbar_bg": "#161e2e",  
+            "enable_publishing": false,  
+            "hide_side_toolbar": false,  
+            "studies": [  
+                "ParabolicSAR@tv-basicstudies",  
+                "RSI@tv-basicstudies",  
+                "MACD@tv-basicstudies",  
+                "BollingerBands@tv-basicstudies"  
+            ]  
+        });  
+    }  
+
+    function changeAsset() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }  
+    function changeTimeframe() { updateChart(document.getElementById('assetSelect').value, document.getElementById('timeframeSelect').value); }  
+
+    const script = document.createElement('script');  
+    script.src = "https://s3.tradingview.com/tv.js";  
+    script.onload = () => updateChart("FX:EURUSD", "1");  
+    document.head.appendChild(script);  
+</script>
+
+</body>  
+</html>  
